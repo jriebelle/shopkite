@@ -914,17 +914,76 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         testimonySection.addEventListener("wheel", accelHandler, { passive: true });
 
+        // Drag & Touch Gesture Handlers for Testimonials
+        let isTestimonyDragging = false;
+        let testimonyLastX = 0;
+
+        const onTestimonyDragStart = (clientX) => {
+            isTestimonyDragging = true;
+            testimonyLastX = clientX;
+            testimonySection.style.cursor = "grabbing";
+        };
+
+        const onTestimonyDragMove = (clientX) => {
+            if (!isTestimonyDragging) return;
+            const deltaX = clientX - testimonyLastX;
+            testimonyLastX = clientX;
+            pos += -deltaX;
+            targetSpeed = -deltaX * 0.5;
+            scrollResumed = true;
+        };
+
+        const onTestimonyDragEnd = () => {
+            if (!isTestimonyDragging) return;
+            isTestimonyDragging = false;
+            testimonySection.style.cursor = "grab";
+        };
+
+        testimonySection.addEventListener("pointerdown", (e) => {
+            onTestimonyDragStart(e.clientX);
+        });
+
+        window.addEventListener("pointermove", (e) => {
+            if (isTestimonyDragging) {
+                onTestimonyDragMove(e.clientX);
+            }
+        });
+
+        window.addEventListener("pointerup", onTestimonyDragEnd);
+        window.addEventListener("pointercancel", onTestimonyDragEnd);
+
+        testimonySection.addEventListener("touchstart", (e) => {
+            if (e.touches.length === 1) {
+                onTestimonyDragStart(e.touches[0].clientX);
+            }
+        }, { passive: true });
+
+        window.addEventListener("touchmove", (e) => {
+            if (isTestimonyDragging && e.touches.length === 1) {
+                onTestimonyDragMove(e.touches[0].clientX);
+            }
+        }, { passive: true });
+
+        window.addEventListener("touchend", onTestimonyDragEnd);
+
+        testimonyTrack.querySelectorAll("img").forEach(img => {
+            img.addEventListener("dragstart", (e) => e.preventDefault());
+        });
+
         function updateCarousel() {
-            // When mousewheel activity occurs (scrollResumed === true), we auto-resume normal speed on mousewheel pause (stops)
-            const limitSpeed = (isHovered && !scrollResumed) ? 0 : baseSpeed;
+            if (!isTestimonyDragging) {
+                // When mousewheel activity occurs (scrollResumed === true), we auto-resume normal speed on mousewheel pause (stops)
+                const limitSpeed = (isHovered && !scrollResumed) ? 0 : baseSpeed;
 
-            // Lerp targetSpeed towards the current limit speed (auto-scroll or paused)
-            targetSpeed += (limitSpeed - targetSpeed) * 0.04;
+                // Lerp targetSpeed towards the current limit speed (auto-scroll or paused)
+                targetSpeed += (limitSpeed - targetSpeed) * 0.04;
 
-            // Damping logic for currentSpeed towards targetSpeed
-            currentSpeed += (targetSpeed - currentSpeed) * 0.1;
+                // Damping logic for currentSpeed towards targetSpeed
+                currentSpeed += (targetSpeed - currentSpeed) * 0.1;
 
-            pos += currentSpeed;
+                pos += currentSpeed;
+            }
+
             if (pos >= W) {
                 pos -= W;
             } else if (pos < 0) {
@@ -971,6 +1030,62 @@ document.addEventListener("DOMContentLoaded", function () {
         let isHovered = false;
         let scrollResumed = false;
 
+        // Drag & Touch Gesture Handlers for Brands
+        let isBrandsDragging = false;
+        let brandsLastX = 0;
+
+        const onBrandsDragStart = (clientX) => {
+            isBrandsDragging = true;
+            brandsLastX = clientX;
+            brandsSection.style.cursor = "grabbing";
+        };
+
+        const onBrandsDragMove = (clientX) => {
+            if (!isBrandsDragging) return;
+            const deltaX = clientX - brandsLastX;
+            brandsLastX = clientX;
+            pos += -deltaX;
+            targetSpeed = -deltaX * 0.5;
+            scrollResumed = true;
+        };
+
+        const onBrandsDragEnd = () => {
+            if (!isBrandsDragging) return;
+            isBrandsDragging = false;
+            brandsSection.style.cursor = "grab";
+        };
+
+        brandsSection.addEventListener("pointerdown", (e) => {
+            onBrandsDragStart(e.clientX);
+        });
+
+        window.addEventListener("pointermove", (e) => {
+            if (isBrandsDragging) {
+                onBrandsDragMove(e.clientX);
+            }
+        });
+
+        window.addEventListener("pointerup", onBrandsDragEnd);
+        window.addEventListener("pointercancel", onBrandsDragEnd);
+
+        brandsSection.addEventListener("touchstart", (e) => {
+            if (e.touches.length === 1) {
+                onBrandsDragStart(e.touches[0].clientX);
+            }
+        }, { passive: true });
+
+        window.addEventListener("touchmove", (e) => {
+            if (isBrandsDragging && e.touches.length === 1) {
+                onBrandsDragMove(e.touches[0].clientX);
+            }
+        }, { passive: true });
+
+        window.addEventListener("touchend", onBrandsDragEnd);
+
+        brandsTrack.querySelectorAll("img").forEach(img => {
+            img.addEventListener("dragstart", (e) => e.preventDefault());
+        });
+
         // Hover listeners to pause auto-scrolling
         brandsSection.addEventListener("mouseenter", () => {
             isHovered = true;
@@ -979,6 +1094,8 @@ document.addEventListener("DOMContentLoaded", function () {
         brandsSection.addEventListener("mouseleave", () => {
             isHovered = false;
             scrollResumed = false;
+            isBrandsDragging = false;
+            brandsSection.style.cursor = "grab";
         });
 
         // Wheel acceleration listener
@@ -1021,11 +1138,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function updateBrandsCarousel() {
-            const limitSpeed = (isHovered && !scrollResumed) ? 0 : baseSpeed;
-            targetSpeed += (limitSpeed - targetSpeed) * 0.04;
-            currentSpeed += (targetSpeed - currentSpeed) * 0.1;
+            if (!isBrandsDragging) {
+                const limitSpeed = (isHovered && !scrollResumed) ? 0 : baseSpeed;
+                targetSpeed += (limitSpeed - targetSpeed) * 0.04;
+                currentSpeed += (targetSpeed - currentSpeed) * 0.1;
 
-            pos += currentSpeed;
+                pos += currentSpeed;
+            }
+
             if (W > 0) {
                 if (pos >= W) {
                     pos -= W;

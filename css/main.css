@@ -1141,6 +1141,10 @@ a {
   width: 100%;
   display: flex;
   align-items: center;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+  touch-action: pan-y;
 }
 
 .testimony-track {
@@ -1171,6 +1175,9 @@ a {
   /* make entire card show pointer on hover */
   z-index: 5;
   /* create stacking context and elevate card */
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .testimonial img {
@@ -1292,6 +1299,10 @@ a {
   align-items: center;
   border-top: 1px solid #f9f9f9;
   border-bottom: 1px solid #f9f9f9;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+  touch-action: pan-y;
 }
 
 .brands-track {
