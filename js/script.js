@@ -1041,7 +1041,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateBrandsCarousel();
     }
 
-    // Media logos infinite scroll carousel
+    // Media logos infinite scroll carousel with mouse wheel, mouse drag & touch swipe gestures
     const mediaSection = document.querySelector(".media-brands");
     const mediaTrack = document.querySelector(".media-brands-track");
     if (mediaSection && mediaTrack) {
@@ -1074,20 +1074,95 @@ document.addEventListener("DOMContentLoaded", function () {
         let mediaTargetSpeed = mediaBaseSpeed;
         let mediaCurrentSpeed = mediaBaseSpeed;
         let mediaIsHovered = false;
+        let isDragging = false;
+        let lastX = 0;
 
         mediaSection.addEventListener("mouseenter", () => {
             mediaIsHovered = true;
         });
         mediaSection.addEventListener("mouseleave", () => {
             mediaIsHovered = false;
+            isDragging = false;
+            mediaSection.style.cursor = "grab";
+        });
+
+        // 1. Mouse wheel / trackpad horizontal & vertical scroll
+        mediaSection.addEventListener("wheel", (e) => {
+            const rawDelta = e.deltaX !== 0 ? e.deltaX : e.deltaY;
+            if (rawDelta !== 0) {
+                if (rawDelta > 0) {
+                    if (mediaTargetSpeed < 0) mediaTargetSpeed = mediaBaseSpeed;
+                    mediaTargetSpeed = Math.min(25, mediaTargetSpeed + rawDelta * 0.08);
+                } else {
+                    if (mediaTargetSpeed > 0) mediaTargetSpeed = -mediaBaseSpeed;
+                    mediaTargetSpeed = Math.max(-25, mediaTargetSpeed + rawDelta * 0.08);
+                }
+            }
+        }, { passive: true });
+
+        // 2. Mouse Drag & Touch Swipe Gesture Handlers
+        const onDragStart = (clientX) => {
+            isDragging = true;
+            lastX = clientX;
+            mediaSection.style.cursor = "grabbing";
+        };
+
+        const onDragMove = (clientX) => {
+            if (!isDragging) return;
+            const deltaX = clientX - lastX;
+            lastX = clientX;
+            mediaPos += -deltaX;
+            mediaTargetSpeed = -deltaX * 0.5;
+        };
+
+        const onDragEnd = () => {
+            if (!isDragging) return;
+            isDragging = false;
+            mediaSection.style.cursor = "grab";
+        };
+
+        // Pointer Events
+        mediaSection.addEventListener("pointerdown", (e) => {
+            onDragStart(e.clientX);
+        });
+
+        window.addEventListener("pointermove", (e) => {
+            if (isDragging) {
+                onDragMove(e.clientX);
+            }
+        });
+
+        window.addEventListener("pointerup", onDragEnd);
+        window.addEventListener("pointercancel", onDragEnd);
+
+        // Touch Events Fallback
+        mediaSection.addEventListener("touchstart", (e) => {
+            if (e.touches.length === 1) {
+                onDragStart(e.touches[0].clientX);
+            }
+        }, { passive: true });
+
+        window.addEventListener("touchmove", (e) => {
+            if (isDragging && e.touches.length === 1) {
+                onDragMove(e.touches[0].clientX);
+            }
+        }, { passive: true });
+
+        window.addEventListener("touchend", onDragEnd);
+
+        // Prevent native image dragging
+        mediaTrack.querySelectorAll("img").forEach(img => {
+            img.addEventListener("dragstart", (e) => e.preventDefault());
         });
 
         function updateMediaCarousel() {
-            const limitSpeed = mediaIsHovered ? 0 : mediaBaseSpeed;
-            mediaTargetSpeed += (limitSpeed - mediaTargetSpeed) * 0.04;
-            mediaCurrentSpeed += (mediaTargetSpeed - mediaCurrentSpeed) * 0.1;
+            if (!isDragging) {
+                const limitSpeed = mediaIsHovered ? 0 : mediaBaseSpeed;
+                mediaTargetSpeed += (limitSpeed - mediaTargetSpeed) * 0.04;
+                mediaCurrentSpeed += (mediaTargetSpeed - mediaCurrentSpeed) * 0.1;
+                mediaPos += mediaCurrentSpeed;
+            }
 
-            mediaPos += mediaCurrentSpeed;
             if (mediaW > 0) {
                 if (mediaPos >= mediaW) {
                     mediaPos -= mediaW;
