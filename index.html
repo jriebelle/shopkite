@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en" class="loading">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/cityscape.css">
+    <link rel="stylesheet" href="css/main.css?v=1.5.0">
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <title>ShopKite</title>
+    <!-- Critical: lock scroll before first paint, before any script loads -->
+    <style>html.loading, html.loading body { overflow: hidden !important; touch-action: none; }</style>
+</head>
+
+<body>
+    <!-- Page Loader -->
+    <div id="page-loader">
+        <div class="loader-content">
+            <div class="loader-percentage">0%</div>
+            <div class="loader-bar-bg">
+                <div class="loader-bar-fill"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Loader script runs immediately: tracks real image loads before DOMContentLoaded -->
+    <script src="js/loader.js"></script>
+
+    <div class="hero-section">
+        <div class="top-nav">
+            <div class="logo">
+                <img src="img/shopkite-logo.png" alt="">
+            </div>
+            <div class="top-nav-right">
+                <div class="top-nav-info">
+                    <div class="gradient-edge">
+                    </div>
+                    <div class="sub-text">
+
+                        <p>Subscribe to ShopKite Merchant at ₦5,000/month &amp; buy Stella (Inventory Management Device) for
+                            ₦360,000 or Ken for ₦450,000</p>
+                    </div>
+                    <a href="#" class="go-to-store">
+                        <div class="text">
+                            <p>Visit our store</p>
+                        </div>
+                        <div class="arrow">
+                            <img src="img/go-to-store-arrow.png" alt="">
+                        </div>
+                    </a>
+                </div>
+                <div class="menu-btn-wrap">
+                    <button class="menu-btn" id="menu-btn" aria-label="Open menu">
+                        <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect class="line-1" width="20" height="2" rx="1" fill="white"/>
+                            <rect class="line-2" y="6" width="20" height="2" rx="1" fill="white"/>
+                            <rect class="line-3" y="12" width="20" height="2" rx="1" fill="white"/>
+                        </svg>
+                    </button>
+                    <nav class="nav-dropdown" id="nav-dropdown" aria-hidden="true">
+                        <a href="#" class="nav-item" data-text="Home"><span>FAQs</span></a>
+                        <a href="#" class="nav-item" data-text="Contact Us" onclick="openPopupSupport()"><span>Contact Us</span></a>
+                        <a href="#" class="nav-item" data-text="IBR"><span>Intelligent Business Report</span><span class="nav-item-pill">new</span></a>
+                        <a href="#" class="nav-item" data-text="Invoice Generator"><span>Free Invoice Generator</span><span class="nav-item-pill">coming soon</span></a>
+                        <a href="#" class="nav-item" data-text="Blog"><span>Blog</span></a>
+                        <a href="#" class="nav-item" data-text="Agent Signup"><span>Become an Agent</span></a>
+                        <a href="#" class="nav-item" data-text="Privacy Policy"><span>Privacy Policy</span></a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="hero-clip">
+            <div class="clouds">
+                <div class="set1"></div>
+                <div class="set2"></div>
+                <div class="set3"></div>
+                <img src="img/cloud-bg-img.png" alt="" class="cloud-bg-img">
+            </div>
+        </div>
+        <div class="welcome-text">
+            <div class="text">Welcome to...</div>
+            <div class="copy">
+                <div>
+                    <p>Selling made</p>
+                </div>
+                <div class="changing-text"><span>plenty</span></div>
+            </div>
+            <div class="sub-text">
+                <p>Built with convenience from the ground up.</p>
+            </div>
+        </div>
+        <div class="phone">
+            <img src="img/phone.png" alt="">
+        </div>
+        <div class="hero-buttons-container">
+            <div class="buttons-row">
+                <a href="#" class="hero-btn primary">
+                    <img src="img/apple-icon.png" alt="Apple" class="btn-icon">
+                    Apple Appstore
+                </a>
+                <a href="#" class="hero-btn secondary">
+                    <img src="img/android-icon.png" alt="Android" class="btn-icon">
+                    Google Play store
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="section-2">
+        <p>Who can use ShopKite?</p>
+        <div class="bubbles">
+            <img class="guy" src="img/section2/guy-bubble-customer.png" alt="">
+            <img class="lady-bubble" src="img/section2/lady-bubble-customer.png" alt="">
+            <img class="silhouette-1" src="img/section2/silhouette-bubble-1.png" alt="">
+            <img class="silhouette-2" src="img/section2/silhouette-bubble-2.png" alt="">
+            <img class="silhouette-3" src="img/section2/silhouette-bubble-3.png" alt="">
+            <img class="silhouette-4" src="img/section2/silhouette-bubble-4.png" alt="">
+            <img class="store" src="img/section2/store-bubble-small.png" alt="">
+            <img class="woman" src="img/section2/woman-bubble-customer.png" alt="">
+            <img class="man" src="img/section2/man-bubble-customer.png" alt="">
+        </div>
+    </div>
+    <div class="section3-4-wrap">
+        <div class="section-3">
+            <div class="title">
+                <img src="img/section2/pharmacy-icon.png" alt="">
+                <h2>Pharmacies</h2>
+            </div>
+            <div class="img-cont">
+                <img class="store-top" src="img/section3/phone-store-top-side.png" alt="">
+                <img class="store-left-wall" src="img/section3/store-left-wall.png" alt="">
+                <img class="store-right-wall" src="img/section3/store-right-wall.png" alt="">
+                <img class="store-floor" src="img/section3/store-floor.png" alt="">
+
+                <img class="first-shelf-left" src="img/section3/1st-shelf-left.png" alt="">
+                <img class="second-shelf-left" src="img/section3/2nd-shelf-left.png" alt="">
+                <img class="third-shelf-left" src="img/section3/3rd-shelf-left.png" alt="">
+
+                <img class="forth-shelf-right" src="img/section3/4th-shelf-right.png" alt="">
+                <img class="fifth-shelf-right" src="img/section3/5th-shelf-right.png" alt="">
+
+                <img class="first-item-left" src="img/section3/1st-items-left.png" alt="">
+                <img class="second-item-left" src="img/section3/2nd-items-left.png" alt="">
+                <img class="third-item-left" src="img/section3/3rd-items-left.png" alt="">
+                <img class="forth-item-right" src="img/section3/4th-items-right.png" alt="">
+                <img class="fifth-item-right" src="img/section3/5th-items-right.png" alt="">
+                <img class="sixth-item-right" src="img/section3/6th-items-right.png" alt="">
+                <img class="seventh-item-right" src="img/section3/7th-items-right.png" alt="">
+
+                <img class="pharmacist" src="img/section3/pharmacist.png" alt="">
+                <img class="store-counter" src="img/section3/store-counter.png" alt="">
+                <img class="items-on-counter" src="img/section3/items-on-counter.png" alt="">
+                <img class="customer" src="img/section3/customer.png" alt="">
+
+
+            </div>
+            <div class="text-cont">Catch expired/expiring stock with automated alerts.</div>
+        </div>
+        <div class="section-4">
+            <div class="title">
+                <img src="img/section4/provisions-store-icon.png" alt="">
+                <h2>Provisions Stores</h2>
+            </div>
+            <div class="img-cont">
+                <img src="img/section4/provisions-store-illustration.png" alt="">
+            </div>
+            <div class="text-cont">Manage staff, multiple branches, owing and owed records from one point.</div>
+        </div>
+        <div class="section-5">
+            <div class="title">
+                <img src="img/section5/mini-mart-icon.png" alt="">
+                <h2>Minimarts</h2>
+            </div>
+            <div class="img-cont">
+                <img src="img/section5/mini-mart-illustration.png" alt="">
+            </div>
+            <div class="text-cont">Get daily, weekly and monthly reports. </div>
+        </div>
+    </div>
+    <div class="section-6">
+        <p>...even your friendly, neighbourhood</p>
+    </div>
+    <div class="section-7">
+        <div class="meshai-wrapper">
+            <img class="meshai-photo unmasked" src="img/section7/meshai-photo.jpg" alt="">
+            <div class="meshai-masked-photo">
+                <img class="meshai-photo masked" src="img/section7/meshai-photo.jpg" alt="">
+            </div>
+        </div>
+    </div>
+    <div class="section-8">
+        <div class="section-8-marquee">
+            <div class="marquee-row top">
+                <p>Built with convenience from the ground up!</p>
+            </div>
+            <div class="marquee-row middle">
+                <p>Built with convenience from the ground up!</p>
+            </div>
+            <div class="marquee-row bottom">
+                <p>Built with convenience from the ground up!</p>
+            </div>
+        </div>
+        <div class="section-img">
+            <div class="logo-marker1">
+                <img src="https://shopkite.com.ng/resources/images/logo-marker.svg" alt="">
+                <div class="stroke"></div>
+            </div>
+            <div class="logo-marker1 two">
+                <img src="https://shopkite.com.ng/resources/images/logo-marker.svg" alt="">
+                <div class="stroke"></div>
+            </div>
+            <div class="logo-marker1 three">
+                <img src="https://shopkite.com.ng/resources/images/logo-marker.svg" alt="">
+                <div class="stroke"></div>
+            </div>
+            <div class="logo-marker1 four">
+                <img src="https://shopkite.com.ng/resources/images/logo-marker.svg" alt="">
+                <div class="stroke"></div>
+            </div>
+            <div class="logo-marker1 five">
+                <img src="https://shopkite.com.ng/resources/images/logo-marker.svg" alt="">
+                <div class="stroke"></div>
+            </div>
+            <div class="logo-marker1 six">
+                <img src="https://shopkite.com.ng/resources/images/logo-marker.svg" alt="">
+                <div class="stroke"></div>
+            </div>
+            <div class="logo-marker1 seven">
+                <img src="https://shopkite.com.ng/resources/images/logo-marker.svg" alt="">
+                <div class="stroke"></div>
+            </div>
+            <!-- city overlay image -->
+            <img src="https://shopkite.com.ng/resources/images/city-overlay.png" alt="" class="main-img2">
+
+            <!-- Vehicles in the city -->
+            <div class="city-danfo1"></div>
+            <div class="city-danfo2"></div>
+
+            <div class="city-danfo5"></div>
+
+            <div class="city-truck1"></div>
+            <div class="city-truck2"></div>
+            <div class="city-danfo4"></div>
+
+            <!-- Vehicles on the bridge -->
+            <!-- Vehicles coming down the bridge -->
+            <img src="https://shopkite.com.ng/resources/images/brt-right-front.svg" alt="" class="brt-front1">
+            <img src="https://shopkite.com.ng/resources/images/truck-right.svg" alt="" class="truck-right1">
+            <img src="https://shopkite.com.ng/resources/images/bus-right.svg" alt="" class="bus-right2">
+            <!-- Vehicles going up the bridge -->
+            <img src="https://shopkite.com.ng/resources/images/brt-back-left.svg" alt="" class="brt-back1">
+            <img src="https://shopkite.com.ng/resources/images/bus-back-left.svg" alt="" class="bus-back-left1">
+            <img src="https://shopkite.com.ng/resources/images/truck-left-back.svg" alt="" class="truck-left-back1">
+
+            <!-- City background image -->
+            <img src="https://shopkite.com.ng/resources/images/city.png" alt="" class="main-img">
+        </div>
+    </div>
+    <div class="testimonials-title">
+        <p>Who is using ShopKite merchant?</p>
+    </div>
+    <div class="merchant-testimony-section">
+        <div class="testimony-track">
+            <div class="testimonial">
+                <button class="testimonial-btn">
+                    <span>Watch on IG</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <img src="img/testimonials/Amaju Ezenduka.jpg" alt="">
+                <h2>"Everyday, I get my reports"</h2>
+                <p>Pharm - Amaju Ezenduka / Delta State</p>
+            </div>
+            <div class="testimonial">
+                <button class="testimonial-btn">
+                    <span>Watch on IG</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <img src="img/testimonials/esther-nwachukwu.jpg" alt="">
+                <h2>"I just love it!"</h2>
+                <p>Pharm - Esther Nwachukwu / Delta State</p>
+            </div>
+            <div class="testimonial">
+                <button class="testimonial-btn">
+                    <span>Watch on IG</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <img src="img/testimonials/faithful-oyakhilome.jpg" alt="">
+                <h2>"ShopKite is very easy to use..."</h2>
+                <p>Pharm - Faithful Oyakhilome / Edo State</p>
+            </div>
+            <div class="testimonial">
+                <button class="testimonial-btn">
+                    <span>Watch on IG</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <img src="img/testimonials/godwin-atah.jpg" alt="">
+                <h2>"Makes documentation and sales easy..."</h2>
+                <p>Pharm - Godwin Atah / FCT Abuja</p>
+            </div>
+            <div class="testimonial">
+                <button class="testimonial-btn">
+                    <span>Watch on IG</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <img src="img/testimonials/christian-jaja.jpg" alt="">
+                <h2>"It has been an excellent experience..."</h2>
+                <p>Pharm - Christian Jaja / Rivers State</p>
+            </div>
+            <div class="testimonial">
+                <button class="testimonial-btn">
+                    <span>Watch on IG</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <img src="img/testimonials/ngozi-luke-egbogu.jpg" alt="">
+                <h2>"expired products has reduced..."</h2>
+                <p>Pharm - Ngozi Luke Egbogu / Rivers State</p>
+            </div>
+            <div class="testimonial">
+                <button class="testimonial-btn">
+                    <span>Watch on IG</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <img src="img/testimonials/temitope-olowolayemo.jpg" alt="">
+                <h2>"makes inventory control simple and easy..."</h2>
+                <p>Pharm - Temitope Olowolayemo / Ondo State</p>
+            </div>
+            <div class="testimonial">
+                <button class="testimonial-btn">
+                    <span>Watch on IG</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <img src="img/testimonials/udeme-nyong.jpg" alt="">
+                <h2>"it's a really nice thing for pharmacy inventory..."</h2>
+                <p>Pharm - Udeme Nyong / Akwa Ibom State</p>
+            </div>
+            <div class="testimonial">
+                <button class="testimonial-btn">
+                    <span>Watch on IG</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <img src="img/testimonials/aramide.jpg" alt="">
+                <h2>"ShopKite has really helped..."</h2>
+                <p>Dr Oyebimpe aramide / Lagos State</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="brands">
+        <div class="brands-track">
+            <div class="brand-container">
+                <p><span>7</span>Outlets</p>
+                <img src="img/brands/turarenwata-by-ray.png" alt="">
+            </div>
+            <div class="brand-container">
+                <p><span>35</span>Outlets</p>
+                <img src="img/brands/babcock-investment-group.png" alt="">
+            </div>
+            <div class="brand-container">
+                <p><span>27</span>Outlets</p>
+                <img src="img/brands/lamed-pharmacy.png" alt="">
+            </div>
+            <div class="brand-container">
+                <p><span>7</span>Outlets</p>
+                <img src="img/brands/kim-zee-pharmacy.png" alt="">
+            </div>
+            <div class="brand-container">
+                <p><span>9</span>Outlets</p>
+                <img src="img/brands/ijapari.png" alt="">
+            </div>
+        </div>
+    </div>
+    <div class="bento-divider"></div>
+    <div class="bento-title">
+        <p>Why choose ShopKite Merchant?</p>
+    </div>
+    <div class="bento-container">
+        <div class="bento-item row-span-2 receipts">
+            <h3>Print <br>Receipts</h3>
+            <p>Either with our recommended devices or a device of your choosing. Print receipts with ease for all or any sales.</p>
+            <img src="img/bento/print-receipts.png" alt="">
+        </div>
+        <div class="bento-item col-span-2 sku-store">
+            <img src="img/bento/sku-store.png" alt="">
+            <h3>400,000+ <br>Pre-loaded SKUs</h3>
+            <p>ShopKite merchant comes preloaded with over 200,000 SKUs to make setup super fast and easy</p>
+            
+        </div>
+        <div class="bento-item reports">
+            <h3>Daily, Monthly & Yearly Reports</h3>
+            <p>Get clear breakdowns of your sales and inventory and watch your business grow.</p>
+            <img src="img/bento/reports.png" alt="">
+        </div>
+        <div class="bento-item staff">
+            <h3>Set Staff Roles</h3>
+            <p>Decide what staff can and can not do or access with granular controls across your ShopKite Merchant account.</p>
+            <img src="img/bento/staff-roles.png" alt="">
+        </div>
+        <div class="bento-item col-span-2 locations">
+            <h3>Manage multiple locations</h3>
+            <p>Create, manage multiple branches and warehouses from your finger tips. Transfer products from one store to another.</p>
+            <img src="img/bento/multiple-locations.png" alt="">
+        </div>
+        <div class="bento-item notified">
+            <h3>Get Notified</h3>
+            <p>Avoid selling expired drugs or loosing on potential sales with instant notifications.</p>
+            <img src="img/bento/get-notified.png" alt="">
+        </div>
+        <div class="bento-item offline">
+            <h3>No Internet? <br>Sell Offline</h3>
+            <p>ShopKite Merchant works seamlessly offline and syncs automatically when online.</p>
+            <img src="img/bento/no-internet.png" alt="">
+        </div>
+        <div class="bento-item col-span-2 ibr">
+            <h3>Intelligent Business <br>Report</h3>
+            <p>This is an intelligently consolidated summary of your business over a selected period of time from about 20 different parameters.</p>
+            <img src="img/bento/ibr.png" alt="">
+            <a href="#" class="ibr-btn">Learn More about IBR</a>
+        </div>
+    </div>
+    <div class="trial-title">
+        <p>What next? Start a free 7-Day trial now</p>
+    </div>
+    <div class="trial-buttons-container">
+        <a href="#" class="trial-btn apple-trial">
+            <img src="img/apple-icon.png" alt="Apple Icon" class="btn-icon">
+            <div class="btn-text">
+                <p>Download ShopKite Merchant for your iPad, iPhone or iMac (Apple Silicon)</p>
+            </div>
+        </a>
+        <a href="#" class="trial-btn android-trial">
+            <img src="img/android-icon.png" alt="Android Icon" class="btn-icon">
+            <div class="btn-text">
+                <p>Download ShopKite Merchant on any device that is powered by a supported Android OS</p>
+            </div>
+        </a>
+    </div>
+
+    <footer class="main-footer">
+        <div class="media-title">
+            <h2>ShopKite in the news</h2>
+        </div>
+        <div class="media-brands">
+            <div class="media-brands-track">
+                <a href="#" target="_blank" rel="noopener noreferrer" class="media-brand-item">
+                    <img src="img/media-logos/channels.png" alt="Channels TV">
+                </a>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="media-brand-item">
+                    <img src="img/media-logos/lagos-talks.png" alt="Lagos Talks">
+                </a>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="media-brand-item">
+                    <img src="img/media-logos/mainland-fm.png" alt="Mainland FM">
+                </a>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="media-brand-item">
+                    <img src="img/media-logos/techcity.png" alt="Tech City">
+                </a>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="media-brand-item">
+                    <img src="img/media-logos/tvc.png" alt="TVC News">
+                </a>
+            </div>
+        </div>
+        <div class="footer-container">
+            <div class="footer-col logo-col">
+                <img src="img/shopkite-logo.png" alt="ShopKite Logo" class="footer-logo">
+            </div>
+            <div class="footer-col links-col">
+                <a href="#">Blog</a>
+                <a href="#">Business Report</a>
+                <a href="#">Recommended Devices</a>
+                <a href="#">Become an Agent</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <div class="footer-col links-col">
+                <a href="#">FAQs</a>
+                <a href="#">Video Tutorial</a>
+                <a href="#">Download for Android</a>
+                <a href="#">Download for iOS</a>
+                <a href="#" onclick="openPopupSupport()">Customer support</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-partners">
+                <span class="partners-label">Official hardware distributors in Nigeria</span>
+                <img src="img/sunmi-logo.png" alt="Sunmi Logo" class="sunmi-logo">
+            </div>
+            <div class="footer-socials">
+                <a href="#" class="social-link"><img src="img/whatsapp-icon.png" alt="WhatsApp"></a>
+                <a href="#" class="social-link"><img src="img/instagram-icon.png" alt="Instagram"></a>
+                <a href="#" class="social-link"><img src="img/facebook-icon.png" alt="Facebook"></a>
+                <a href="#" class="social-link"><img src="img/x-icon.png" alt="X"></a>
+                <a href="#" class="social-link"><img src="img/youtube-icon.png" alt="YouTube"></a>
+                <a href="#" class="social-link"><img src="img/tiktok-icon.png" alt="TikTok"></a>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>&copy; 2026 ShopKite Nigeria Limited. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Custom menu cursor -->
+    <div id="menu-cursor" aria-hidden="true">Menu</div>
+    <!-- Custom brand cursor -->
+    <div id="brand-cursor" aria-hidden="true"><span></span>Outlets</div>
+
+
+    <div class="overlay" id="popupOverlaySupport" onclick="if(event.target === this) closePopupSupport()">
+        <div class="popup">
+            <button class="close-btn" onclick="closePopupSupport()" aria-label="Close">close</button>
+            <img src="img/support-img.png" alt="Support" class="popup-support-img">
+            <div class="popup-body">
+                <h1>We are happy to hear from you!</h1>
+                <p>Would you like to make inquiries?<br> Setup a Store?<br> Get help on a feature or make a suggestion?<br>Reach us via email/WhatsApp or any of our social handles...</p>
+                <div class="popup-socials">
+                    <a href="#" class="social-link"><img src="img/instagram-icon.png" alt="Instagram"></a>
+                    <a href="#" class="social-link"><img src="img/facebook-icon.png" alt="Facebook"></a>
+                    <a href="#" class="social-link"><img src="img/x-icon.png" alt="X"></a>
+                    <a href="#" class="social-link"><img src="img/youtube-icon.png" alt="YouTube"></a>
+                    <a href="#" class="social-link"><img src="img/tiktok-icon.png" alt="TikTok"></a>
+                </div>
+                <div class="popup-email">
+                    <a href="mailto:hello@shopkite.com.ng">hello@shopkite.com.ng</a>
+                </div>
+                <h3><a href="tel:09062000393">09062000393</a></h3>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"
+        integrity="sha512-NcZdtrT77bJr4STcmsGAESr06BYGE8woZdSdEgqnpyqac7sugNO+Tr4bGwGF3MsnEkGKhU2KL2xh6Ec+BqsaHA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        function openPopupSupport() {
+            const overlay = document.getElementById('popupOverlaySupport');
+            const navDropdown = document.getElementById('nav-dropdown');
+            const menuBtn = document.getElementById('menu-btn');
+            
+            if (navDropdown && menuBtn) {
+                navDropdown.classList.remove('open');
+                menuBtn.classList.remove('open');
+            }
+            
+            if (overlay) {
+                overlay.style.display = 'flex';
+                requestAnimationFrame(() => {
+                    overlay.classList.add('active');
+                });
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closePopupSupport() {
+            const overlay = document.getElementById('popupOverlaySupport');
+            if (overlay) {
+                overlay.classList.remove('active');
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    document.body.style.overflow = '';
+                }, 250);
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closePopupSupport();
+            }
+        });
+    </script>
+</body>
+
+</html>

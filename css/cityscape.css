@@ -1,0 +1,239 @@
+.section-img {  z-index: 3;  position: relative; overflow: hidden; border-radius: 50px; width: 50%;}
+.section-img .main-img { width: 100%; margin-bottom: -4px; }
+.section-img .main-img2 { width: 100%; position:absolute; top:0; left: 0; z-index:100;}
+
+
+.bus-right2,
+.truck-left-back1,
+.truck-right1,
+.bus-back-left1,
+.brt-back1,
+.brt-front1 { position: absolute; height: 6%; width: auto; z-index: 3; top: 26%; left: -2%;
+animation-name: bus-right1 ; animation-duration: 7s; animation-fill-mode: forwards; }
+
+.bus-right2,
+.truck-left-back1,
+.truck-right1,
+.bus-back-left1,
+.brt-back1,
+.brt-front1,
+.city-danfo1,
+.city-danfo2,
+.city-truck1,
+.city-danfo4,
+.city-danfo5
+{ animation-timing-function: linear;
+animation-iteration-count: 30;
+-webkit-transform: translateZ(0);
+-moz-transform: translateZ(0);
+-ms-transform: translateZ(0);
+-o-transform: translateZ(0);
+transform: translateZ(0);
+backface-visibility: hidden;}
+
+/* danfo bus on the bridge */
+.bus-right2 { z-index:8; left: 69%; top: 50%; animation-name: bus-lane ; animation-duration: 10s;  }
+.truck-left-back1  { left: 100%; top: 56%; animation-name: bus-lane-up ; animation-duration: 10s; }
+.truck-right1 { z-index:8; top: -8%; left: 41%; animation-name: bus-lane ; animation-duration: 10s; animation-delay:3s; }
+.bus-back-left1 { left: 100%; top: 56%; animation-name: bus-lane-up; animation-duration: 10s; animation-delay:5s;}
+
+/* brt bus on the bridge going up */
+.brt-back1 { z-index:7; top: -26%; left: -12%; animation-name: brt-lane-up; animation-delay:3s; animation-duration:12s; height: 10%;  }
+
+/* brt bus on the bridge coming down */
+.brt-front1 { z-index:8;top: -26%; left: -12%; animation-delay:3s; animation-name: brt-lane; height: 10%; animation-duration:16s; }
+
+/* Vehicles on the bridge GOING DOWN */
+@keyframes bus-lane {
+  0% { top: -8%; left: 38%;}
+    100% { left: 102%; top: 60%; }
+}
+
+@keyframes brt-lane {
+  0% { top: -8%; left: 42%;}
+    100% { left: 102%; top: 56%; }
+}
+
+/* Vehicles on the bridge GOING UP */
+@keyframes brt-lane-up {
+  0% { left: 109%; top: 59%; }
+    100% { top: -12%; left: 41.5%; }
+}
+
+@keyframes bus-lane-up {
+  0% { left: 111%; top: 59%; }
+    100% { top: -12%; left: 43%; }
+}
+
+
+
+/* Vehicles in the city */
+.city-danfo1,
+.city-danfo2
+ {
+  position: absolute;
+  top: 20%;
+  left: -10%;
+  height: 6%;
+  width: 4%;
+  background: url('../img/city/bus-right.svg') no-repeat;
+  animation-name:city-danfo1;
+  animation-duration: 29s;
+  z-index:4;
+}
+
+.city-danfo2 {
+  animation-name: city-danfo1;
+  animation-delay: 3s;
+}
+
+
+@keyframes city-danfo1 {
+  /* coming down right */
+  0% { left: -10%; top: 18%; }
+  30% { left: 39%; top: 70%; background-image: url('../img/city/bus-right.svg')}
+  /* going up right */
+  30.5% { left: 40%; top: 70%;background-image: url('../img/city/bus-back-right.svg') }
+  50% { left: 67%; top: 42%; background-image: url('../img/city/bus-back-right.svg')}
+  /* making the u-turn */
+  50.5% {  left: 66%; top: 41%; background-image: url('../img/city/bus-back-left.svg')}
+  51.5% {  left: 65%; top: 40%; background-image: url('../img/city/bus-back-left.svg')}
+  52% { left: 65%; top: 39%; background-image: url('../img/city/bus-left.svg')}
+  /* coming down left */
+  70.5% {   z-index:1; left: 40%; top: 66%; background-image: url('../img/city/bus-left.svg')}
+  /* going up left */
+  71% {  z-index:1; left: 39%; top: 66%; background-image: url('../img/city/bus-back-left.svg')}
+  100% {  z-index:1; left: -10%; top: 13%; background-image: url('../img/city/bus-back-left.svg')}
+}
+
+/*  */
+.city-truck1,
+.city-danfo4 {
+  position: absolute;
+  height: 6%;
+  width: 4%;
+  background: no-repeat;
+  animation-name: city-truck1;
+  animation-duration: 12s;
+  z-index: 4;
+}
+
+.city-danfo4 { animation-delay: 8s; animation-name: city-danfo4; }
+
+@keyframes city-truck1 {
+  0% { top:102%; left: 10%; background-image: url('../img/city/truck-right-back.svg'); }
+  50% { top: 79%; left: 31%; background-image: url('../img/city/truck-right-back.svg'); }
+  51% {top: 78%; left: 32%; background-image: url('../img/city/truck-right.svg'); }
+  100% { top: 100%; left: 52%; background-image: url('../img/city/truck-right.svg');}
+}
+
+@keyframes city-danfo4 {
+  0% { top:102%; left: 10%; background-image: url('../img/city/bus-back-right.svg'); }
+  50% {z-index: 4; top: 79%; left: 31%; background-image: url('../img/city/bus-back-right.svg'); }
+  51% { z-index: 4;top: 78%; left: 32%; background-image: url('../img/city/bus-right.svg'); }
+  100% { top: 100%; left: 52%; background-image: url('../img/city/bus-right.svg');}
+}
+
+.city-danfo5 {
+  position: absolute;
+  height: 6%;
+  width: 4%;
+  background: no-repeat;
+  animation-name: city-danfo5;
+  animation-duration: 15s;
+  animation-delay: 5s;
+}
+
+@keyframes city-danfo5 {
+  0% { z-index: 3; top:18%; left:-10%; background-image: url('../img/city/bus-right.svg');}
+  65% {z-index: 3; top:68%; left: 37%;background-image: url('../img/city/bus-right.svg'); }
+  66% { top: 69%; left: 37%; background-image: url('../img/city/bus-left.svg');}
+  100% { top: 100%; left: 8%; background-image: url('../img/city/bus-left.svg');}
+}
+
+.logo-marker1 {
+  position: absolute;
+  height: 7%;
+  width: auto;
+  z-index: 200;
+  left: 7%;
+  top: 12%;
+}
+
+.stroke { width: 4%; height: 60%; left:48%; background:#fff; position: absolute;
+  animation-name: stroke;
+  animation-duration: 4s;
+  animation-fill-mode:forwards;
+  /*animation-iteration-count: infinite;*/
+}
+
+.logo-marker1 img {
+  width: auto;
+  height: 50%;
+}
+
+.logo-marker1 {
+  animation-name: logo-marker;
+  animation-duration: 4s;
+  opacity:0;
+  animation-fill-mode:forwards;
+}
+
+.logo-marker1.two {
+    left: 24%;
+    top: 33%;
+    animation-delay: 4s;
+}
+
+.logo-marker1.three {
+    top: 63%;
+    left: 30%;
+    animation-delay: 8s;
+}
+.logo-marker1.four {
+    top: 2%;
+    left: 34%;
+    animation-delay: 12s;
+}
+.logo-marker1.five {
+    top: 25%;
+    left: 65%;
+    animation-delay: 16s;
+}
+.logo-marker1.six {
+    top: 78%;
+    left: 52%;
+    animation-delay: 20s;
+}
+.logo-marker1.seven {
+    top: 72%;
+    left: 92%;
+    animation-delay: 24s;
+}
+
+.logo-marker1,
+.logo-marker1.two,
+.logo-marker1.three,
+.logo-marker1.four,
+.logo-marker1.five,
+.logo-marker1.six,
+.logo-marker1.seven {
+  animation-direction: alternate;
+}
+
+
+@keyframes logo-marker {
+  0% {transform: rotateY(0deg);}
+  100% {transform: rotateY(360deg); opacity:1;}
+  /*
+  80% {transform: rotateY(360deg); opacity:1;}
+  100% {transform: rotateY(0deg);opacity:0;}*/
+}
+
+@keyframes stroke {
+  0% { height: 0;}
+  100% { height: 60%; }
+  /*
+  80% { height: 60%; }
+  100% { height: 0%; }*/
+}
