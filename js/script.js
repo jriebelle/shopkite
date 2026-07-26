@@ -12,96 +12,102 @@ document.addEventListener("DOMContentLoaded", function () {
     const span = document.querySelector(".changing-text span");
     const subTextP = document.querySelector(".welcome-text .sub-text p");
 
-    let wordIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    let typeSpeed = 50;
-    const changeInterval = 6000;
+    // Only run typewriter if hero text elements exist (homepage only)
+    if (span && subTextP) {
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typeSpeed = 50;
+        const changeInterval = 6000;
 
-    let currentWord = words[wordIndex];
+        let currentWord = words[wordIndex];
 
-    function type() {
-        if (isDeleting) {
-            span.textContent = currentWord.substring(0, charIndex - 1);
-            charIndex--;
-            typeSpeed = 50;
-        } else {
-            span.textContent = currentWord.substring(0, charIndex + 1);
-            charIndex++;
-            typeSpeed = 50;
+        function type() {
+            if (isDeleting) {
+                span.textContent = currentWord.substring(0, charIndex - 1);
+                charIndex--;
+                typeSpeed = 50;
+            } else {
+                span.textContent = currentWord.substring(0, charIndex + 1);
+                charIndex++;
+                typeSpeed = 50;
+            }
+
+            if (!isDeleting && charIndex === currentWord.length) {
+                isDeleting = true;
+                typeSpeed = changeInterval;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+                currentWord = words[wordIndex];
+                updatePhrase();
+                typeSpeed = 50;
+            }
+
+            setTimeout(type, typeSpeed);
         }
 
-        if (!isDeleting && charIndex === currentWord.length) {
-            isDeleting = true;
-            typeSpeed = changeInterval;
-        } else if (isDeleting && charIndex === 0) {
-            isDeleting = false;
-            wordIndex = (wordIndex + 1) % words.length;
-            currentWord = words[wordIndex];
-            updatePhrase();
-            typeSpeed = 50;
+        function updatePhrase() {
+            const phrase = phrases[currentWord];
+
+            gsap.timeline()
+                .to(subTextP, {
+                    y: -20,
+                    opacity: 0,
+                    duration: 0.3,
+                    ease: "power2.in",
+                    onComplete: () => {
+                        subTextP.textContent = phrase;
+                    }
+                })
+                .fromTo(subTextP, 
+                    { y: 20, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" }
+                );
         }
 
-        setTimeout(type, typeSpeed);
+        type();
     }
-
-    function updatePhrase() {
-        const phrase = phrases[currentWord];
-
-        gsap.timeline()
-            .to(subTextP, {
-                y: -20,
-                opacity: 0,
-                duration: 0.3,
-                ease: "power2.in",
-                onComplete: () => {
-                    subTextP.textContent = phrase;
-                }
-            })
-            .fromTo(subTextP, 
-                { y: 20, opacity: 0 },
-                { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" }
-            );
-    }
-
-    type();
 
     // Go-to-store button hover animation
     const goToStore = document.querySelector(".go-to-store");
     const goToStoreText = document.querySelector(".go-to-store .text");
     const arrowImg = document.querySelector(".go-to-store .arrow img");
 
-    // Start with text invisible
-    gsap.set(goToStoreText, { opacity: 0 });
+    // Only run hover animation when go-to-store button exists
+    if (goToStore && goToStoreText && arrowImg) {
+        // Start with text invisible
+        gsap.set(goToStoreText, { opacity: 0 });
 
-    // Go-to-store button hover animation timeline (perfectly synchronized)
-    const hoverTl = gsap.timeline({ paused: true });
+        // Go-to-store button hover animation timeline (perfectly synchronized)
+        const hoverTl = gsap.timeline({ paused: true });
 
-    hoverTl.to(goToStore, {
-        width: 170,
-        duration: 0.8,
-        ease: "power2.out"
-    }, 0);
+        hoverTl.to(goToStore, {
+            width: 170,
+            duration: 0.8,
+            ease: "power2.out"
+        }, 0);
 
-    hoverTl.to(arrowImg, {
-        rotation: 360,
-        duration: 0.8,
-        ease: "power2.out"
-    }, 0);
+        hoverTl.to(arrowImg, {
+            rotation: 360,
+            duration: 0.8,
+            ease: "power2.out"
+        }, 0);
 
-    hoverTl.to(goToStoreText, {
-        opacity: 1,
-        duration: 0.2,
-        ease: "power2.out"
-    }, 0.4);
+        hoverTl.to(goToStoreText, {
+            opacity: 1,
+            duration: 0.2,
+            ease: "power2.out"
+        }, 0.4);
 
-    goToStore.addEventListener("mouseenter", () => {
-        hoverTl.play();
-    });
+        goToStore.addEventListener("mouseenter", () => {
+            hoverTl.play();
+        });
 
-    goToStore.addEventListener("mouseleave", () => {
-        hoverTl.reverse();
-    });
+        goToStore.addEventListener("mouseleave", () => {
+            hoverTl.reverse();
+        });
+    }
 
     // Nav header scroll behavior (only menu button sticks on scroll down, full nav reveals on scroll up)
     let lastScrollY = window.scrollY;
@@ -264,233 +270,237 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const isMobile = window.matchMedia("(max-width: 820px)").matches;
     const phone = document.querySelector(".phone");
-    let phonePinWrap = phone.parentElement;
 
-    if (!isMobile) {
-        if (!phonePinWrap.classList.contains("phone-pin-wrap")) {
-            phonePinWrap = document.createElement("div");
-            phonePinWrap.className = "phone-pin-wrap";
-            phone.parentElement.insertBefore(phonePinWrap, phone);
-            phonePinWrap.appendChild(phone);
-        }
+    // Only run hero/phone scroll animations when the phone element exists (homepage only)
+    if (phone) {
+        let phonePinWrap = phone.parentElement;
 
-        phonePinWrap.style.width = "100%";
-        phonePinWrap.style.position = "relative";
-        phonePinWrap.style.zIndex = "2";
-        phone.style.position = "relative";
-        phone.style.zIndex = "2";
+        if (!isMobile) {
+            if (!phonePinWrap.classList.contains("phone-pin-wrap")) {
+                phonePinWrap = document.createElement("div");
+                phonePinWrap.className = "phone-pin-wrap";
+                phone.parentElement.insertBefore(phonePinWrap, phone);
+                phonePinWrap.appendChild(phone);
+            }
 
-        // Pin the phone wrapper so it stays fixed on screen through Section 3 & 4, then unpins when out of view
-        ScrollTrigger.create({
-            trigger: ".hero-section",
-            start: "top top",
-            endTrigger: ".section3-4-wrap",
-            end: "bottom top",
-            pin: phonePinWrap,
-            pinSpacing: false,
-            anticipatePin: 1
-        });
+            phonePinWrap.style.width = "100%";
+            phonePinWrap.style.position = "relative";
+            phonePinWrap.style.zIndex = "2";
+            phone.style.position = "relative";
+            phone.style.zIndex = "2";
 
-        // Phone image transform animation timeline with scroll scrub
-        const phoneImg = document.querySelector(".phone img");
-        const transformVals = {
-            pers: 900,
-            rotX: 75,
-            skewX: 0,
-            scaleY: 1,
-            rotY: 0
-        };
-
-        function getTop10PercentOffset() {
-            const phoneRect = phone.getBoundingClientRect();
-            const height = phoneRect.height || 800;
-
-            // Get the absolute top relative to the document to handle page loads when already scrolled down
-            const absoluteTop = phoneRect.top + window.scrollY;
-
-            // Compensate for the top moving down when scaled down to 0.70 around the center
-            const scaleCorrection = (1 - 0.70) * height / 2;
-
-            // Align to 10% from the top of the viewport
-            const targetY = (window.innerHeight * 0.10) - absoluteTop - scaleCorrection;
-            return targetY;
-        }
-
-        const phoneImgTl = gsap.timeline({
-            scrollTrigger: {
+            // Pin the phone wrapper so it stays fixed on screen through Section 3 & 4, then unpins when out of view
+            ScrollTrigger.create({
                 trigger: ".hero-section",
                 start: "top top",
-                endTrigger: ".section-3",
-                end: "top top",
-                scrub: 1,
-                invalidateOnRefresh: true
+                endTrigger: ".section3-4-wrap",
+                end: "bottom top",
+                pin: phonePinWrap,
+                pinSpacing: false,
+                anticipatePin: 1
+            });
+
+            // Phone image transform animation timeline with scroll scrub
+            const phoneImg = document.querySelector(".phone img");
+            const transformVals = {
+                pers: 900,
+                rotX: 75,
+                skewX: 0,
+                scaleY: 1,
+                rotY: 0
+            };
+
+            function getTop10PercentOffset() {
+                const phoneRect = phone.getBoundingClientRect();
+                const height = phoneRect.height || 800;
+
+                // Get the absolute top relative to the document to handle page loads when already scrolled down
+                const absoluteTop = phoneRect.top + window.scrollY;
+
+                // Compensate for the top moving down when scaled down to 0.70 around the center
+                const scaleCorrection = (1 - 0.70) * height / 2;
+
+                // Align to 10% from the top of the viewport
+                const targetY = (window.innerHeight * 0.10) - absoluteTop - scaleCorrection;
+                return targetY;
             }
-        });
 
-        phoneImgTl.to(transformVals, {
-            pers: 7000,
-            rotX: 60,
-            skewX: 40,
-            scaleY: 0.94,
-            rotY: -35,
-            ease: "none",
-            onUpdate: () => {
-                phone.style.perspective = `${transformVals.pers}px`;
-                phoneImg.style.transform = `rotateX(${transformVals.rotX}deg) skewX(${transformVals.skewX}deg) scaleY(${transformVals.scaleY}) rotateY(${transformVals.rotY}deg)`;
-            }
-        });
-
-        phoneImgTl.to(phone, {
-            y: getTop10PercentOffset(),
-            xPercent: -15,
-            scale: 0.7,
-            ease: "none"
-        }, "<");
-
-        phoneImgTl.fromTo(phoneImg, {
-            width: 400
-        }, {
-            width: 380,
-            ease: "none"
-        }, "<");
-
-        // Section 3 sequence animation on pinning (triggers when 98% in view)
-        const s3Images = document.querySelectorAll(".section-3 .img-cont img");
-        const imgCont = document.querySelector(".section-3 .img-cont");
-
-        // Initially hide all elements for the animation sequence
-        gsap.set(s3Images, { opacity: 0 });
-        gsap.set([".section-3 .title", ".section-3 .text-cont"], { opacity: 0 });
-
-        const s3Timeline = gsap.timeline({
-            scrollTrigger: {
-                trigger: ".section3-4-wrap",
-                start: "top top", // Pin flush at the top of the viewport to prevent any gaps
-                end: "+=300%",   // pin for 300vh of scroll (100% for store building, 100% for s3 wipe, 100% for s4 wipe)
-                pin: true,
-                pinSpacing: true,
-                scrub: true,
-                invalidateOnRefresh: true
-            }
-        });
-
-        // Phone fades out from 1 to 0 over the first 0.5s of the timeline (at time 0)
-        s3Timeline.to(phone, {
-            opacity: 0,
-            duration: 0.5,
-            ease: "power1.inOut"
-        }, 0);
-
-        // Manage display state dynamically to save GPU rendering cycles when out of view
-        s3Timeline.set([phone, phoneImg], { display: "flex" }, 0);
-        s3Timeline.set([phone, phoneImg], { display: "none" }, 0.5);
-
-        // Title and text-cont fade in from left/right at the very start (time 0)
-        s3Timeline.fromTo(".section-3 .title", {
-            x: -50,
-            opacity: 0
-        }, {
-            x: 0,
-            opacity: 1,
-            duration: 0.6,
-            ease: "power2.out"
-        }, 0);
-
-        s3Timeline.fromTo(".section-3 .text-cont", {
-            x: 50,
-            opacity: 0
-        }, {
-            x: 0,
-            opacity: 1,
-            duration: 0.6,
-            ease: "power2.out"
-        }, 0);
-
-        const imgContHeight = imgCont.offsetHeight || 870;
-        const threePercent = imgContHeight * 0.03;
-
-        s3Images.forEach((img) => {
-            const style = window.getComputedStyle(img);
-
-            // Check if element is bottom positioned
-            const isBottom = img.className.includes("floor") ||
-                img.className.includes("counter") ||
-                img.className.includes("customer");
-
-            const isStoreTop = img.className.includes("store-top");
-            // store-top fades in over 0.3s starting concurrently at 0, so it appears before phone is completely gone
-            const duration = isStoreTop ? 0.3 : 0.4;
-            const ease = isStoreTop ? "power1.out" : "power2.out";
-            const position = isStoreTop ? 0 : "+=0.15";
-
-            if (isBottom) {
-                const originalBottom = style.bottom;
-                const baseVal = parseFloat(originalBottom) || 0;
-                const startBottom = baseVal - threePercent;
-
-                s3Timeline.fromTo(img, {
-                    bottom: `${startBottom}px`,
-                    opacity: 0
-                }, {
-                    bottom: originalBottom,
-                    opacity: 1,
-                    duration: duration,
-                    ease: ease
-                }, position);
-            } else {
-                const originalTop = style.top;
-                const baseVal = parseFloat(originalTop) || 0;
-                const startTop = baseVal + threePercent;
-
-                s3Timeline.fromTo(img, {
-                    top: `${startTop}px`,
-                    opacity: 0
-                }, {
-                    top: originalTop,
-                    opacity: 1,
-                    duration: duration,
-                    ease: ease
-                }, position);
-            }
-        });
-
-        // After Section 3 building sequence completes, wipe Section 3 out from bottom-to-top using clip-path to reveal Section 4 underneath
-        s3Timeline.to(".section-3", {
-            clipPath: "inset(0% 0% 100% 0%)",
-            duration: 5.0, // relative duration matching scroll scale
-            ease: "none"
-        }, "+=0.3");
-
-        // After Section 4 is fully revealed, wipe Section 4 out from bottom-to-top using clip-path to reveal Section 5 underneath
-        s3Timeline.to(".section-4", {
-            clipPath: "inset(0% 0% 100% 0%)",
-            duration: 5.0, // relative duration matching scroll scale
-            ease: "none"
-        }, "+=0.3");
-
-    } else {
-        gsap.set(".phone", { clearProps: "all" });
-        gsap.set(".phone img", { clearProps: "transform,transformOrigin" });
-        gsap.set([".section-3", ".section-4"], { clearProps: "all" });
-        gsap.set(".section-3 .img-cont img", { clearProps: "all" });
-        gsap.set([".section-3 .title", ".section-3 .text-cont"], { clearProps: "all" });
-
-        // Mobile scroll trigger to scale down phone.png by 70% (to scale: 0.3)
-        const mobilePhoneImg = document.querySelector(".phone img");
-        if (mobilePhoneImg) {
-            gsap.to(mobilePhoneImg, {
-                scale: 0.3,
-                ease: "none",
+            const phoneImgTl = gsap.timeline({
                 scrollTrigger: {
                     trigger: ".hero-section",
                     start: "top top",
-                    end: "bottom top",
+                    endTrigger: ".section-3",
+                    end: "top top",
+                    scrub: 1,
+                    invalidateOnRefresh: true
+                }
+            });
+
+            phoneImgTl.to(transformVals, {
+                pers: 7000,
+                rotX: 60,
+                skewX: 40,
+                scaleY: 0.94,
+                rotY: -35,
+                ease: "none",
+                onUpdate: () => {
+                    phone.style.perspective = `${transformVals.pers}px`;
+                    phoneImg.style.transform = `rotateX(${transformVals.rotX}deg) skewX(${transformVals.skewX}deg) scaleY(${transformVals.scaleY}) rotateY(${transformVals.rotY}deg)`;
+                }
+            });
+
+            phoneImgTl.to(phone, {
+                y: getTop10PercentOffset(),
+                xPercent: -15,
+                scale: 0.7,
+                ease: "none"
+            }, "<");
+
+            phoneImgTl.fromTo(phoneImg, {
+                width: 400
+            }, {
+                width: 380,
+                ease: "none"
+            }, "<");
+
+            // Section 3 sequence animation on pinning (triggers when 98% in view)
+            const s3Images = document.querySelectorAll(".section-3 .img-cont img");
+            const imgCont = document.querySelector(".section-3 .img-cont");
+
+            // Initially hide all elements for the animation sequence
+            gsap.set(s3Images, { opacity: 0 });
+            gsap.set([".section-3 .title", ".section-3 .text-cont"], { opacity: 0 });
+
+            const s3Timeline = gsap.timeline({
+                scrollTrigger: {
+                    trigger: ".section3-4-wrap",
+                    start: "top top", // Pin flush at the top of the viewport to prevent any gaps
+                    end: "+=300%",   // pin for 300vh of scroll (100% for store building, 100% for s3 wipe, 100% for s4 wipe)
+                    pin: true,
+                    pinSpacing: true,
                     scrub: true,
                     invalidateOnRefresh: true
                 }
             });
+
+            // Phone fades out from 1 to 0 over the first 0.5s of the timeline (at time 0)
+            s3Timeline.to(phone, {
+                opacity: 0,
+                duration: 0.5,
+                ease: "power1.inOut"
+            }, 0);
+
+            // Manage display state dynamically to save GPU rendering cycles when out of view
+            s3Timeline.set([phone, phoneImg], { display: "flex" }, 0);
+            s3Timeline.set([phone, phoneImg], { display: "none" }, 0.5);
+
+            // Title and text-cont fade in from left/right at the very start (time 0)
+            s3Timeline.fromTo(".section-3 .title", {
+                x: -50,
+                opacity: 0
+            }, {
+                x: 0,
+                opacity: 1,
+                duration: 0.6,
+                ease: "power2.out"
+            }, 0);
+
+            s3Timeline.fromTo(".section-3 .text-cont", {
+                x: 50,
+                opacity: 0
+            }, {
+                x: 0,
+                opacity: 1,
+                duration: 0.6,
+                ease: "power2.out"
+            }, 0);
+
+            const imgContHeight = imgCont.offsetHeight || 870;
+            const threePercent = imgContHeight * 0.03;
+
+            s3Images.forEach((img) => {
+                const style = window.getComputedStyle(img);
+
+                // Check if element is bottom positioned
+                const isBottom = img.className.includes("floor") ||
+                    img.className.includes("counter") ||
+                    img.className.includes("customer");
+
+                const isStoreTop = img.className.includes("store-top");
+                // store-top fades in over 0.3s starting concurrently at 0, so it appears before phone is completely gone
+                const duration = isStoreTop ? 0.3 : 0.4;
+                const ease = isStoreTop ? "power1.out" : "power2.out";
+                const position = isStoreTop ? 0 : "+=0.15";
+
+                if (isBottom) {
+                    const originalBottom = style.bottom;
+                    const baseVal = parseFloat(originalBottom) || 0;
+                    const startBottom = baseVal - threePercent;
+
+                    s3Timeline.fromTo(img, {
+                        bottom: `${startBottom}px`,
+                        opacity: 0
+                    }, {
+                        bottom: originalBottom,
+                        opacity: 1,
+                        duration: duration,
+                        ease: ease
+                    }, position);
+                } else {
+                    const originalTop = style.top;
+                    const baseVal = parseFloat(originalTop) || 0;
+                    const startTop = baseVal + threePercent;
+
+                    s3Timeline.fromTo(img, {
+                        top: `${startTop}px`,
+                        opacity: 0
+                    }, {
+                        top: originalTop,
+                        opacity: 1,
+                        duration: duration,
+                        ease: ease
+                    }, position);
+                }
+            });
+
+            // After Section 3 building sequence completes, wipe Section 3 out from bottom-to-top using clip-path to reveal Section 4 underneath
+            s3Timeline.to(".section-3", {
+                clipPath: "inset(0% 0% 100% 0%)",
+                duration: 5.0, // relative duration matching scroll scale
+                ease: "none"
+            }, "+=0.3");
+
+            // After Section 4 is fully revealed, wipe Section 4 out from bottom-to-top using clip-path to reveal Section 5 underneath
+            s3Timeline.to(".section-4", {
+                clipPath: "inset(0% 0% 100% 0%)",
+                duration: 5.0, // relative duration matching scroll scale
+                ease: "none"
+            }, "+=0.3");
+
+        } else {
+            gsap.set(".phone", { clearProps: "all" });
+            gsap.set(".phone img", { clearProps: "transform,transformOrigin" });
+            gsap.set([".section-3", ".section-4"], { clearProps: "all" });
+            gsap.set(".section-3 .img-cont img", { clearProps: "all" });
+            gsap.set([".section-3 .title", ".section-3 .text-cont"], { clearProps: "all" });
+
+            // Mobile scroll trigger to scale down phone.png by 70% (to scale: 0.3)
+            const mobilePhoneImg = document.querySelector(".phone img");
+            if (mobilePhoneImg) {
+                gsap.to(mobilePhoneImg, {
+                    scale: 0.3,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: ".hero-section",
+                        start: "top top",
+                        end: "bottom top",
+                        scrub: true,
+                        invalidateOnRefresh: true
+                    }
+                });
+            }
         }
-    }
+    } // end if (phone)
 
     // Split text effect for Section 2
     const section2Text = document.querySelector(".section-2 p");
