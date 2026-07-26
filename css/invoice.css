@@ -1,6 +1,7 @@
 /* ══════════════════════════════════════════
    Invoice Page — Base
 ══════════════════════════════════════════ */
+
 .invoice-page-wrap {
     min-height: 100vh;
     background: #f4f4f4;
@@ -867,4 +868,13 @@
     body * { visibility: hidden; }
     #invoice-doc, #invoice-doc * { visibility: visible; }
     #invoice-doc { position: fixed; inset: 0; padding: 30px; }
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="search"],
+textarea,
+select {
+  font-size: 16px;
 }
