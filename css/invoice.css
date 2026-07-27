@@ -755,7 +755,7 @@
     }
 
     .invoice-page-header {
-        width: 92%;
+        width: 85%;
         margin-bottom: 24px;
     }
 
@@ -851,8 +851,12 @@
     /* Remove button floats to the right of the price row */
     .line-item-remove {
         position: absolute;
-        top: 12px;
-        right: 0;
+        top: 18px;
+        right: 7px;
+        background: red;
+        padding: 4px 8px;
+        border-radius: 40px;
+        color: #fff;
     }
 
     .line-item-row input {
