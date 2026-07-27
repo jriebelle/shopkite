@@ -238,6 +238,19 @@
                                     <textarea id="inv-notes" placeholder="e.g. Payment due within 14 days. Thank you!" rows="3"></textarea>
                                 </div>
                             </div>
+
+                            <div class="form-row single" style="margin-top:12px;">
+                                <div class="form-field">
+                                    <label>Invoice status</label>
+                                    <select id="inv-status">
+                                        <option value="Unpaid">Unpaid</option>
+                                        <option value="Paid">Paid</option>
+                                        <option value="Partial">Partial Payment</option>
+                                        <option value="Overdue">Overdue</option>
+                                        <option value="Draft">Draft</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
                     </div><!-- /slides-track -->
@@ -521,10 +534,12 @@
                 lineItems.forEach((item, i) => {
                     const row = document.createElement('div');
                     row.className = 'line-item-row';
+                    const qtyDisplay   = item.qty   ? fmtNumInput(String(item.qty))   : '';
+                    const priceDisplay = item.price ? fmtNumInput(String(item.price)) : '';
                     row.innerHTML = `
                         <input type="text" placeholder="Description" value="${esc(item.desc)}" data-idx="${i}" data-field="desc">
-                        <input type="number" placeholder="1" value="${item.qty}" min="1" data-idx="${i}" data-field="qty">
-                        <input type="number" placeholder="0.00" value="${item.price || ''}" min="0" step="0.01" data-idx="${i}" data-field="price">
+                        <input type="text" inputmode="numeric" pattern="[0-9,]*" placeholder="1" value="${qtyDisplay}" data-idx="${i}" data-field="qty">
+                        <input type="text" inputmode="decimal" pattern="[0-9,.]*" placeholder="0.00" value="${priceDisplay}" data-idx="${i}" data-field="price">
                         <button class="line-item-remove" data-idx="${i}">×</button>`;
                     list.appendChild(row);
                 });
@@ -533,7 +548,17 @@
             document.getElementById('line-items-list').addEventListener('input', e => {
                 const el = e.target; const idx = +el.dataset.idx; const field = el.dataset.field;
                 if (!field) return;
-                lineItems[idx][field] = field === 'desc' ? el.value : parseFloat(el.value) || 0;
+                if (field === 'qty' || field === 'price') {
+                    /* Format with thousands commas, preserve cursor from end */
+                    const cursorFromEnd = el.value.length - el.selectionStart;
+                    const formatted = fmtNumInput(el.value);
+                    el.value = formatted;
+                    const newCursor = Math.max(0, formatted.length - cursorFromEnd);
+                    el.setSelectionRange(newCursor, newCursor);
+                    lineItems[idx][field] = parseFloat(el.value.replace(/,/g, '')) || 0;
+                } else {
+                    lineItems[idx][field] = el.value;
+                }
                 updatePreview();
             });
 
@@ -639,13 +664,31 @@
                 notesSection.style.display = notes ? '' : 'none';
                 document.getElementById('inv-notes-text').textContent = notes;
 
+                // Status badge
+                const STATUS_STYLES = {
+                    'Unpaid':  { bg: '#fff3e8', color: '#ff6600', label: 'Unpaid'  },
+                    'Paid':    { bg: '#e8faf3', color: '#0d9488', label: 'Paid'    },
+                    'Partial': { bg: '#eff6ff', color: '#1a73e8', label: 'Partial' },
+                    'Overdue': { bg: '#fff1f1', color: '#e11d48', label: 'Overdue' },
+                    'Draft':   { bg: '#f4f4f4', color: '#999999', label: 'Draft'   },
+                };
+                const statusVal = (document.getElementById('inv-status') || {}).value || 'Unpaid';
+                const ss = STATUS_STYLES[statusVal] || STATUS_STYLES['Unpaid'];
+                const badge = document.querySelector('.inv-status-badge');
+                if (badge) {
+                    badge.textContent = ss.label;
+                    badge.style.background = ss.bg;
+                    badge.style.color = ss.color;
+                }
+
                 applyAccent();
             }
 
             // Bind all inputs
-            document.querySelectorAll('#biz-name,#biz-email,#biz-phone,#biz-address,#client-name,#client-email,#client-address,#inv-number,#inv-currency,#inv-date,#inv-due-date,#tax-rate,#discount-rate,#inv-notes').forEach(el => {
+            document.querySelectorAll('#biz-name,#biz-email,#biz-phone,#biz-address,#client-name,#client-email,#client-address,#inv-number,#inv-currency,#inv-date,#inv-due-date,#tax-rate,#discount-rate,#inv-notes,#inv-status').forEach(el => {
                 el.addEventListener('input', updatePreview);
             });
+            document.getElementById('inv-status').addEventListener('change', updatePreview);
 
             /* ── Clear / Reset Form ── */
             function resetForm() {
@@ -677,6 +720,8 @@
 
                 lineItems = [{ desc: '', qty: 1, price: 0 }];
                 renderLineItems();
+                const statusEl = document.getElementById('inv-status');
+                if (statusEl) statusEl.value = 'Unpaid';
 
                 goToStep(0);
                 updatePreview();
@@ -698,7 +743,25 @@
                     margin: [10, 10, 10, 10],
                     filename,
                     image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2, useCORS: true, logging: false },
+                    html2canvas: {
+                        scale: 2,
+                        useCORS: true,
+                        logging: false,
+                        scrollX: 0,
+                        scrollY: 0,
+                        /* Force desktop layout in the PDF regardless of device viewport */
+                        onclone: (clonedDoc) => {
+                            const s = clonedDoc.createElement('style');
+                            s.textContent = `
+                                .inv-header         { flex-direction: row !important; align-items: flex-end !important; }
+                                .inv-meta           { text-align: right !important; }
+                                .inv-parties        { grid-template-columns: 1fr 1fr !important; gap: 20px !important; }
+                                .inv-totals-wrap    { justify-content: flex-end !important; }
+                                .inv-totals         { width: 240px !important; }
+                            `;
+                            clonedDoc.head.appendChild(s);
+                        }
+                    },
                     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
                 }).from(document.getElementById('invoice-doc')).save().then(() => {
                     btn.textContent = '⬇ Download PDF';
@@ -716,6 +779,21 @@
             }
             function esc(str) {
                 return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            }
+            /* Format a numeric string with thousands commas (preserves partial decimal) */
+            function fmtNumInput(str) {
+                let raw = str.replace(/[^\d.]/g, '');
+                const dotIdx = raw.indexOf('.');
+                let intPart, decPart;
+                if (dotIdx !== -1) {
+                    intPart = raw.slice(0, dotIdx);
+                    decPart = raw.slice(dotIdx); /* keeps the dot + digits as typed */
+                } else {
+                    intPart = raw;
+                    decPart = '';
+                }
+                intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                return intPart + decPart;
             }
         });
     </script>
