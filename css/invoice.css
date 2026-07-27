@@ -616,6 +616,7 @@
     min-width: 200px;
     border-collapse: separate;
     border-spacing: 0;
+    table-layout: fixed; /* lock column widths to CSS values — prevents cells growing to fit content */
 }
 
 .inv-table thead tr { background: #ff6600; }
@@ -652,6 +653,7 @@
     padding: 11px 13px;
     font-size: 13px;
     color: #555;
+    word-break: break-word; /* wrap long content within fixed cells instead of pushing the column wider */
 }
 
 .inv-table tbody td:nth-child(2),
@@ -735,11 +737,13 @@
         width: 100%;
         max-width: 100%;
         box-sizing: border-box;
+        min-width: 0; /* grid items default to min-width:auto; this stops the wizard growing wider than its 1fr cell */
     }
     .invoice-preview-panel {
         width: 100%;
         max-width: 100%;
         box-sizing: border-box;
+        min-width: 0; /* grid item fix — prevents preview panel from pushing the generator grid wider */
     }
 }
 
@@ -784,6 +788,8 @@
 
     .wizard-slide {
         padding: 20px 16px 0 16px;
+        max-width: 100%;      /* cap at track width — slide cannot grow wider than its flex container */
+        overflow-x: hidden;   /* clip content that exceeds the slide's capped width */
     }
 
     .slide-title { font-size: 18px; }
@@ -794,15 +800,67 @@
         gap: 10px;
     }
 
-    .line-item-header-grid,
+    /* Hide column headers — layout switches to stacked rows */
+    .line-item-header-grid {
+        display: none;
+    }
+
+    /* Separator between line items */
+    .line-items-list {
+        gap: 0;
+        overflow: hidden;
+        width: 100%;
+    }
+
     .line-item-row {
-        grid-template-columns: 1fr 44px 68px 24px;
-        gap: 5px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        grid-template-areas:
+            "desc desc"
+            "qty  price";
+        gap: 6px;
+        padding: 12px 0;
+        border-bottom: 1px solid #e8e8e8;
+        position: relative;
+        align-items: center;
+        min-width: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .line-item-row:last-child {
+        border-bottom: none;
+    }
+
+    /* Description spans full width */
+    .line-item-row input[data-field="desc"] {
+        grid-area: desc;
+    }
+
+    /* Qty */
+    .line-item-row input[data-field="qty"] {
+        grid-area: qty;
+    }
+
+    /* Price */
+    .line-item-row input[data-field="price"] {
+        grid-area: price;
+    }
+
+    /* Remove button floats to the right of the price row */
+    .line-item-remove {
+        position: absolute;
+        top: 12px;
+        right: 0;
     }
 
     .line-item-row input {
-        padding: 8px 8px;
-        font-size: 11px;
+        padding: 9px 12px;
+        font-size: 13px;
+        min-width: 0;      /* prevents grid blowout on long values */
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .wizard-footer {
