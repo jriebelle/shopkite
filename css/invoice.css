@@ -802,7 +802,7 @@
         margin: 0 auto;
     }
 
-    .form-row #inv-due-date { border: 1px solid #ff6600; max-width: 300px; }
+    .form-row #inv-due-date { border: 1px solid #ff6600; max-width: 200px; }
 
     /* Hide column headers — layout switches to stacked rows */
     .line-item-header-grid {
