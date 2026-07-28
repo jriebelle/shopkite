@@ -2299,7 +2299,7 @@ a {
   }
 
   .top-nav-info {
-    width: 220px;
+    width: 196px;
   }
 
   .bento-container .sku-store img { 
@@ -2578,5 +2578,52 @@ a {
 
   .ibr-writeup p {
     font-size: 15px;
+  }
+}
+
+/* ── Generic Banner (store.html & shared pages) ── */
+.generic-banner {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.generic-banner img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.generic-banner-text {
+  position: absolute;
+  top: 60%;
+  left: 60px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  z-index: 2;
+}
+
+.generic-banner-text span {
+  display: block;
+  font-size: 63px;
+  font-weight: 100;
+  line-height: 1;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+}
+
+.generic-banner-text .generic-banner-text-bold {
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .generic-banner-text {
+    left: 20px;
+  }
+
+  .generic-banner-text span {
+    font-size: 22px;
   }
 }

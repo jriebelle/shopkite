@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en" class="loading">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/cityscape.css">
+    <link rel="stylesheet" href="css/main.css?v=1.1.0">
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <title>ShopKite Store — Devices &amp; Services</title>
+    <meta name="description" content="Buy ShopKite devices and services — hardware, training, technical support and more. Delivered to your door across Nigeria.">
+    <style>html.loading, html.loading body { overflow: hidden !important; touch-action: none; }</style>
+    <style>
+        .store-content-area {
+            max-width: 860px;
+            margin: 50px auto 0 auto;
+            padding: 48px 24px 80px;
+        }
+        .store-intro { margin-bottom: 36px; }
+        .store-intro p { font-size: 15px; color: #555; line-height: 1.7; margin: 0 0 8px; }
+        .store-section-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #ff6600;
+            margin-bottom: 20px;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 56px;
+        }
+        .product-card {
+            background: #fff;
+            border-radius: 30px;
+            border: 1px solid #f0f0f0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .product-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .product-thumb {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            background: #f5f5f5;
+            display: block;
+        }
+        .product-thumb-placeholder {
+            width: 100%;
+            aspect-ratio: 4/3;
+            background: linear-gradient(135deg, #f7f7f7, #ebebeb);
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .product-card-body {
+            padding: 18px 18px 20px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        .product-card-name { font-size: 15px; font-weight: 700; color: #111; line-height: 1.3; margin-bottom: 4px; }
+        .product-card-variant { font-size: 12px; color: #999; margin-bottom: 14px; }
+        .product-card-price { font-size: 20px; font-weight: 800; color: #ff6600; margin-top: auto; margin-bottom: 14px; }
+        .product-out-of-stock {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #999;
+            background: #f4f4f4;
+            border-radius: 999px;
+            padding: 4px 12px;
+            margin-bottom: 14px;
+        }
+        .btn-buy {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: #ff6600;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 30px;
+            padding: 11px 16px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: background 0.15s ease;
+            box-sizing: border-box;
+        }
+        .btn-buy:hover { background: #e55c00; }
+        .btn-buy-disabled { background: #e8e8e8; color: #aaa; cursor: not-allowed; pointer-events: none; }
+        .store-checkout-note {
+            background: #fff8f4;
+            border: 1px solid #ffe3cc;
+            border-radius: 14px;
+            padding: 20px 24px;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+        .store-checkout-note svg { flex-shrink: 0; margin-top: 2px; }
+        .store-checkout-note p { font-size: 14px; color: #555; line-height: 1.6; margin: 0; }
+        .store-checkout-note strong { color: #111; }
+        .store-checkout-note a { color: #ff6600; text-decoration: none; font-weight: 600; }
+        .store-checkout-note a:hover { text-decoration: underline; }
+        /* ── Card image wrapper & overlays ── */
+        .product-card-img-wrap {
+            position: relative;
+        }
+        .product-stock-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(6px);
+            border-radius: 999px;
+            padding: 4px 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.14);
+            font-size: 12px;
+            font-weight: 700;
+            color: #111;
+            transition: opacity 0.2s;
+        }
+        .product-stock-badge.empty {
+            opacity: 0.4;
+        }
+        .product-qty-control {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(6px);
+            border-radius: 999px;
+            padding: 4px 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.14);
+        }
+        .qty-btn {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: none;
+            background: #ff6600;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 400;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s, transform 0.1s;
+            flex-shrink: 0;
+        }
+        .qty-btn:hover:not(:disabled) { background: #e55c00; transform: scale(1.1); }
+        .qty-btn:disabled { background: #e0e0e0; color: #bbb; cursor: not-allowed; }
+        .qty-count {
+            min-width: 22px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: #111;
+        }
+        @media (max-width: 520px) {
+            .store-content-area { padding: 28px 16px 60px; }
+            .product-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+            .product-card-body { padding: 14px 14px 16px; }
+            .product-card-name { font-size: 13px; }
+            .product-card-price { font-size: 17px; }
+            .qty-btn { width: 22px; height: 22px; font-size: 15px; }
+
+            .cart-modal-body { padding: 16px 18px; }
+            .cart-item-row { gap: 10px; }
+            .cart-item-img { width: 44px; height: 44px; }
+            .cart-item-name {
+                white-space: normal;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                font-size: 13px;
+            }
+            .cart-item-right {
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 6px;
+            }
+            .cart-item-subtotal {
+                min-width: auto;
+                font-size: 13px;
+                text-align: right;
+            }
+        }
+        @media (max-width: 360px) {
+            .product-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ── Toolbar Bar (Search + Cart) ── */
+        .store-toolbar-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .store-search-wrap {
+            position: relative;
+            flex: 1;
+            min-width: 240px;
+        }
+
+        .store-search-input {
+            width: 100%;
+            padding: 12px 18px 12px 42px;
+            border-radius: 30px;
+            border: 1px solid #e2e8f0;
+            background: #ffffff;
+            font-size: 14px;
+            color: #1e293b;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+        }
+
+        .store-search-input:focus {
+            border-color: #ff6600;
+            box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.15);
+        }
+
+        .store-search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .store-cart-btn-wrap {
+            position: relative;
+        }
+
+        .store-cart-btn {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #ff6600;
+            color: #ffffff;
+            border: none;
+            border-radius: 30px;
+            padding: 11px 22px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+            box-shadow: 0 4px 14px rgba(255, 102, 0, 0.25);
+        }
+
+        .store-cart-btn:hover {
+            background: #e55c00;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(255, 102, 0, 0.35);
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #444444;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 800;
+            min-width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .cart-badge.bump {
+            transform: scale(1.35);
+        }
+
+        .no-products-found {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 48px 20px;
+            color: #64748b;
+            font-size: 15px;
+            font-weight: 500;
+            display: none;
+        }
+
+        /* ── Cart Popup Modal ── */
+        .cart-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100000;
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .cart-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .cart-modal {
+            background: #ffffff;
+            width: 100%;
+            max-width: 520px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            max-height: 85vh;
+            transform: translateY(20px) scale(0.96);
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .cart-overlay.active .cart-modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .cart-modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .cart-modal-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-close-btn {
+            background: #f1f5f9;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 18px;
+            color: #64748b;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .cart-close-btn:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .cart-modal-body {
+            padding: 20px 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .cart-empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #94a3b8;
+        }
+
+        .cart-empty-state svg {
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        .cart-empty-state p {
+            font-size: 15px;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .cart-items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .cart-item-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .cart-item-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .cart-item-img {
+            width: 54px;
+            height: 54px;
+            border-radius: 12px;
+            object-fit: cover;
+            background: #f8fafc;
+            flex-shrink: 0;
+        }
+
+        .cart-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .cart-item-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.3;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .cart-item-price {
+            font-size: 13px;
+            color: #ff6600;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        .cart-item-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-shrink: 0;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 999px;
+            padding: 3px 6px;
+        }
+
+        .cart-item-subtotal {
+            font-size: 14px;
+            font-weight: 800;
+            color: #0f172a;
+            min-width: 75px;
+            text-align: right;
+        }
+
+        .cart-modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid #f1f5f9;
+            background: #f8fafc;
+        }
+
+        .cart-total-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .cart-total-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .cart-total-val {
+            font-size: 22px;
+            font-weight: 800;
+            color: #ff6600;
+        }
+
+        .btn-checkout {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: #ff6600;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 30px;
+            padding: 14px 20px;
+            text-decoration: none;
+            transition: background 0.15s ease, transform 0.15s ease;
+            box-shadow: 0 4px 14px rgba(255, 102, 0, 0.3);
+            box-sizing: border-box;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-checkout:hover {
+            background: #e55c00;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Page Loader -->
+    <div id="page-loader">
+        <div class="loader-content">
+            <div class="loader-percentage">0%</div>
+            <div class="loader-bar-bg">
+                <div class="loader-bar-fill"></div>
+            </div>
+        </div>
+    </div>
+    <script src="js/loader.js"></script>
+
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+        <div class="logo">
+            <a href="index.html"><img src="img/shopkite-logo.png" alt="ShopKite Logo"></a>
+        </div>
+        <div class="top-nav-right">
+            <div class="top-nav-info">
+                <div class="gradient-edge"></div>
+                <div class="sub-text">
+                    <p>Subscribe to ShopKite Merchant at &#8358;5,000/month &amp; buy Stella (Inventory Management Device) for &#8358;360,000 or Ken for &#8358;450,000</p>
+                </div>
+                <a href="store.html" class="go-to-store">
+                    <div class="text"><p>Visit our store</p></div>
+                    <div class="arrow"><img src="img/go-to-store-arrow.png" alt=""></div>
+                </a>
+            </div>
+            <div class="menu-btn-wrap">
+                <button class="menu-btn" id="menu-btn" aria-label="Open menu">
+                    <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect class="line-1" width="20" height="2" rx="1" fill="white"/>
+                        <rect class="line-2" y="6" width="20" height="2" rx="1" fill="white"/>
+                        <rect class="line-3" y="12" width="20" height="2" rx="1" fill="white"/>
+                    </svg>
+                </button>
+                <nav class="nav-dropdown" id="nav-dropdown" aria-hidden="true">
+                    <a href="index.html" class="nav-item" data-text="Home"><span>FAQs</span></a>
+                    <a href="#" class="nav-item" data-text="Contact Us" onclick="openPopupSupport()"><span>Get help from a human</span></a>
+                    <a href="ibr.html" class="nav-item" data-text="IBR"><span>Intelligent Business Report</span><span class="nav-item-pill">new</span></a>
+                    <a href="invoice.html" class="nav-item" data-text="Invoice Generator"><span>Free Invoice Generator</span><span class="nav-item-pill">new</span></a>
+                    <a href="#" class="nav-item" data-text="Blog"><span>Blog</span></a>
+                    <a href="#" class="nav-item" data-text="Agent Signup"><span>Become an Agent</span></a>
+                    <a href="#" class="nav-item" data-text="Privacy Policy"><span>Privacy Policy</span></a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="store-content-area">
+
+        <!-- Store Banner — generic-banner style -->
+        <div class="generic-banner" style="margin-bottom: 40px;">
+            <div class="generic-banner-text">
+                <span>Devices</span>
+                <span class="generic-banner-text-bold">&amp; Services</span>
+            </div>
+            <img src="img/generic-banner@2x.png" alt="ShopKite Devices and Services">
+        </div>
+
+        <div class="store-intro">
+            <div class="store-section-label">Our Products</div>
+            <p>Browse and order ShopKite hardware and services directly. Select items to add to your cart, or click checkout to complete your order details.</p>
+        </div>
+
+        <!-- Toolbar Bar: Search + Cart -->
+        <div class="store-toolbar-bar">
+            <div class="store-search-wrap">
+                <div class="store-search-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </div>
+                <input type="text" id="storeSearchInput" class="store-search-input" placeholder="Search products or services...">
+            </div>
+            <div class="store-cart-btn-wrap">
+                <button type="button" class="store-cart-btn" id="openCartBtn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    <span>Cart</span>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="product-grid" id="productGrid">
+
+            <!-- Ken Desktop Device -->
+            <div class="product-card" data-id="ken" data-name="Ken Desktop Device + Barcode Scanner" data-price="630000" data-stock="10" data-img="https://shopkitemerchants.s3.eu-west-2.amazonaws.com/photos/products/thumbnail/shopkite-ken-58mm-available-on-pre-order.jpg">
+                <div class="product-card-img-wrap">
+                    <div class="product-stock-badge"><span class="stock-count">10</span> left</div>
+                    <div class="product-qty-control">
+                        <button class="qty-btn qty-minus" aria-label="Decrease quantity" disabled>&#8722;</button>
+                        <span class="qty-count">0</span>
+                        <button class="qty-btn qty-plus" aria-label="Increase quantity">&#43;</button>
+                    </div>
+                    <img class="product-thumb"
+                         src="https://shopkitemerchants.s3.eu-west-2.amazonaws.com/photos/products/thumbnail/shopkite-ken-58mm-available-on-pre-order.jpg"
+                         alt="Ken Desktop Device + Barcode Scanner"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <div class="product-thumb-placeholder">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    </div>
+                </div>
+                <div class="product-card-body">
+                    <div class="product-card-name">Ken Desktop Device + Barcode Scanner</div>
+                    <div class="product-card-variant">Sunmi D3 Mini (58mm)</div>
+                    <div class="product-card-price">&#8358;630,000</div>
+                    <button type="button" class="btn-buy btn-add-cart">Add to cart</button>
+                </div>
+            </div>
+
+            <!-- Stella Android Device (Sold Out) -->
+            <div class="product-card" data-id="stella" data-name="Stella Android Device" data-price="390000" data-stock="0" data-img="https://shopkitemerchants.s3.eu-west-2.amazonaws.com/photos/products/thumbnail/stella-android-device.jpg">
+                <div class="product-card-img-wrap">
+                    <div class="product-stock-badge empty"><span class="stock-count">0</span> left</div>
+                    <div class="product-qty-control">
+                        <button class="qty-btn qty-minus" aria-label="Decrease quantity" disabled>&#8722;</button>
+                        <span class="qty-count">0</span>
+                        <button class="qty-btn qty-plus" aria-label="Increase quantity" disabled>&#43;</button>
+                    </div>
+                    <img class="product-thumb"
+                         src="https://shopkitemerchants.s3.eu-west-2.amazonaws.com/photos/products/thumbnail/stella-android-device.jpg"
+                         alt="Stella Android Device"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <div class="product-thumb-placeholder">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    </div>
+                </div>
+                <div class="product-card-body">
+                    <div class="product-card-name">Stella Android Device</div>
+                    <div class="product-card-variant">Sunmi V3</div>
+                    <div class="product-card-price">&#8358;390,000</div>
+                    <span class="product-out-of-stock">Sold out</span>
+                    <button type="button" class="btn-buy btn-buy-disabled" disabled aria-disabled="true">Currently unavailable</button>
+                </div>
+            </div>
+
+            <!-- On-ground Technical Support -->
+            <div class="product-card" data-id="support" data-name="On-ground Technical Support" data-price="10500" data-stock="2" data-img="https://shopkitemerchants.s3.eu-west-2.amazonaws.com/photos/products/thumbnail/on-ground-technical-support.jpg">
+                <div class="product-card-img-wrap">
+                    <div class="product-stock-badge"><span class="stock-count">2</span> left</div>
+                    <div class="product-qty-control">
+                        <button class="qty-btn qty-minus" aria-label="Decrease quantity" disabled>&#8722;</button>
+                        <span class="qty-count">0</span>
+                        <button class="qty-btn qty-plus" aria-label="Increase quantity">&#43;</button>
+                    </div>
+                    <img class="product-thumb"
+                         src="https://shopkitemerchants.s3.eu-west-2.amazonaws.com/photos/products/thumbnail/on-ground-technical-support.jpg"
+                         alt="On-ground Technical Support"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <div class="product-thumb-placeholder">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    </div>
+                </div>
+                <div class="product-card-body">
+                    <div class="product-card-name">On-ground Technical Support</div>
+                    <div class="product-card-variant">1 day</div>
+                    <div class="product-card-price">&#8358;10,500</div>
+                    <button type="button" class="btn-buy btn-add-cart">Add to cart</button>
+                </div>
+            </div>
+
+            <!-- Virtual Staff Training Fee -->
+            <div class="product-card" data-id="virtual" data-name="Virtual Staff Training Fee" data-price="10000" data-stock="20" data-img="https://shopkitemerchants.s3.eu-west-2.amazonaws.com/photos/products/thumbnail/virtual-staff-training-fee.jpg">
+                <div class="product-card-img-wrap">
+                    <div class="product-stock-badge"><span class="stock-count">20</span> left</div>
+                    <div class="product-qty-control">
+                        <button class="qty-btn qty-minus" aria-label="Decrease quantity" disabled>&#8722;</button>
+                        <span class="qty-count">0</span>
+                        <button class="qty-btn qty-plus" aria-label="Increase quantity">&#43;</button>
+                    </div>
+                    <img class="product-thumb"
+                         src="https://shopkitemerchants.s3.eu-west-2.amazonaws.com/photos/products/thumbnail/virtual-staff-training-fee.jpg"
+                         alt="Virtual Staff Training Fee"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <div class="product-thumb-placeholder">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    </div>
+                </div>
+                <div class="product-card-body">
+                    <div class="product-card-name">Virtual Staff Training Fee</div>
+                    <div class="product-card-variant">One session</div>
+                    <div class="product-card-price">&#8358;10,000</div>
+                    <button type="button" class="btn-buy btn-add-cart">Add to cart</button>
+                </div>
+            </div>
+
+            <!-- Stock-taking Fee -->
+            <div class="product-card" data-id="stocktaking" data-name="Stock-taking Fee (1 - 100 SKUs)" data-price="19500" data-stock="15" data-img="https://shopkitemerchants.s3.eu-west-2.amazonaws.com/photos/products/thumbnail/stock-taking-fee-1-100-skus.jpg">
+                <div class="product-card-img-wrap">
+                    <div class="product-stock-badge"><span class="stock-count">15</span> left</div>
+                    <div class="product-qty-control">
+                        <button class="qty-btn qty-minus" aria-label="Decrease quantity" disabled>&#8722;</button>
+                        <span class="qty-count">0</span>
+                        <button class="qty-btn qty-plus" aria-label="Increase quantity">&#43;</button>
+                    </div>
+                    <img class="product-thumb"
+                         src="https://shopkitemerchants.s3.eu-west-2.amazonaws.com/photos/products/thumbnail/stock-taking-fee-1-100-skus.jpg"
+                         alt="Stock-taking Fee (1 - 100 SKUs)"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <div class="product-thumb-placeholder">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    </div>
+                </div>
+                <div class="product-card-body">
+                    <div class="product-card-name">Stock-taking Fee (1 &ndash; 100 SKUs)</div>
+                    <div class="product-card-variant">per Store</div>
+                    <div class="product-card-price">&#8358;19,500</div>
+                    <button type="button" class="btn-buy btn-add-cart">Add to cart</button>
+                </div>
+            </div>
+
+            <!-- Staff Training Fee -->
+            <div class="product-card" data-id="staff" data-name="Staff Training Fee" data-price="15000" data-stock="25" data-img="https://shopkitemerchants.s3.eu-west-2.amazonaws.com/photos/products/updated/NJOAuig9qekaMXGuwVs6jWNn1SoQEBpNcciQQVNp.png">
+                <div class="product-card-img-wrap">
+                    <div class="product-stock-badge"><span class="stock-count">25</span> left</div>
+                    <div class="product-qty-control">
+                        <button class="qty-btn qty-minus" aria-label="Decrease quantity" disabled>&#8722;</button>
+                        <span class="qty-count">0</span>
+                        <button class="qty-btn qty-plus" aria-label="Increase quantity">&#43;</button>
+                    </div>
+                    <img class="product-thumb"
+                         src="https://shopkitemerchants.s3.eu-west-2.amazonaws.com/photos/products/updated/NJOAuig9qekaMXGuwVs6jWNn1SoQEBpNcciQQVNp.png"
+                         alt="Staff Training Fee"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <div class="product-thumb-placeholder">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    </div>
+                </div>
+                <div class="product-card-body">
+                    <div class="product-card-name">Staff Training Fee</div>
+                    <div class="product-card-variant">5 staff per Store per Day</div>
+                    <div class="product-card-price">&#8358;15,000</div>
+                    <button type="button" class="btn-buy btn-add-cart">Add to cart</button>
+                </div>
+            </div>
+
+            <div class="no-products-found" id="noProductsFound">
+                No products found matching your search.
+            </div>
+
+        </div>
+
+        <div class="store-checkout-note">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <p><strong>How to order:</strong> Clicking &ldquo;Order now&rdquo; takes you to the ShopKite checkout where you can select quantities, enter your delivery details, and pay securely. Need help? <a href="#" onclick="openPopupSupport(); return false;">Contact our team.</a></p>
+        </div>
+
+    </main>
+
+    <!-- Main Footer -->
+    <footer class="main-footer">
+        <div class="media-title"><h2>ShopKite in the news</h2></div>
+        <div class="media-brands">
+            <div class="media-brands-track">
+                <a href="#" target="_blank" rel="noopener noreferrer" class="media-brand-item"><img src="img/media-logos/channels.png" alt="Channels TV"></a>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="media-brand-item"><img src="img/media-logos/lagos-talks.png" alt="Lagos Talks"></a>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="media-brand-item"><img src="img/media-logos/mainland-fm.png" alt="Mainland FM"></a>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="media-brand-item"><img src="img/media-logos/techcity.png" alt="Tech City"></a>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="media-brand-item"><img src="img/media-logos/tvc.png" alt="TVC News"></a>
+            </div>
+        </div>
+        <div class="footer-container">
+            <div class="footer-col logo-col">
+                <a href="index.html"><img src="img/shopkite-logo.png" alt="ShopKite Logo" class="footer-logo"></a>
+            </div>
+            <div class="footer-col links-col">
+                <a href="#">Blog</a>
+                <a href="ibr.html">Business Report</a>
+                <a href="store.html">Our Store</a>
+                <a href="#">Become an Agent</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <div class="footer-col links-col">
+                <a href="#">FAQs</a>
+                <a href="#">Video Tutorial</a>
+                <a href="#">Download for Android</a>
+                <a href="#">Download for iOS</a>
+                <a href="#" onclick="openPopupSupport()">Get help from a human</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-partners">
+                <span class="partners-label">Official hardware distributors in Nigeria</span>
+                <img src="img/sunmi-logo.png" alt="Sunmi Logo" class="sunmi-logo">
+            </div>
+            <div class="footer-socials">
+                <a href="#" class="social-link"><img src="img/whatsapp-icon.png" alt="WhatsApp"></a>
+                <a href="#" class="social-link"><img src="img/instagram-icon.png" alt="Instagram"></a>
+                <a href="#" class="social-link"><img src="img/facebook-icon.png" alt="Facebook"></a>
+                <a href="#" class="social-link"><img src="img/x-icon.png" alt="X"></a>
+                <a href="#" class="social-link"><img src="img/youtube-icon.png" alt="YouTube"></a>
+                <a href="#" class="social-link"><img src="img/tiktok-icon.png" alt="TikTok"></a>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>&copy; 2026 ShopKite Nigeria Limited. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div id="menu-cursor" aria-hidden="true">Menu</div>
+    <div id="brand-cursor" aria-hidden="true"><span></span>Outlets</div>
+
+    <div class="overlay" id="popupOverlaySupport" onclick="if(event.target === this) closePopupSupport()">
+        <div class="popup">
+            <button class="close-btn" onclick="closePopupSupport()" aria-label="Close">close</button>
+            <img src="img/support-img.png" alt="Support" class="popup-support-img">
+            <div class="popup-body">
+                <h1>We are happy to hear from you!</h1>
+                <p>Need to setup a Store?<br> Need clarity on a feature? <br>or would you like to make a suggestion?<br>Reach us via email/WhatsApp or any of our social handles...</p>
+                <div class="popup-socials">
+                    <a href="https://wa.me/2349062000393" target="_blank" rel="noopener noreferrer" class="social-link"><img src="img/whatsapp-icon.png" alt="WhatsApp"></a>
+                    <a href="#" class="social-link"><img src="img/instagram-icon.png" alt="Instagram"></a>
+                    <a href="#" class="social-link"><img src="img/facebook-icon.png" alt="Facebook"></a>
+                    <a href="#" class="social-link"><img src="img/x-icon.png" alt="X"></a>
+                    <a href="#" class="social-link"><img src="img/youtube-icon.png" alt="YouTube"></a>
+                    <a href="#" class="social-link"><img src="img/tiktok-icon.png" alt="TikTok"></a>
+                </div>
+                <div class="popup-email"><a href="mailto:hello@shopkite.com.ng">hello@shopkite.com.ng</a></div>
+                <h3><a href="tel:09062000393">09062000393</a></h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shopping Cart Modal Overlay (Blurred Backdrop) -->
+    <div class="cart-overlay" id="cartOverlay" onclick="if(event.target === this) closeCartModal()">
+        <div class="cart-modal">
+            <div class="cart-modal-header">
+                <div class="cart-modal-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    <span>Shopping Cart</span>
+                </div>
+                <button type="button" class="cart-close-btn" onclick="closeCartModal()" aria-label="Close cart">&times;</button>
+            </div>
+            <div class="cart-modal-body" id="cartModalBody">
+                <!-- Dynamic cart list or empty state -->
+            </div>
+            <div class="cart-modal-footer">
+                <div class="cart-total-row">
+                    <span class="cart-total-label">Subtotal</span>
+                    <span class="cart-total-val" id="cartTotalVal">&#8358;0</span>
+                </div>
+                <a href="https://shopkite.com.ng/pay" target="_blank" rel="noopener noreferrer" class="btn-checkout" id="cartCheckoutBtn">Proceed to checkout</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" integrity="sha512-NcZdtrT77bJr4STcmsGAESr06BYGE8woZdSdEgqnpyqac7sugNO+Tr4bGwGF3MsnEkGKhU2KL2xh6Ec+BqsaHA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        function openPopupSupport() {
+            const overlay = document.getElementById('popupOverlaySupport');
+            const navDropdown = document.getElementById('nav-dropdown');
+            const menuBtn = document.getElementById('menu-btn');
+            if (navDropdown && menuBtn) { navDropdown.classList.remove('open'); menuBtn.classList.remove('open'); }
+            if (overlay) { overlay.style.display = 'flex'; requestAnimationFrame(() => { overlay.classList.add('active'); }); document.body.style.overflow = 'hidden'; }
+        }
+        function closePopupSupport() {
+            const overlay = document.getElementById('popupOverlaySupport');
+            if (overlay) { overlay.classList.remove('active'); setTimeout(() => { overlay.style.display = 'none'; document.body.style.overflow = ''; }, 250); }
+        }
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePopupSupport(); });
+
+        // ── Cart & Store Logic ──
+        const storeSearchInput = document.getElementById('storeSearchInput');
+        const noProductsFound  = document.getElementById('noProductsFound');
+        const cartBadge        = document.getElementById('cartBadge');
+        const openCartBtn      = document.getElementById('openCartBtn');
+        const cartOverlay      = document.getElementById('cartOverlay');
+        const cartModalBody    = document.getElementById('cartModalBody');
+        const cartTotalVal     = document.getElementById('cartTotalVal');
+
+        // Store product states
+        const productsState = {};
+
+        function formatNaira(amount) {
+            return '&#8358;' + amount.toLocaleString('en-US');
+        }
+
+        function updateCartUI() {
+            let totalItems = 0;
+            let totalPrice = 0;
+            const itemsInCart = [];
+
+            Object.values(productsState).forEach(prod => {
+                totalItems += prod.qty;
+                totalPrice += prod.qty * prod.price;
+                if (prod.qty > 0) {
+                    itemsInCart.push(prod);
+                }
+            });
+
+            // Update badge counter
+            if (cartBadge) {
+                cartBadge.textContent = totalItems;
+            }
+
+            // Update Modal Body
+            if (cartModalBody) {
+                if (itemsInCart.length === 0) {
+                    cartModalBody.innerHTML = `
+                        <div class="cart-empty-state">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                            <p>Your shopping cart is empty</p>
+                        </div>
+                    `;
+                } else {
+                    let html = '<div class="cart-items-list">';
+                    itemsInCart.forEach(prod => {
+                        html += `
+                            <div class="cart-item-row" data-id="${prod.id}">
+                                <img src="${prod.img}" alt="${prod.name}" class="cart-item-img" onerror="this.src='img/shopkite-logo.png'">
+                                <div class="cart-item-info">
+                                    <div class="cart-item-name">${prod.name}</div>
+                                    <div class="cart-item-price">${formatNaira(prod.price)}</div>
+                                </div>
+                                <div class="cart-item-right">
+                                    <div class="cart-item-controls">
+                                        <button type="button" class="qty-btn cart-item-minus" data-id="${prod.id}">&#8722;</button>
+                                        <span class="qty-count">${prod.qty}</span>
+                                        <button type="button" class="qty-btn cart-item-plus" data-id="${prod.id}" ${prod.stock === 0 ? 'disabled' : ''}>&#43;</button>
+                                    </div>
+                                    <div class="cart-item-subtotal">${formatNaira(prod.qty * prod.price)}</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                    cartModalBody.innerHTML = html;
+
+                    // Wire up modal item quantity controls
+                    cartModalBody.querySelectorAll('.cart-item-plus').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const id = btn.dataset.id;
+                            if (productsState[id] && productsState[id].stock > 0) {
+                                changeQuantity(id, 1);
+                            }
+                        });
+                    });
+
+                    cartModalBody.querySelectorAll('.cart-item-minus').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const id = btn.dataset.id;
+                            if (productsState[id] && productsState[id].qty > 0) {
+                                changeQuantity(id, -1);
+                            }
+                        });
+                    });
+                }
+            }
+
+            // Update Total Price
+            if (cartTotalVal) {
+                cartTotalVal.innerHTML = formatNaira(totalPrice);
+            }
+        }
+
+        function triggerBadgeBump() {
+            if (cartBadge) {
+                cartBadge.classList.add('bump');
+                setTimeout(() => cartBadge.classList.remove('bump'), 200);
+            }
+        }
+
+        function changeQuantity(id, delta) {
+            const prod = productsState[id];
+            if (!prod) return;
+
+            if (delta > 0 && prod.stock > 0) {
+                prod.qty += 1;
+                prod.stock -= 1;
+                triggerBadgeBump();
+            } else if (delta < 0 && prod.qty > 0) {
+                prod.qty -= 1;
+                prod.stock += 1;
+            }
+
+            refreshProductCardUI(prod);
+            updateCartUI();
+        }
+
+        function refreshProductCardUI(prod) {
+            const card = prod.cardEl;
+            if (!card) return;
+
+            const stockEl  = card.querySelector('.stock-count');
+            const qtyEl    = card.querySelector('.qty-count');
+            const minusBtn = card.querySelector('.qty-minus');
+            const plusBtn  = card.querySelector('.qty-plus');
+            const addBtn   = card.querySelector('.btn-add-cart');
+            const badge    = card.querySelector('.product-stock-badge');
+
+            if (stockEl) stockEl.textContent = prod.stock;
+            if (qtyEl)   qtyEl.textContent   = prod.qty;
+            if (minusBtn) minusBtn.disabled  = prod.qty === 0;
+            if (plusBtn)  plusBtn.disabled   = prod.stock === 0;
+            if (badge)    badge.classList.toggle('empty', prod.stock === 0);
+
+            if (addBtn) {
+                if (prod.stock === 0) {
+                    addBtn.disabled = true;
+                    addBtn.textContent = 'Out of stock';
+                    addBtn.classList.add('btn-buy-disabled');
+                } else {
+                    addBtn.disabled = false;
+                    addBtn.textContent = 'Add to cart';
+                    addBtn.classList.remove('btn-buy-disabled');
+                }
+            }
+        }
+
+        // Initialize each product card
+        document.querySelectorAll('.product-card[data-id]').forEach(card => {
+            const id    = card.dataset.id;
+            const name  = card.dataset.name;
+            const price = parseInt(card.dataset.price, 10) || 0;
+            const stock = parseInt(card.dataset.stock, 10) || 0;
+            const img   = card.dataset.img || '';
+
+            const prod = {
+                id,
+                name,
+                price,
+                stock,
+                qty: 0,
+                img,
+                cardEl: card
+            };
+
+            productsState[id] = prod;
+
+            const minusBtn = card.querySelector('.qty-minus');
+            const plusBtn  = card.querySelector('.qty-plus');
+            const addBtn   = card.querySelector('.btn-add-cart');
+
+            if (plusBtn) {
+                plusBtn.addEventListener('click', () => changeQuantity(id, 1));
+            }
+            if (minusBtn) {
+                minusBtn.addEventListener('click', () => changeQuantity(id, -1));
+            }
+            if (addBtn) {
+                addBtn.addEventListener('click', () => changeQuantity(id, 1));
+            }
+
+            refreshProductCardUI(prod);
+        });
+
+        // Search Filter Logic
+        if (storeSearchInput) {
+            storeSearchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                let visibleCount = 0;
+
+                Object.values(productsState).forEach(prod => {
+                    const cardName = prod.name.toLowerCase();
+                    const cardVariant = (prod.cardEl.querySelector('.product-card-variant')?.textContent || '').toLowerCase();
+                    const matches = cardName.includes(query) || cardVariant.includes(query);
+
+                    if (matches) {
+                        prod.cardEl.style.display = '';
+                        visibleCount++;
+                    } else {
+                        prod.cardEl.style.display = 'none';
+                    }
+                });
+
+                if (noProductsFound) {
+                    noProductsFound.style.display = visibleCount === 0 ? 'block' : 'none';
+                }
+            });
+        }
+
+        // Modal Open / Close Logic
+        function openCartModal() {
+            if (cartOverlay) {
+                cartOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeCartModal() {
+            if (cartOverlay) {
+                cartOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        if (openCartBtn) {
+            openCartBtn.addEventListener('click', openCartModal);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeCartModal();
+                closePopupSupport();
+            }
+        });
+
+        // Initial Cart UI render
+        updateCartUI();
+    </script>
+</body>
+
+</html>
