@@ -2561,7 +2561,7 @@ a {
 @media (max-width: 768px) {
   .ibr-content-area {
     margin-top: 100px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
   }
 
   .ibr-banner-text {
@@ -2586,6 +2586,7 @@ a {
   width: 100%;
   position: relative;
   overflow: hidden;
+  margin-bottom: 10px;
 }
 
 .generic-banner img {
