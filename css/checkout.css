@@ -75,8 +75,8 @@ body:has(.checkout-area) {
 
 .checkout-card-title {
     font-family: "Roboto", sans-serif;
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 22px;
+    font-weight: 200;
     color: #0f172a;
     margin: 0 0 24px 0;
     display: flex;

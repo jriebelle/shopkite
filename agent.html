@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" class="loading">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/cityscape.css">
+    <link rel="stylesheet" href="css/main.css?v=1.1.0">
+    <link rel="stylesheet" href="css/agent.css">
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <title>Become an Agent — ShopKite</title>
+    <meta name="description" content="Talk to stores around you about ShopKite, earn money. Find neighbourhood supermarkets or pharmacies around you and start earning today.">
+    <!-- Critical: lock scroll before first paint -->
+    <style>html.loading, html.loading body { overflow: hidden !important; touch-action: none; }</style>
+</head>
+
+<body>
+    <!-- Page Loader -->
+    <div id="page-loader">
+        <div class="loader-content">
+            <div class="loader-percentage">0%</div>
+            <div class="loader-bar-bg">
+                <div class="loader-bar-fill"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Loader script -->
+    <script src="js/loader.js"></script>
+
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+        <div class="logo">
+            <a href="index.html"><img src="img/shopkite-logo.png" alt="ShopKite Logo"></a>
+        </div>
+        <div class="top-nav-right">
+            <div class="top-nav-info">
+                <div class="gradient-edge"></div>
+                <div class="sub-text">
+                    <p>Subscribe to ShopKite Merchant at &#8358;5,000/month &amp; buy Stella (Inventory Management Device) for &#8358;360,000 or Ken for &#8358;450,000</p>
+                </div>
+                <a href="store.html" class="go-to-store">
+                    <div class="text">
+                        <p>Visit our store</p>
+                    </div>
+                    <div class="arrow">
+                        <img src="img/go-to-store-arrow.png" alt="">
+                    </div>
+                </a>
+            </div>
+            <div class="menu-btn-wrap">
+                <button class="menu-btn" id="menu-btn" aria-label="Open menu">
+                    <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect class="line-1" width="20" height="2" rx="1" fill="white"/>
+                        <rect class="line-2" y="6" width="20" height="2" rx="1" fill="white"/>
+                        <rect class="line-3" y="12" width="20" height="2" rx="1" fill="white"/>
+                    </svg>
+                </button>
+                <nav class="nav-dropdown" id="nav-dropdown" aria-hidden="true">
+                    <a href="index.html" class="nav-item" data-text="Home"><span>FAQs</span></a>
+                    <a href="#" class="nav-item" data-text="Contact Us" onclick="openPopupSupport()"><span>Get help from a human</span></a>
+                    <a href="ibr.html" class="nav-item" data-text="IBR"><span>Intelligent Business Report</span><span class="nav-item-pill">new</span></a>
+                    <a href="invoice.html" class="nav-item" data-text="Invoice Generator"><span>Free Invoice Generator</span><span class="nav-item-pill">new</span></a>
+                    <a href="agent.html" class="nav-item nav-active" data-text="Agent Signup"><span>Become an Agent</span></a>
+                    <a href="#" class="nav-item" data-text="Blog"><span>Blog</span></a>
+                    <a href="#" class="nav-item" data-text="Privacy Policy"><span>Privacy Policy</span></a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="agent-content-area">
+        
+        <!-- Agent Page Banner -->
+        <div class="agent-banner">
+            <div class="agent-banner-text">
+                <span>Become a</span>
+                <span class="agent-banner-text-bold">ShopKite Agent</span>
+            </div>
+            <img src="img/shopkite-agent-banner@2x.png" alt="ShopKite Agent Banner">
+        </div>
+
+        <!-- Intro Writeup -->
+        <div class="agent-writeup">
+            <h1 class="agent-hero-title">Talk to stores around you about ShopKite, earn money.</h1>
+            <p class="agent-hero-subtitle">Find neighbourhood supermarkets or pharmacies around you, tell them about ShopKite Merchant and start earning money.</p>
+        </div>
+
+        <!-- Video & Overview Grid -->
+        <div class="agent-video-grid">
+            <div class="agent-video-wrap">
+                <iframe src="https://www.youtube.com/embed/5GbQTo6sOao" title="ShopKite Merchant Overview" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="agent-video-content">
+                <h2>Let's start with ShopKite Merchant</h2>
+                <p>Simply put, <strong>ShopKite Merchant</strong> shrinks the big point of sale systems used in pharmacies and supermarkets into an app on your phone.</p>
+                <p>No need for big and bulky point of sale systems — store owners just install ShopKite Merchant on their tablet or mobile phone, period!</p>
+            </div>
+        </div>
+
+        <!-- Features / Agent Steps Grid -->
+        <h2 class="agent-section-heading">How It Works</h2>
+        <div class="agent-features-grid">
+            
+            <div class="agent-feature-card">
+                <div class="agent-feature-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <h3>Tell someone about it</h3>
+                <p>Every pharmacy and supermarket owner you talk to about ShopKite Merchant is very likely to sign up because it was specially designed for them.</p>
+                <p>ShopKite Merchant is for every kind of store — big, medium, or small.</p>
+            </div>
+            <div class="agent-feature-card">
+                <div class="agent-feature-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+                </div>
+                <h3>Don't sell, recommend!</h3>
+                <p>You are helping pharmacies and supermarkets by introducing them to ShopKite Merchant. You are not trying to convince them, you are bringing them to the light.</p>
+            </div>
+
+            <div class="agent-feature-card">
+                <div class="agent-feature-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                </div>
+                <h3>Read the handbook</h3>
+                <p>Everything you need to understand about being a ShopKite agent can be found in the official handbook.</p>
+                <p>It explains earnings, commissions, and answers questions you may have.</p>
+            </div>
+
+        </div>
+
+        <!-- CTA Box -->
+        <div class="agent-cta-box">
+            <h2>Ready to start earning with ShopKite?</h2>
+            <p>Join hundreds of agents empowering store owners across Nigeria. Register today or read the agent handbook for details.</p>
+            <div class="agent-btn-group">
+                <a href="https://agent.shopkite.com.ng/register" target="_blank" rel="noopener noreferrer" class="agent-btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                    Sign up as a ShopKite Agent
+                </a>
+                <a href="https://agent.shopkite.com.ng/handbook" target="_blank" rel="noopener noreferrer" class="agent-btn-secondary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    Read Agent Handbook
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Main Footer -->
+    <footer class="main-footer">
+        <div class="media-title">
+            <h2>ShopKite in the news</h2>
+        </div>
+        <div class="media-brands">
+            <div class="media-brands-track">
+                <a href="#" target="_blank" rel="noopener noreferrer" class="media-brand-item"><img src="img/media-logos/channels.png" alt="Channels TV"></a>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="media-brand-item"><img src="img/media-logos/lagos-talks.png" alt="Lagos Talks"></a>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="media-brand-item"><img src="img/media-logos/mainland-fm.png" alt="Mainland FM"></a>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="media-brand-item"><img src="img/media-logos/techcity.png" alt="Tech City"></a>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="media-brand-item"><img src="img/media-logos/tvc.png" alt="TVC News"></a>
+            </div>
+        </div>
+        <div class="footer-container">
+            <div class="footer-col logo-col">
+                <a href="index.html"><img src="img/shopkite-logo.png" alt="ShopKite Logo" class="footer-logo"></a>
+            </div>
+            <div class="footer-col links-col">
+                <a href="#">Blog</a>
+                <a href="ibr.html">Business Report</a>
+                <a href="store.html">Our Store</a>
+                <a href="agent.html">Become an Agent</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <div class="footer-col links-col">
+                <a href="#">FAQs</a>
+                <a href="#">Video Tutorial</a>
+                <a href="#">Download for Android</a>
+                <a href="#">Download for iOS</a>
+                <a href="#" onclick="openPopupSupport(); return false;">Get help from a human</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-partners">
+                <span class="partners-label">Official hardware distributors in Nigeria</span>
+                <img src="img/sunmi-logo.png" alt="Sunmi Logo" class="sunmi-logo">
+            </div>
+            <div class="footer-socials">
+                <a href="https://wa.me/2349062000393" target="_blank" class="social-link"><img src="img/whatsapp-icon.png" alt="WhatsApp"></a>
+                <a href="https://instagram.com/shopkiteagents" target="_blank" class="social-link"><img src="img/instagram-icon.png" alt="Instagram"></a>
+                <a href="https://facebook.com/shopkite" target="_blank" class="social-link"><img src="img/facebook-icon.png" alt="Facebook"></a>
+                <a href="https://twitter.com/shopkiteagents" target="_blank" class="social-link"><img src="img/x-icon.png" alt="X"></a>
+                <a href="https://www.youtube.com/channel/UCajEZd_nCgLxN1Rz4mFis0g" target="_blank" class="social-link"><img src="img/youtube-icon.png" alt="YouTube"></a>
+                <a href="#" class="social-link"><img src="img/tiktok-icon.png" alt="TikTok"></a>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>&copy; 2026 ShopKite Nigeria Limited. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Custom menu cursor -->
+    <div id="menu-cursor" aria-hidden="true">Menu</div>
+    <!-- Custom brand cursor -->
+    <div id="brand-cursor" aria-hidden="true"><span></span>Outlets</div>
+
+    <!-- Contact Support Popup -->
+    <div class="overlay" id="popupOverlaySupport" onclick="if(event.target === this) closePopupSupport()">
+        <div class="popup">
+            <button class="close-btn" onclick="closePopupSupport()" aria-label="Close">close</button>
+            <img src="img/support-img.png" alt="Support" class="popup-support-img">
+            <div class="popup-body">
+                <h1>We are happy to hear from you!</h1>
+                <p>Need to setup a Store?<br> Need clarity on a feature? <br>or would you like to make a suggestion?<br>Reach us via email/WhatsApp or any of our social handles...</p>
+                <div class="popup-socials">
+                    <a href="https://wa.me/2349062000393" target="_blank" rel="noopener noreferrer" class="social-link"><img src="img/whatsapp-icon.png" alt="WhatsApp"></a>
+                    <a href="#" class="social-link"><img src="img/instagram-icon.png" alt="Instagram"></a>
+                    <a href="#" class="social-link"><img src="img/facebook-icon.png" alt="Facebook"></a>
+                    <a href="#" class="social-link"><img src="img/x-icon.png" alt="X"></a>
+                    <a href="#" class="social-link"><img src="img/youtube-icon.png" alt="YouTube"></a>
+                    <a href="#" class="social-link"><img src="img/tiktok-icon.png" alt="TikTok"></a>
+                </div>
+                <div class="popup-email">
+                    <a href="mailto:hello@shopkite.com.ng">hello@shopkite.com.ng</a>
+                </div>
+                <h3><a href="tel:09062000393">09062000393</a></h3>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"
+        integrity="sha512-NcZdtrT77bJr4STcmsGAESr06BYGE8woZdSdEgqnpyqac7sugNO+Tr4bGwGF3MsnEkGKhU2KL2xh6Ec+BqsaHA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        function openPopupSupport() {
+            const overlay = document.getElementById('popupOverlaySupport');
+            const navDropdown = document.getElementById('nav-dropdown');
+            const menuBtn = document.getElementById('menu-btn');
+            
+            if (navDropdown && menuBtn) {
+                navDropdown.classList.remove('open');
+                menuBtn.classList.remove('open');
+            }
+            
+            if (overlay) {
+                overlay.style.display = 'flex';
+                requestAnimationFrame(() => {
+                    overlay.classList.add('active');
+                });
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closePopupSupport() {
+            const overlay = document.getElementById('popupOverlaySupport');
+            if (overlay) {
+                overlay.classList.remove('active');
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    document.body.style.overflow = '';
+                }, 250);
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closePopupSupport();
+            }
+        });
+    </script>
+</body>
+
+</html>
