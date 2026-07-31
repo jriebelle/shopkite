@@ -254,6 +254,203 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
+/* ── Handbook Specific Styles ── */
+.handbook-toc-card {
+    background: #ffffff;
+    border-radius: 20px;
+    border: 1px solid #f1f5f9;
+    padding: 28px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+}
+
+.handbook-toc-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.handbook-toc-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.handbook-toc-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #475569;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.handbook-toc-pill:hover {
+    background: rgba(255, 102, 0, 0.08);
+    border-color: #ff6600;
+    color: #ff6600;
+}
+
+.handbook-section {
+    background: #ffffff;
+    border-radius: 24px;
+    border: 1px solid #f1f5f9;
+    padding: 32px;
+    margin-bottom: 32px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    scroll-margin-top: 100px;
+}
+
+.handbook-section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.handbook-section-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: rgba(255, 102, 0, 0.1);
+    color: #ff6600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.handbook-section-title {
+    font-size: 22px;
+    font-weight: 400;
+    color: #0f172a;
+    margin: 0;
+}
+
+.handbook-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.handbook-list li {
+    position: relative;
+    padding-left: 24px;
+    font-size: 15px;
+    color: #475569;
+    line-height: 1.7;
+}
+
+.handbook-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ff6600;
+}
+
+.handbook-earnings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 24px 0 12px 0;
+}
+
+.handbook-earning-badge {
+    background: #f8fafc;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    padding: 22px 18px;
+    text-align: center;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.handbook-earning-badge:hover {
+    border-color: #ff6600;
+    transform: translateY(-2px);
+}
+
+.handbook-earning-amount {
+    font-size: 26px;
+    font-weight: 700;
+    color: #ff6600;
+    margin-bottom: 6px;
+}
+
+.handbook-earning-label {
+    font-size: 13.5px;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+.handbook-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.handbook-step-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.handbook-step-number {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #ff6600;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.handbook-step-body h4 {
+    font-size: 17px;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0 0 6px 0;
+}
+
+.handbook-step-body p {
+    font-size: 14.5px;
+    color: #475569;
+    line-height: 1.65;
+    margin: 0 0 8px 0;
+}
+
+.handbook-step-body ul {
+    margin: 6px 0 0 0;
+    padding-left: 18px;
+    color: #475569;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
     .agent-content-area {
@@ -294,4 +491,13 @@
         justify-content: center;
         box-sizing: border-box;
     }
+
+    .handbook-section {
+        padding: 24px 18px;
+    }
+
+    .handbook-toc-card {
+        padding: 20px 16px;
+    }
 }
+
