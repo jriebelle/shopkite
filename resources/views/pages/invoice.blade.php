@@ -1,0 +1,700 @@
+@extends('layouts.app')
+
+@section('title', 'Free Invoice Generator — ShopKite')
+@section('meta_description', 'Create, preview and download professional invoices instantly with ShopKite\'s free invoice generator. No sign-in required.')
+
+@section('extra_css')
+<link rel="stylesheet" href="{{ asset('css/invoice.css?v=1.0.4') }}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+@endsection
+
+@section('content')
+<!-- Page -->
+<div class="invoice-page-wrap">
+    <div class="invoice-page-header">
+        <h1>Free <strong>Invoice Generator</strong></h1>
+        <p>Fill in the steps, preview your invoice live, then download as a PDF — no sign-in needed.</p>
+    </div>
+
+    <div class="invoice-generator">
+
+        <!-- ══ LEFT: Wizard Panel ═══════════════════════════ -->
+        <div class="invoice-wizard">
+
+            <!-- Step progress indicator -->
+            <div class="wizard-progress" id="wizard-progress">
+                <!-- JS renders these -->
+            </div>
+
+            <!-- Slides -->
+            <div class="wizard-slides-outer">
+                <div class="wizard-slides-track" id="slides-track">
+
+                    <!-- ─ Step 1: Your Business ─ -->
+                    <div class="wizard-slide" data-step="0">
+                        <div class="slide-title">Your Business details</div>
+                        <div class="slide-subtitle">Who is sending this invoice?</div>
+
+                        <div class="logo-upload-area" id="logo-drop-zone">
+                            <input type="file" id="logo-input" accept="image/*">
+                            <img id="logo-preview-thumb" src="" alt="Logo">
+                            <div class="upload-icon-wrap" id="logo-icon-wrap">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="17 8 12 3 7 8"/>
+                                    <line x1="12" y1="3" x2="12" y2="15"/>
+                                </svg>
+                            </div>
+                            <p>Click to upload your logo (optional)</p>
+                        </div>
+
+                        <div class="form-row single">
+                            <div class="form-field">
+                                <label>Business name *</label>
+                                <input type="text" id="biz-name" placeholder="Add your Business name here">
+                            </div>
+                        </div>
+                        <div class="form-row" style="margin-top:12px;">
+                            <div class="form-field">
+                                <label>Email</label>
+                                <input type="email" id="biz-email" placeholder="hello@business.com">
+                            </div>
+                            <div class="form-field">
+                                <label>Phone</label>
+                                <input type="text" id="biz-phone" placeholder="+234 800 000 0000">
+                            </div>
+                        </div>
+                        <div class="form-row single" style="margin-top:12px;">
+                            <div class="form-field">
+                                <label>Address</label>
+                                <textarea id="biz-address" placeholder="Your office address (optional)"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ─ Step 2: Bill To ─ -->
+                    <div class="wizard-slide" data-step="1">
+                        <div class="slide-title">Bill To</div>
+                        <div class="slide-subtitle">Who are you invoicing?</div>
+
+                        <div class="form-row single">
+                            <div class="form-field">
+                                <label>Client name *</label>
+                                <input type="text" id="client-name" placeholder="e.g. Jane Doe or XYZ Corp">
+                            </div>
+                        </div>
+                        <div class="form-row single" style="margin-top:12px;">
+                            <div class="form-field">
+                                <label>Client email</label>
+                                <input type="email" id="client-email" placeholder="client@email.com">
+                            </div>
+                        </div>
+                        <div class="form-row single" style="margin-top:12px;">
+                            <div class="form-field">
+                                <label>Client address</label>
+                                <textarea id="client-address" placeholder="456 Client Road, Abuja, Nigeria"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ─ Step 3: Invoice Details ─ -->
+                    <div class="wizard-slide" data-step="2">
+                        <div class="slide-title">Invoice Details</div>
+                        <div class="slide-subtitle">Reference numbers, dates &amp; style.</div>
+
+                        <div class="form-row" style="margin-bottom:12px;">
+                            <div class="form-field">
+                                <label>Invoice #</label>
+                                <input type="text" id="inv-number" placeholder="INV-001">
+                            </div>
+                            <div class="form-field">
+                                <label>Currency</label>
+                                <select id="inv-currency">
+                                    <option value="₦">₦ — Naira</option>
+                                    <option value="$">$ — USD</option>
+                                    <option value="£">£ — GBP</option>
+                                    <option value="€">€ — EUR</option>
+                                    <option value="GH₵">GH₵ — Cedi</option>
+                                    <option value="KSh">KSh — KES</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row" style="margin-bottom:20px;">
+                            <div class="form-field">
+                                <label>Issue date</label>
+                                <input type="date" id="inv-date">
+                            </div>
+                            <div class="form-field">
+                                <label>Due date</label>
+                                <input type="date" id="inv-due-date">
+                            </div>
+                        </div>
+
+                        <div class="form-field" style="margin-bottom:6px;">
+                            <label>Accent colour</label>
+                        </div>
+                        <div class="colour-picker-row" id="colour-picker">
+                            <div class="colour-chip active" style="background:#ff6600" data-colour="#ff6600"></div>
+                            <div class="colour-chip" style="background:#f59e0b" data-colour="#f59e0b"></div>
+                            <div class="colour-chip" style="background:#dc2626" data-colour="#dc2626"></div>
+                            <div class="colour-chip" style="background:#7c3aed" data-colour="#7c3aed"></div>
+                            <div class="colour-chip" style="background:#1a73e8" data-colour="#1a73e8"></div>
+                            <div class="colour-chip" style="background:#9ca3af" data-colour="#9ca3af"></div>
+                            <div class="colour-chip" style="background:#374151" data-colour="#374151"></div>
+                        </div>
+                    </div>
+
+                    <!-- ─ Step 4: Line Items ─ -->
+                    <div class="wizard-slide" data-step="3">
+                        <div class="slide-title">Line Items</div>
+                        <div class="slide-subtitle">What are you charging for?</div>
+
+                        <div class="line-item-header-grid">
+                            <span>Description</span>
+                            <span>Qty</span>
+                            <span>Price</span>
+                            <span></span>
+                        </div>
+                        <div class="line-items-list" id="line-items-list"></div>
+                        <button class="btn-add-line" id="btn-add-line">＋ &nbsp;Add line item</button>
+                    </div>
+
+                    <!-- ─ Step 5: Totals, Notes & Download ─ -->
+                    <div class="wizard-slide" data-step="4">
+                        <div class="slide-title">Totals &amp; Notes</div>
+                        <div class="slide-subtitle">Final adjustments before you download.</div>
+
+                        <div class="totals-summary">
+                            <div class="totals-row">
+                                <span>Subtotal</span>
+                                <span id="form-subtotal">₦0.00</span>
+                            </div>
+                            <div class="totals-row">
+                                <span>Tax (%)</span>
+                                <input type="number" id="tax-rate" placeholder="0" min="0" max="100" value="0">
+                            </div>
+                            <div class="totals-row">
+                                <span>Discount (%)</span>
+                                <input type="number" id="discount-rate" placeholder="0" min="0" max="100" value="0">
+                            </div>
+                            <div class="totals-row grand">
+                                <span>Total Due</span>
+                                <span id="form-total" class="grand-amount">₦0.00</span>
+                            </div>
+                        </div>
+
+                        <div class="form-row single">
+                            <div class="form-field">
+                                <label>Notes &amp; payment terms</label>
+                                <textarea id="inv-notes" placeholder="e.g. Payment due within 14 days. Thank you!" rows="3"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-row single" style="margin-top:12px;">
+                            <div class="form-field">
+                                <label>Invoice status</label>
+                                <select id="inv-status">
+                                    <option value="Unpaid">Unpaid</option>
+                                    <option value="Paid">Paid</option>
+                                    <option value="Partial">Partial Payment</option>
+                                    <option value="Overdue">Overdue</option>
+                                    <option value="Draft">Draft</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- /slides-track -->
+            </div><!-- /slides-outer -->
+
+            <!-- Wizard footer nav -->
+            <div class="wizard-footer">
+                <button class="btn-back" id="btn-back" disabled>← Back</button>
+                <span class="step-counter" id="step-counter">Step 1 of 5</span>
+                <button class="btn-next" id="btn-next">Continue →</button>
+            </div>
+        </div>
+
+        <!-- ══ RIGHT: Live Preview ═══════════════════════════ -->
+        <div class="invoice-preview-panel">
+            <button type="button" class="btn-clear-form" id="btn-clear-form" title="Clear form">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+                <span>Clear</span>
+            </button>
+            <div id="invoice-doc">
+
+                <div class="inv-header">
+                    <div>
+                        <img class="inv-logo" id="inv-logo-img" src="" alt="" style="display:none;">
+                        <div class="inv-logo-placeholder" id="inv-biz-name-head">Your Business</div>
+                    </div>
+                    <div class="inv-meta">
+                        <div class="inv-label" id="inv-accent-label" style="color:#ff6600;">INVOICE</div>
+                        <div class="inv-number" id="inv-number-disp">INV-001</div>
+                        <div class="inv-dates">
+                            Issued: <span id="inv-date-disp">—</span><br>
+                            Due: <span id="inv-due-disp">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inv-parties">
+                    <div class="inv-party">
+                        <h4 class="inv-accent-h4" style="color:#ff6600;">From</h4>
+                        <div class="inv-name" id="inv-from-name">—</div>
+                        <p id="inv-from-detail"></p>
+                    </div>
+                    <div class="inv-party">
+                        <h4 class="inv-accent-h4" style="color:#ff6600;">Bill To</h4>
+                        <div class="inv-name" id="inv-to-name">—</div>
+                        <p id="inv-to-detail"></p>
+                    </div>
+                </div>
+
+                <div class="inv-table-wrap">
+                    <table class="inv-table">
+                        <thead>
+                            <tr id="inv-table-head">
+                                <th>Description</th>
+                                <th>Qty</th>
+                                <th>Unit Price</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inv-table-body">
+                            <tr>
+                                <td colspan="4" style="color:#ccc;text-align:center;padding:20px 0;font-size:13px;">
+                                    Add line items to see them here
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="inv-totals-wrap">
+                    <div class="inv-totals">
+                        <div class="inv-totals-row">
+                            <span>Subtotal</span>
+                            <span id="inv-subtotal">₦0.00</span>
+                        </div>
+                        <div class="inv-totals-row" id="inv-tax-row" style="display:none;">
+                            <span id="inv-tax-label">Tax (0%)</span>
+                            <span id="inv-tax-val">₦0.00</span>
+                        </div>
+                        <div class="inv-totals-row" id="inv-discount-row" style="display:none;">
+                            <span id="inv-discount-label">Discount (0%)</span>
+                            <span id="inv-discount-val">₦0.00</span>
+                        </div>
+                        <div class="inv-totals-row grand">
+                            <span>Total</span>
+                            <span id="inv-grand-total" class="inv-total-val" style="color:#ff6600;">₦0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inv-notes" id="inv-notes-section" style="display:none;">
+                    <h5 class="inv-accent-notes" style="color:#ff6600;">Notes &amp; Terms</h5>
+                    <p id="inv-notes-text"></p>
+                </div>
+
+                <div class="inv-footer">
+                    <div class="inv-footer-brand">
+                        Generated with <strong>ShopKite</strong>
+                    </div>
+                    <div class="inv-status-badge">Unpaid</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@push('scripts')
+<script>
+    /* ── Invoice Wizard ────────────────────────────────────── */
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const STEPS = ['Business', 'Client', 'Details', 'Items', 'Totals'];
+        const TOTAL = STEPS.length;
+
+        let currentStep = 0;
+        let accentColour = '#ff6600';
+        let logoDataUrl = null;
+        let lineItems = [{ desc: '', qty: 1, price: 0 }];
+
+        /* ── Build progress bar ── */
+        const progressWrap = document.getElementById('wizard-progress');
+        STEPS.forEach((label, i) => {
+            if (i > 0) {
+                const line = document.createElement('div');
+                line.className = 'progress-line';
+                line.id = `pline-${i}`;
+                progressWrap.appendChild(line);
+            }
+            const step = document.createElement('div');
+            step.className = 'progress-step';
+            step.id = `pstep-${i}`;
+            step.innerHTML = `<div class="progress-dot" id="pdot-${i}">${i + 1}</div><div class="progress-label">${label}</div>`;
+            progressWrap.appendChild(step);
+        });
+
+        function updateProgress() {
+            for (let i = 0; i < TOTAL; i++) {
+                const dot  = document.getElementById(`pdot-${i}`);
+                const step = document.getElementById(`pstep-${i}`);
+                dot.className  = 'progress-dot' + (i < currentStep ? ' done' : i === currentStep ? ' active' : '');
+                step.className = 'progress-step' + (i < currentStep ? ' done' : i === currentStep ? ' active' : '');
+                if (i > 0) {
+                    const line = document.getElementById(`pline-${i}`);
+                    line.className = 'progress-line' + (i <= currentStep ? ' done' : '');
+                }
+            }
+            document.getElementById('step-counter').textContent = `Step ${currentStep + 1} of ${TOTAL}`;
+            document.getElementById('btn-back').disabled = currentStep === 0;
+
+            const nextBtn = document.getElementById('btn-next');
+            if (currentStep === TOTAL - 1) {
+                nextBtn.textContent = '⬇ Download PDF';
+                nextBtn.className = 'btn-next download';
+            } else {
+                nextBtn.textContent = 'Continue →';
+                nextBtn.className = 'btn-next';
+            }
+        }
+
+        function goToStep(n) {
+            if (n < 0 || n >= TOTAL) return;
+            currentStep = n;
+            const track = document.getElementById('slides-track');
+            track.style.transform = `translateX(-${currentStep * 100}%)`;
+            updateProgress();
+        }
+
+        document.getElementById('btn-next').addEventListener('click', () => {
+            if (currentStep === TOTAL - 1) {
+                downloadPDF();
+            } else {
+                goToStep(currentStep + 1);
+            }
+        });
+
+        document.getElementById('btn-back').addEventListener('click', () => {
+            goToStep(currentStep - 1);
+        });
+
+        updateProgress();
+
+        /* ── Logo upload ── */
+        document.getElementById('logo-input').addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = ev => {
+                logoDataUrl = ev.target.result;
+                const thumb = document.getElementById('logo-preview-thumb');
+                thumb.src = logoDataUrl;
+                const iconWrap = document.getElementById('logo-icon-wrap');
+                if (iconWrap) iconWrap.style.display = 'none';
+                document.querySelector('#logo-drop-zone p').textContent = 'Logo uploaded ✓';
+                updatePreview();
+            };
+            reader.readAsDataURL(file);
+        });
+
+        /* ── Colour picker ── */
+        document.getElementById('colour-picker').addEventListener('click', e => {
+            const chip = e.target.closest('.colour-chip');
+            if (!chip) return;
+            document.querySelectorAll('.colour-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            accentColour = chip.dataset.colour;
+            applyAccent();
+        });
+
+        function applyAccent() {
+            const thead = document.getElementById('inv-table-head');
+            if (thead) thead.style.background = accentColour;
+            document.querySelectorAll('.inv-accent-h4, .inv-accent-notes').forEach(el => el.style.color = accentColour);
+            const label = document.getElementById('inv-accent-label');
+            if (label) label.style.color = accentColour;
+            const gt = document.getElementById('inv-grand-total');
+            if (gt) gt.style.color = accentColour;
+            const ga = document.getElementById('form-total');
+            if (ga) ga.style.color = accentColour;
+        }
+
+        /* ── Line items ── */
+        function renderLineItems() {
+            const list = document.getElementById('line-items-list');
+            list.innerHTML = '';
+            lineItems.forEach((item, i) => {
+                const row = document.createElement('div');
+                row.className = 'line-item-row';
+                const qtyDisplay   = item.qty   ? fmtNumInput(String(item.qty))   : '';
+                const priceDisplay = item.price ? fmtNumInput(String(item.price)) : '';
+                row.innerHTML = `
+                    <input type="text" placeholder="Description" value="${esc(item.desc)}" data-idx="${i}" data-field="desc">
+                    <input type="text" inputmode="numeric" pattern="[0-9,]*" placeholder="1" value="${qtyDisplay}" data-idx="${i}" data-field="qty">
+                    <input type="text" inputmode="decimal" pattern="[0-9,.]*" placeholder="0.00" value="${priceDisplay}" data-idx="${i}" data-field="price">
+                    <button class="line-item-remove" data-idx="${i}">×</button>`;
+                list.appendChild(row);
+            });
+        }
+
+        document.getElementById('line-items-list').addEventListener('input', e => {
+            const el = e.target; const idx = +el.dataset.idx; const field = el.dataset.field;
+            if (!field) return;
+            if (field === 'qty' || field === 'price') {
+                /* Format with thousands commas, preserve cursor from end */
+                const cursorFromEnd = el.value.length - el.selectionStart;
+                const formatted = fmtNumInput(el.value);
+                el.value = formatted;
+                const newCursor = Math.max(0, formatted.length - cursorFromEnd);
+                el.setSelectionRange(newCursor, newCursor);
+                lineItems[idx][field] = parseFloat(el.value.replace(/,/g, '')) || 0;
+            } else {
+                lineItems[idx][field] = el.value;
+            }
+            updatePreview();
+        });
+
+        document.getElementById('line-items-list').addEventListener('click', e => {
+            const btn = e.target.closest('.line-item-remove');
+            if (!btn) return;
+            lineItems.splice(+btn.dataset.idx, 1);
+            if (lineItems.length === 0) lineItems.push({ desc: '', qty: 1, price: 0 });
+            renderLineItems();
+            updatePreview();
+        });
+
+        document.getElementById('btn-add-line').addEventListener('click', () => {
+            lineItems.push({ desc: '', qty: 1, price: 0 });
+            renderLineItems();
+        });
+
+        renderLineItems();
+
+        /* ── Set default dates ── */
+        const today = new Date();
+        const due   = new Date(today); due.setDate(due.getDate() + 14);
+        document.getElementById('inv-date').value     = today.toISOString().split('T')[0];
+        document.getElementById('inv-due-date').value = due.toISOString().split('T')[0];
+        document.getElementById('inv-number').value   = 'INV-' + (Math.floor(Math.random() * 900) + 100);
+
+        /* ── Live preview update ── */
+        function updatePreview() {
+            const cur = document.getElementById('inv-currency').value;
+
+            // Logo / biz name
+            const bizName = document.getElementById('biz-name').value.trim() || 'Your Business';
+            const logoImg = document.getElementById('inv-logo-img');
+            const bizHead = document.getElementById('inv-biz-name-head');
+            if (logoDataUrl) {
+                logoImg.src = logoDataUrl; logoImg.style.display = 'block';
+                bizHead.style.display = 'none';
+            } else {
+                logoImg.style.display = 'none';
+                bizHead.style.display = 'block';
+                bizHead.textContent = bizName;
+            }
+
+            // Number / dates
+            document.getElementById('inv-number-disp').textContent = document.getElementById('inv-number').value || 'INV-001';
+            document.getElementById('inv-date-disp').textContent   = fmtDate(document.getElementById('inv-date').value) || '—';
+            document.getElementById('inv-due-disp').textContent    = fmtDate(document.getElementById('inv-due-date').value) || '—';
+
+            // From
+            document.getElementById('inv-from-name').textContent = bizName;
+            const fromParts = [document.getElementById('biz-email').value, document.getElementById('biz-phone').value, document.getElementById('biz-address').value].filter(Boolean);
+            document.getElementById('inv-from-detail').innerHTML = fromParts.join('<br>') || '';
+
+            // To
+            document.getElementById('inv-to-name').textContent = document.getElementById('client-name').value.trim() || '—';
+            const toParts = [document.getElementById('client-email').value, document.getElementById('client-address').value].filter(Boolean);
+            document.getElementById('inv-to-detail').innerHTML = toParts.join('<br>') || '';
+
+            // Line items table
+            const tbody = document.getElementById('inv-table-body');
+            let subtotal = 0;
+            const hasItems = lineItems.some(i => i.desc || i.price);
+            if (!hasItems) {
+                tbody.innerHTML = `<tr><td colspan="4" style="color:#ccc;text-align:center;padding:20px 0;font-size:13px;">Add line items to see them here</td></tr>`;
+            } else {
+                tbody.innerHTML = lineItems.map(item => {
+                    const total = (item.qty || 0) * (item.price || 0);
+                    subtotal += total;
+                    return `<tr>
+                        <td>${esc(item.desc) || '—'}</td>
+                        <td>${item.qty || 0}</td>
+                        <td>${cur}${fmt(item.price || 0)}</td>
+                        <td>${cur}${fmt(total)}</td>
+                    </tr>`;
+                }).join('');
+            }
+
+            // Totals
+            const taxRate  = parseFloat(document.getElementById('tax-rate').value)      || 0;
+            const discRate = parseFloat(document.getElementById('discount-rate').value)  || 0;
+            const taxAmt   = subtotal * (taxRate / 100);
+            const discAmt  = subtotal * (discRate / 100);
+            const grand    = subtotal + taxAmt - discAmt;
+
+            document.getElementById('inv-subtotal').textContent  = cur + fmt(subtotal);
+            document.getElementById('form-subtotal').textContent = cur + fmt(subtotal);
+            document.getElementById('inv-grand-total').textContent = cur + fmt(grand);
+            document.getElementById('form-total').textContent      = cur + fmt(grand);
+
+            const taxRow  = document.getElementById('inv-tax-row');
+            taxRow.style.display = taxRate > 0 ? '' : 'none';
+            document.getElementById('inv-tax-label').textContent = `Tax (${taxRate}%)`;
+            document.getElementById('inv-tax-val').textContent   = cur + fmt(taxAmt);
+
+            const discRow = document.getElementById('inv-discount-row');
+            discRow.style.display = discRate > 0 ? '' : 'none';
+            document.getElementById('inv-discount-label').textContent = `Discount (${discRate}%)`;
+            document.getElementById('inv-discount-val').textContent   = '−' + cur + fmt(discAmt);
+
+            // Notes
+            const notes = document.getElementById('inv-notes').value.trim();
+            const notesSection = document.getElementById('inv-notes-section');
+            notesSection.style.display = notes ? '' : 'none';
+            document.getElementById('inv-notes-text').textContent = notes;
+
+            // Status badge
+            const STATUS_STYLES = {
+                'Unpaid':  { bg: '#fff3e8', color: '#ff6600', label: 'Unpaid'  },
+                'Paid':    { bg: '#e8faf3', color: '#0d9488', label: 'Paid'    },
+                'Partial': { bg: '#eff6ff', color: '#1a73e8', label: 'Partial' },
+                'Overdue': { bg: '#fff1f1', color: '#e11d48', label: 'Overdue' },
+                'Draft':   { bg: '#f4f4f4', color: '#999999', label: 'Draft'   },
+            };
+            const statusVal = (document.getElementById('inv-status') || {}).value || 'Unpaid';
+            const ss = STATUS_STYLES[statusVal] || STATUS_STYLES['Unpaid'];
+            const badge = document.querySelector('.inv-status-badge');
+            if (badge) {
+                badge.textContent = ss.label;
+                badge.style.background = ss.bg;
+                badge.style.color = ss.color;
+            }
+
+            applyAccent();
+        }
+
+        // Bind all inputs
+        document.querySelectorAll('#biz-name,#biz-email,#biz-phone,#biz-address,#client-name,#client-email,#client-address,#inv-number,#inv-currency,#inv-date,#inv-due-date,#tax-rate,#discount-rate,#inv-notes,#inv-status').forEach(el => {
+            el.addEventListener('input', updatePreview);
+        });
+        document.getElementById('inv-status').addEventListener('change', updatePreview);
+
+        /* ── Clear / Reset Form ── */
+        function resetForm() {
+            ['biz-name','biz-email','biz-phone','biz-address','client-name','client-email','client-address','tax-rate','discount-rate','inv-notes'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = (id === 'tax-rate' || id === 'discount-rate') ? '0' : '';
+            });
+
+            document.getElementById('inv-currency').value = '₦';
+            const today = new Date();
+            const due   = new Date(today); due.setDate(due.getDate() + 14);
+            document.getElementById('inv-date').value     = today.toISOString().split('T')[0];
+            document.getElementById('inv-due-date').value = due.toISOString().split('T')[0];
+            document.getElementById('inv-number').value   = 'INV-' + (Math.floor(Math.random() * 900) + 100);
+
+            accentColour = '#ff6600';
+            document.querySelectorAll('.colour-chip').forEach(c => {
+                c.classList.toggle('active', c.dataset.colour === '#ff6600');
+            });
+
+            logoDataUrl = null;
+            document.getElementById('logo-input').value = '';
+            const thumb = document.getElementById('logo-preview-thumb');
+            if (thumb) { thumb.src = ''; thumb.style.display = 'none'; }
+            const iconWrap = document.getElementById('logo-icon-wrap');
+            if (iconWrap) iconWrap.style.display = '';
+            const logoP = document.querySelector('#logo-drop-zone p');
+            if (logoP) logoP.textContent = 'Click to upload your logo (optional)';
+
+            lineItems = [{ desc: '', qty: 1, price: 0 }];
+            renderLineItems();
+            const statusEl = document.getElementById('inv-status');
+            if (statusEl) statusEl.value = 'Unpaid';
+
+            goToStep(0);
+            updatePreview();
+        }
+
+        document.getElementById('btn-clear-form').addEventListener('click', resetForm);
+
+        /* ── PDF Download ── */
+        function downloadPDF() {
+            const btn = document.getElementById('btn-next');
+            btn.textContent = 'Generating…';
+            btn.disabled = true;
+
+            const bizName = document.getElementById('biz-name').value.trim() || 'invoice';
+            const invNum  = document.getElementById('inv-number').value.trim() || 'INV';
+            const filename = `${bizName.replace(/\s+/g, '-')}-${invNum}.pdf`;
+
+            html2pdf().set({
+                margin: [10, 10, 10, 10],
+                filename,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false,
+                    scrollX: 0,
+                    scrollY: 0,
+                    /* Force desktop layout in the PDF regardless of device viewport */
+                    onclone: (clonedDoc) => {
+                        const s = clonedDoc.createElement('style');
+                        s.textContent = `
+                            .inv-header         { flex-direction: row !important; align-items: flex-end !important; }
+                            .inv-meta           { text-align: right !important; }
+                            .inv-parties        { grid-template-columns: 1fr 1fr !important; gap: 20px !important; }
+                            .inv-totals-wrap    { justify-content: flex-end !important; }
+                            .inv-totals         { width: 240px !important; }
+                        `;
+                        clonedDoc.head.appendChild(s);
+                    }
+                },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            }).from(document.getElementById('invoice-doc')).save().then(() => {
+                btn.textContent = '⬇ Download PDF';
+                btn.disabled = false;
+            });
+        }
+
+        /* ── Helpers ── */
+        function fmt(n) {
+            return Number(n).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+        function fmtDate(str) {
+            if (!str) return '';
+            return new Date(str + 'T00:00:00').toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+        }
+        function esc(str) {
+            return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        }
+        /* Format a numeric string with thousands commas (preserves partial decimal) */
+        function fmtNumInput(str) {
+            let raw = str.replace(/[^\d.]/g, '');
+            const dotIdx = raw.indexOf('.');
+            let intPart, decPart;
+            if (dotIdx !== -1) {
+                intPart = raw.slice(0, dotIdx);
+                decPart = raw.slice(dotIdx); /* keeps the dot + digits as typed */
+            } else {
+                intPart = raw;
+                decPart = '';
+            }
+            intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            return intPart + decPart;
+        }
+    });
+</script>
+@endpush
