@@ -1449,15 +1449,15 @@ a {
   text-align: center;
 }
 
-.bento-title p:first-of-type {
+.bento-title p {
   font-size: 54px;
   font-weight: 200;
   color: #4f4f4f;
   margin-bottom: 16px;
 }
 
-.bento-title p.bento-subtext {
-  font-size: 18px;
+.bento-title .bento-subtext p {
+  font-size: 16px;
   font-weight: 300;
   color: #666666;
   max-width: 680px;
