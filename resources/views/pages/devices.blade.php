@@ -11,7 +11,7 @@
 <main class="devices-main-wrapper">
   
   <div class="bento-title devices-title" style="height: auto; margin-bottom: 20px; text-align: center;">
-      <p>If ShopKite merchant was beans, this is the bread...</p>
+      <h3>If ShopKite merchant was beans, this is the bread...</h3>
   </div>
 
   <!-- Interactive Plugin Section (Jhey JoGpOGV CodePen Pattern) -->

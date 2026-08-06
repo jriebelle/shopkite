@@ -1439,30 +1439,31 @@ a {
 }
 
 .bento-title {
-  min-height: 240px;
   height: auto;
-  padding: 60px 20px 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
 }
 
 .bento-title h3 {
   font-size: 54px;
   font-weight: 200;
   color: #4f4f4f;
-  margin-bottom: 16px;
+  margin: 0;
+  text-align: center;
 }
 
-.bento-title .bento-subtext p {
-  font-size: 16px !important;
-  font-weight: 300;
-  color: #666666;
-  max-width: 680px;
-  line-height: 1.6;
-  margin: 0 auto;
+.bento-title .sub-text p {
+  font-size: 18px;
+  font-weight: 200;
+  color: #4e4e4e;
+  margin-top: 10px;
+  margin-bottom: 0;
+  text-align: center;
+  max-width: 900px;
+  padding: 20px;
+  line-height: 26px;
 }
 
 .trial-title {
@@ -1942,6 +1943,7 @@ a {
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
+
   .bento-container {
     grid-template-columns: 1fr;
   }
