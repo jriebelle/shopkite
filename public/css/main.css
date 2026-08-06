@@ -1457,7 +1457,7 @@ a {
 }
 
 .bento-title .bento-subtext p {
-  font-size: 16px;
+  font-size: 16px !important;
   font-weight: 300;
   color: #666666;
   max-width: 680px;
