@@ -43,7 +43,7 @@
 </div>
 
 <div class="section-2">
-    <p>Who can use ShopKite?</p>
+    <p>Who can use ShopKite merchant?</p>
     <div class="bubbles">
         <img class="guy" src="{{ asset('img/section2/guy-bubble-customer.png') }}" alt="">
         <img class="lady-bubble" src="{{ asset('img/section2/lady-bubble-customer.png') }}" alt="">

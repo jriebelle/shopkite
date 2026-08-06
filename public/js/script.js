@@ -566,9 +566,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Split text effect for Testimonials Section (testimonials-title)
-    // DOM setup happens at DOMContentLoaded so words start hidden immediately
     const testimonialsText = document.querySelector(".testimonials-title p");
-    if (testimonialsText) {
+    if (testimonialsText && document.querySelector(".merchant-testimony-section")) {
         const words = testimonialsText.textContent.trim().split(/\s+/);
         testimonialsText.innerHTML = words.map(word => {
             // Apply brand-highlight highlight to "ShopKite"
@@ -587,7 +586,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Split text effect for Bento Section (bento-title)
     const bentoText = document.querySelector(".bento-title p");
-    if (bentoText) {
+    if (bentoText && document.querySelector(".bento-container")) {
         const words = bentoText.textContent.trim().split(/\s+/);
         bentoText.innerHTML = words.map(word => {
             let wordHtml = word;
@@ -604,7 +603,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Split text effect for Trial Section (trial-title)
     const trialText = document.querySelector(".trial-title p");
-    if (trialText) {
+    if (trialText && document.querySelector(".trial-buttons-container")) {
         const words = trialText.textContent.trim().split(/\s+/);
         trialText.innerHTML = words.map(word => {
             let wordHtml = word;
@@ -1315,9 +1314,8 @@ window.addEventListener("load", () => {
     ScrollTrigger.refresh();
 
     const testimonialsText = document.querySelector(".testimonials-title p");
-    if (testimonialsText) {
+    if (testimonialsText && document.querySelector(".merchant-testimony-section")) {
         const wordsEls = testimonialsText.querySelectorAll(".word");
-        // Ensure still hidden after refresh
         gsap.set(wordsEls, { y: "110%" });
 
         const testimonialsTl = gsap.timeline({
@@ -1337,9 +1335,8 @@ window.addEventListener("load", () => {
     }
 
     const bentoText = document.querySelector(".bento-title p");
-    if (bentoText) {
+    if (bentoText && document.querySelector(".bento-container")) {
         const wordsEls = bentoText.querySelectorAll(".word");
-        // Ensure still hidden after refresh
         gsap.set(wordsEls, { y: "110%" });
 
         const bentoTl = gsap.timeline({
@@ -1361,7 +1358,6 @@ window.addEventListener("load", () => {
     // Bento items slide up and fade in animation with scrub control
     const bentoItems = document.querySelectorAll(".bento-container .bento-item");
     if (bentoItems.length > 0) {
-        // Set initial state for bento items
         gsap.set(bentoItems, { y: 60, opacity: 0 });
 
         const bentoItemsTl = gsap.timeline({
@@ -1384,9 +1380,8 @@ window.addEventListener("load", () => {
     }
 
     const trialText = document.querySelector(".trial-title p");
-    if (trialText) {
+    if (trialText && document.querySelector(".trial-buttons-container")) {
         const wordsEls = trialText.querySelectorAll(".word");
-        // Ensure still hidden after refresh
         gsap.set(wordsEls, { y: "110%" });
 
         const trialTl = gsap.timeline({
@@ -1402,6 +1397,41 @@ window.addEventListener("load", () => {
             y: "0%",
             stagger: 0.4,
             ease: "power2.out"
+        });
+    }
+
+    // ════════════════════════════════════════════════════════════
+    // GSAP Entrance Animations for Inner Pages
+    // ════════════════════════════════════════════════════════════
+    const innerHeaders = document.querySelectorAll(
+        ".generic-banner, .agent-banner, .ibr-banner, .invoice-page-header, .devices-title, .store-intro, .agent-writeup, .ibr-writeup"
+    );
+    if (innerHeaders.length > 0) {
+        gsap.from(innerHeaders, {
+            y: 35,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.12,
+            ease: "power2.out"
+        });
+    }
+
+    const innerCards = document.querySelectorAll(
+        ".agent-feature-card, .agent-video-wrap, .handbook-toc-card, .privacy-card, .store-item, section.devices-plugin-section, .invoice-wizard, .invoice-preview-panel, .checkout-card"
+    );
+    if (innerCards.length > 0) {
+        innerCards.forEach(card => {
+            gsap.from(card, {
+                y: 30,
+                opacity: 0,
+                duration: 0.7,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top 90%",
+                    toggleActions: "play none none none"
+                }
+            });
         });
     }
 });
