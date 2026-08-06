@@ -318,12 +318,14 @@
 <div class="bento-divider"></div>
 <div class="bento-title">
     <p>Why choose ShopKite Merchant?</p>
+    <p class="bento-subtext">ShopKite Merchant unifies store operations into one simple platform, combining lightning-fast store setup with over 400,000+ pre-loaded product SKUs, sales & inventory tracking, multi-location monitoring and intelligent real-time business reporting.</p>
 </div>
 <div class="bento-container">
     <div class="bento-item row-span-2 receipts">
         <h3>Print <br>Receipts</h3>
         <p>Either with our recommended devices or a device of your choosing. Print receipts with ease for all or any sales.</p>
         <img src="{{ asset('img/bento/print-receipts.png') }}" alt="">
+        <a href="{{ route('devices') }}" class="see-devices-btn">See Recommended Devices</a>
     </div>
     <div class="bento-item col-span-2 sku-store">
         <img src="{{ asset('img/bento/sku-store.png') }}" alt="">

@@ -1439,16 +1439,30 @@ a {
 }
 
 .bento-title {
-  height: 240px;
+  min-height: 240px;
+  height: auto;
+  padding: 60px 20px 30px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
 }
 
-.bento-title p {
+.bento-title p:first-of-type {
   font-size: 54px;
   font-weight: 200;
   color: #4f4f4f;
+  margin-bottom: 16px;
+}
+
+.bento-title p.bento-subtext {
+  font-size: 18px;
+  font-weight: 300;
+  color: #666666;
+  max-width: 680px;
+  line-height: 1.6;
+  margin: 0 auto;
 }
 
 .trial-title {
@@ -1683,6 +1697,29 @@ a {
   right: -100px;
   bottom: 0;
   z-index: 1;
+}
+
+.bento-container .receipts .see-devices-btn {
+  position: absolute;
+  bottom: 34px;
+  color: #fff;
+  background: #00000019;
+  backdrop-filter: blur(30px);
+  border: 1px solid #ffffff;
+  padding: 10px 24px;
+  border-radius: 100px;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  z-index: 5;
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.bento-container .receipts .see-devices-btn:hover {
+  background-color: #ff6600;
+  border-color: #ff6600;
+  color: #ffffff;
 }
 
 .bento-container .ibr .ibr-btn {
