@@ -585,7 +585,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Split text effect for Bento Section (bento-title)
-    const bentoText = document.querySelector(".bento-title p");
+    const bentoText = document.querySelector(".bento-title h3");
     if (bentoText && document.querySelector(".bento-container")) {
         const words = bentoText.textContent.trim().split(/\s+/);
         bentoText.innerHTML = words.map(word => {
@@ -1334,7 +1334,7 @@ window.addEventListener("load", () => {
         });
     }
 
-    const bentoText = document.querySelector(".bento-title p");
+    const bentoText = document.querySelector(".bento-title h3");
     if (bentoText && document.querySelector(".bento-container")) {
         const wordsEls = bentoText.querySelectorAll(".word");
         gsap.set(wordsEls, { y: "110%" });

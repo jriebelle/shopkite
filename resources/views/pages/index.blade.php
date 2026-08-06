@@ -317,7 +317,7 @@
 </div>
 <div class="bento-divider"></div>
 <div class="bento-title">
-    <p>Why choose ShopKite Merchant?</p>
+    <h3>Why choose ShopKite Merchant?</h3>
     <div class="bento-subtext"><p>ShopKite Merchant unifies store operations into one simple platform, combining lightning-fast store setup with over 400,000+ pre-loaded product SKUs, sales & inventory tracking, multi-location monitoring and intelligent real-time business reporting.</p></div>
 </div>
 <div class="bento-container">
