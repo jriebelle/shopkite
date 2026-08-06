@@ -1,0 +1,7 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/jriebell/public_html/shopkite
+    - /bin/cp -Rf public/css/* $DEPLOYPATH/css/
+    - /bin/cp -Rf public/js/* $DEPLOYPATH/js/
+    - /bin/cp -Rf public/img/* $DEPLOYPATH/img/
