@@ -363,7 +363,7 @@
     object-fit: cover;
   }
 
-  summary {
+  section.devices-plugin-section summary {
     display: inline-flex;
     gap: 0.5rem;
     align-items: center;
@@ -383,19 +383,19 @@
     outline-color: canvasText;
   }
 
-  summary svg {
+  section.devices-plugin-section summary svg {
     width: 22px;
     aspect-ratio: 1;
   }
 
-  [open] summary {
+  section.devices-plugin-section [open] summary {
     opacity: 0;
     pointer-events: none;
     transition-delay: 0s;
     width: var(--width);
   }
 
-  details {
+  section.devices-plugin-section details {
     display: inline-block;
     border-radius: calc(var(--sizing) * 0.5);
     overflow: hidden;
@@ -406,16 +406,16 @@
     transition: background 0.2s var(--ease);
   }
 
-  details:hover:not([open]) {
+  section.devices-plugin-section details:hover:not([open]) {
     background: var(--hover-background);
   }
 
-  summary::marker,
-  summary::-webkit-details-marker {
+  section.devices-plugin-section summary::marker,
+  section.devices-plugin-section summary::-webkit-details-marker {
     display: none;
   }
 
-  details::details-content {
+  section.devices-plugin-section details::details-content {
     opacity: 0;
     transition-property: content-visibility, height, width, opacity;
     transition-duration: var(--speed), calc(var(--speed) * 1.6), calc(var(--speed) * 1.6), calc(var(--speed) * 0.5);
@@ -428,27 +428,27 @@
     min-height: var(--sizing);
   }
 
-  [open]::details-content {
+  section.devices-plugin-section [open]::details-content {
     height: fit-content;
     width: var(--width);
     opacity: 1;
     transition-delay: 0s, 0s, 0s, calc(var(--speed) * 1);
   }
 
-  .content {
+  section.devices-plugin-section .content {
     width: var(--width);
     min-height: var(--sizing);
     padding: 1.5rem;
   }
 
-  .content h4 {
+  section.devices-plugin-section .content h4 {
     margin: 0 0 12px 0 !important;
     font-size: 22px;
     font-weight: 100;
     color: #fff;
   }
 
-  .content p {
+  section.devices-plugin-section .content p {
     margin: 0;
     width: 100%;
     padding: 0;
@@ -457,7 +457,7 @@
     color: #f8fafc;
   }
 
-  .content .price-tag {
+  section.devices-plugin-section .content .price-tag {
     display: inline-block;
     margin-top: 10px;
     padding: 4px 12px;
@@ -468,8 +468,215 @@
     font-size: 13px;
   }
 
-  details,
-  details::details-content {
+  section.devices-plugin-section details,
+  section.devices-plugin-section details::details-content {
     interpolate-size: allow-keywords;
   }
 }
+
+/* ════════════════════════════════════════════════════════════
+   Devices Page Title & Section Intro — standalone classes
+   ════════════════════════════════════════════════════════════ */
+
+.devices-page-title {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 60px;
+  margin-bottom: 24px;
+}
+
+.devices-page-title h3 {
+  font-size: 54px;
+  font-weight: 200;
+  color: #4f4f4f;
+  margin: 0;
+  text-align: center;
+}
+
+.devices-section-intro {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 32px;
+  margin-bottom: 12px;
+}
+
+.devices-section-intro h3 {
+  font-size: 40px;
+  font-weight: 200;
+  color: #4f4f4f;
+  margin: 0;
+  text-align: center;
+}
+
+.devices-page-subtext p {
+  font-size: 16px;
+  font-weight: 200;
+  color: #4e4e4e;
+  margin-top: 8px;
+  margin-bottom: 0;
+  text-align: center;
+  max-width: 860px;
+  padding: 10px 20px;
+  line-height: 24px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   Simple Accordion List Section
+   width: 100%, max-width: 1280px, collapsed height: 60px incl. padding
+   ════════════════════════════════════════════════════════════ */
+
+.devices-accordion-wrapper {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0px auto 60px auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.devices-accordion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.simple-accordion-item {
+  width: 100% !important;
+  background: #f4f4f4 !important;
+  border: 1px solid #e2e8f0;
+  border-radius: 30px !important;
+  overflow: visible;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.simple-accordion-item:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+}
+
+.simple-accordion-item[open] {
+  box-shadow: 0 8px 20px rgba(255, 102, 0, 0.12);
+}
+
+/* Collapsed height: exactly 60px including padding */
+.simple-accordion-item summary.accordion-header {
+  height: 120px !important;
+  min-height: 60px !important;
+  max-height: 200px !important;
+  padding: 0 20px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  cursor: pointer;
+  list-style: none;
+  position: relative;
+  user-select: none;
+  background: transparent !important;
+  opacity: 1 !important;
+  width: 100% !important;
+  border-radius: 0 !important;
+}
+
+.simple-accordion-item summary.accordion-header::-webkit-details-marker,
+.simple-accordion-item summary.accordion-header::marker {
+  display: none !important;
+}
+
+.simple-accordion-item .header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.simple-accordion-item .header-right {
+  pointer-events: none;
+}
+
+.simple-accordion-item .accordion-title {
+  font-size: 22px;
+  font-weight: 100;
+  color: #1e293b !important;
+  margin: 0 !important;
+  white-space: nowrap;
+}
+
+.simple-accordion-item .accordion-subtext {
+  font-size: 13px;
+  font-weight: 400;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Background image on right side of title area — 50% of header width */
+.simple-accordion-item .header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  flex: 0 0 50%;
+  height: 100%;
+  padding-right: 16px;
+  background-repeat: no-repeat;
+  background-position: center right;
+  background-size: cover;
+}
+
+.simple-accordion-item .chevron-icon {
+  width: 20px;
+  height: 20px;
+  color: #64748b;
+  transition: transform 0.3s ease, color 0.3s ease;
+  flex-shrink: 0;
+}
+
+.simple-accordion-item[open] .chevron-icon {
+  transform: rotate(180deg);
+  color: #ff6600;
+}
+
+/* Accordion content taking full width with 30px padding */
+.simple-accordion-item p.accordion-content-text {
+  display: block !important;
+  padding: 30px !important;
+  margin: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  font-size: 15px;
+  line-height: 1.65;
+  color: #334155 !important;
+  background: #ffffff;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+
+/* ─── Mobile: background image contains within its section ─── */
+@media (max-width: 768px) {
+  .simple-accordion-item .header-right {
+    background-size: contain;
+    background-position: center;
+    flex: 0 0 50%;
+    width: 50%;
+  }
+
+  .simple-accordion-item summary.accordion-header {
+    height: 60px !important;
+    min-height: 60px !important;
+    max-height: 60px !important;
+  }
+}
+

@@ -10,8 +10,11 @@
 @section('content')
 <main class="devices-main-wrapper">
   
-  <div class="bento-title devices-title" style="height: auto; margin-bottom: 20px; text-align: center;">
+  <div class="devices-page-title">
       <h3>If ShopKite merchant was beans, this is the bread...</h3>
+      <div class="devices-page-subtext">
+          <p>These are the devices we have tested and verified to work seamlessly with ShopKite Merchant. From powerful handheld terminals to heavy-duty desktop POS systems &mdash; built for Nigerian merchants who mean business.</p>
+      </div>
   </div>
 
   <!-- Interactive Plugin Section (Jhey JoGpOGV CodePen Pattern) -->
@@ -86,6 +89,109 @@
       </svg>        
     </button>
   </section>
+
+  <!-- Simple Accordion List (Max Width: 1280px, Collapsed Height: 60px) -->
+  <div class="devices-section-intro">
+      <h3>Additional Recommended Devices</h3>
+      <div class="devices-page-subtext">
+          <p>Click any device below to find out more. The brands listed below are compatible with ShopKite Merchant out of the box.</p>
+      </div>
+  </div>
+  <div class="devices-accordion-wrapper">
+    <div class="devices-accordion-list">
+
+      <!-- Item 1: Ken -->
+      <details class="simple-accordion-item">
+        <summary class="accordion-header">
+          <div class="header-left">
+            <h4 class="accordion-title">Samsung Tab</h4>
+          </div>
+          <div class="header-right" style="background-image: url('{{ asset('img/recommended-devices/samsung-tab.png') }}');">
+            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+          </div>
+        </summary>
+        <p class="accordion-content-text">Samsung Galaxy tablets provide exceptional display quality and long battery life. They are ideal for high-volume sales counters running ShopKite Merchant with Bluetooth receipt printers and barcode scanners connected seamlessly.</p>
+      </details>
+
+      <!-- Item 2: Stella -->
+      <details class="simple-accordion-item">
+        <summary class="accordion-header">
+          <div class="header-left">
+            <h4 class="accordion-title">Apple iPad</h4>
+          </div>
+          <div class="header-right" style="background-image: url('{{ asset('img/recommended-devices/apple-ipad.png') }}');">
+            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+          </div>
+        </summary>
+        <p class="accordion-content-text">Experience sleek performance and fluid touch controls on Apple iPad. Perfect for modern retail counters and boutique shops using ShopKite Merchant to manage inventory, print receipts, and track real-time analytics.</p>
+      </details>
+
+      <!-- Item 3: Sunmi T2 -->
+      <details class="simple-accordion-item">
+        <summary class="accordion-header">
+          <div class="header-left">
+            <h4 class="accordion-title">Lenovo Tab</h4>
+          </div>
+          <div class="header-right" style="background-image: url('{{ asset('img/recommended-devices/lenovo-tab.png') }}');">
+            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+          </div>
+        </summary>
+        <p class="accordion-content-text">Lenovo tablets combine durable build quality with reliable processor performance. Great for busy storefronts needing an affordable, heavy-duty Android tablet to run daily ShopKite POS operations smoothly.</p>
+      </details>
+
+      <!-- Item 4: Printers -->
+      <details class="simple-accordion-item">
+        <summary class="accordion-header">
+          <div class="header-left">
+            <h4 class="accordion-title">Huawei Tab</h4>
+          </div>
+          <div class="header-right" style="background-image: url('{{ asset('img/recommended-devices/huawei-tab.png') }}');">
+            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+          </div>
+        </summary>
+        <p class="accordion-content-text">Huawei tablets deliver vibrant displays and fast connectivity. They offer a responsive, reliable touch environment for merchants processing sales and monitoring stock levels on ShopKite Merchant.</p>
+      </details>
+
+      <!-- Item 5: Scanners -->
+      <details class="simple-accordion-item">
+        <summary class="accordion-header">
+          <div class="header-left">
+            <h4 class="accordion-title">Infinix Tab</h4>
+          </div>
+          <div class="header-right" style="background-image: url('{{ asset('img/recommended-devices/infinix-tab.png') }}');">
+            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+          </div>
+        </summary>
+        <p class="accordion-content-text">Infinix tablets deliver excellent value with large screens and robust multi-tasking capabilities. Perfect for cost-conscious store owners looking to deploy ShopKite Merchant across multiple cashiers.</p>
+      </details>
+
+      <!-- Item 6: Cash Drawers -->
+      <details class="simple-accordion-item">
+        <summary class="accordion-header">
+          <div class="header-left">
+            <h4 class="accordion-title">Oppo Tab</h4>
+          </div>
+          <div class="header-right" style="background-image: url('{{ asset('img/recommended-devices/oppo-tab.png') }}');">
+            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+          </div>
+        </summary>
+        <p class="accordion-content-text">Oppo tablets offer sleek design, fast performance, and battery efficiency. Designed for active store environments, making sale management and stock updates effortless on ShopKite Merchant.</p>
+      </details>
+
+    </div>
+  </div>
 
 </main>
 @endsection
