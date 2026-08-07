@@ -4,7 +4,7 @@
 @section('meta_description', 'Explore ShopKite recommended POS devices, Sunmi handheld terminals, thermal receipt printers, and barcode scanners.')
 
 @section('extra_css')
-<link rel="stylesheet" href="{{ asset('css/devices.css') }}">
+<link rel="stylesheet" href="{{ asset('css/devices.css') }}?v={{ filemtime(public_path('css/devices.css')) }}">
 @endsection
 
 @section('content')
