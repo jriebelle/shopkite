@@ -13,11 +13,11 @@
   <div class="devices-page-title">
       <h3>If ShopKite merchant was beans, this is the bread...</h3>
       <div class="devices-page-subtext">
-          <p>These are the devices we have tested and verified to work seamlessly with ShopKite Merchant. From powerful handheld terminals to heavy-duty desktop POS systems &mdash; built for Nigerian merchants who mean business.</p>
+          <p>The right device will guarantee the ShopKite merchant experience. As a result, we've strategically partnered with "world class retail device manufacturer" <strong>Sunmi</strong>, to provide "Steller" hardware match-up for the ultimate sales/inventory management experience designed for African merchants who mean business.</p>
       </div>
   </div>
 
-  <!-- Interactive Plugin Section (Jhey JoGpOGV CodePen Pattern) -->
+  <!-- Interactive Plugin Section — desktop only -->
   <section class="devices-plugin-section">
     <div class="column">
       
@@ -62,12 +62,12 @@
       </div>
       <div class="img-block">
         <div class="img-wrapper">
-          <img src="{{ asset('img/ken-device.png') }}" alt="Stella POS Device" />
+          <img src="{{ asset('img/ken-device.png') }}" alt="Ken POS Device" />
         </div>
       </div>
       <div class="img-block">
         <div class="img-wrapper">
-          <img src="{{ asset('img/stella-device.png') }}" alt="Ken Terminal" />
+          <img src="{{ asset('img/stella-device.png') }}" alt="Stella Terminal" />
         </div>
       </div>
     </div>
@@ -90,11 +90,42 @@
     </button>
   </section>
 
+  <!-- Bento Cards Section — mobile only -->
+  <section class="devices-bento-section">
+
+    <!-- Ken Device Card -->
+    <div class="device-bento-card" id="ken-device-card">
+      <div class="bento-img-area">
+        <img src="{{ asset('img/ken-device.png') }}" alt="Ken Device — Sunmi D3 Mini" />
+      </div>
+      <div class="bento-content">
+        <span class="bento-label">Desktop Device</span>
+        <h3 class="bento-device-name">Ken <span class="bento-model">(Sunmi D3 Mini)</span></h3>
+        <p class="bento-description">Bring your checkout system to life with a 10.1 inch, android-powered desktop device. Comes with a built-in 1D/2D barcode scanner and a 58mm thermal printer for fast receipts.</p>
+        <a href="/store" class="bento-cta" id="ken-buy-btn">Get Ken Now →</a>
+      </div>
+    </div>
+
+    <!-- Stella Device Card -->
+    <div class="device-bento-card" id="stella-device-card">
+      <div class="bento-img-area">
+        <img src="{{ asset('img/stella-device.png') }}" alt="Stella Device — Sunmi V3" />
+      </div>
+      <div class="bento-content">
+        <span class="bento-label">Handheld Device</span>
+        <h3 class="bento-device-name">Stella <span class="bento-model">(Sunmi V3)</span></h3>
+        <p class="bento-description">A powerful handheld device with a 6.75 inch display, 32 GB storage, and 58mm printer. With 3 GB RAM, ShopKite runs super smooth — perfect for merchants on the move.</p>
+        <a href="/store" class="bento-cta" id="stella-buy-btn">Get Stella Now →</a>
+      </div>
+    </div>
+
+  </section>
+
   <!-- Simple Accordion List (Max Width: 1280px, Collapsed Height: 60px) -->
   <div class="devices-section-intro">
       <h3>Additional Recommended Devices</h3>
       <div class="devices-page-subtext">
-          <p>Click any device below to find out more. The brands listed below are compatible with ShopKite Merchant out of the box.</p>
+          <p>Click any device below to find out more. The brands listed below are compatible with <strong>ShopKite Merchant</strong> out of the box. Ensuring to purchase a version that supports <strong>Android 14</strong> and above is highly recommended.</p>
       </div>
   </div>
   <div class="devices-accordion-wrapper">
@@ -202,7 +233,6 @@
     const section = document.querySelector('section.devices-plugin-section');
     if (!section) return;
 
-    const column = section.querySelector('.column');
     let detailsElements = section.querySelectorAll('details[name="feature"]');
     const nextButton = section.querySelector('button[data-action="next"]');
     const previousButton = section.querySelector('button[data-action="previous"]');
