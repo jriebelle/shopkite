@@ -13,7 +13,7 @@
   <div class="devices-page-title">
       <h3>If ShopKite merchant was beans, this is the bread...</h3>
       <div class="devices-page-subtext">
-          <p>The right device will guarantee the ShopKite merchant experience. As a result, we've strategically partnered with "world class retail device manufacturer" <strong>Sunmi</strong>, to provide "Steller" hardware match-up for the ultimate sales/inventory management experience designed for African merchants who mean business.</p>
+          <p>The right device will guarantee the best <strong>ShopKite merchant </strong> experience. As a result, we've strategically partnered with "world-class retail device manufacturer" <strong>Sunmi</strong>, to provide "Steller" hardware. This combination of a solid hardware plus the ShopKite merchant application, will surely remind you of a classic Nigerian meal (Beans & Bread). This match-up will no doubt deliver the ultimate sales/inventory management experience designed for African merchants who mean business.</p>
       </div>
   </div>
 
@@ -125,7 +125,7 @@
   <div class="devices-section-intro">
       <h3>Additional Recommended Devices</h3>
       <div class="devices-page-subtext">
-          <p>Click any device below to find out more. The brands listed below are compatible with <strong>ShopKite Merchant</strong> out of the box. Ensuring to purchase a version that supports <strong>Android 14</strong> and above is highly recommended.</p>
+          <p>The brands listed below are compatible with <strong>ShopKite Merchant</strong> out of the box. Ensuring to purchase a version that supports <strong>Android 14</strong> and above is highly recommended.</p>
       </div>
   </div>
   <div class="devices-accordion-wrapper">
