@@ -36,7 +36,9 @@
     <div class="footer-bottom">
         <div class="footer-partners">
             <span class="partners-label">Official hardware distributors in Nigeria</span>
-            <img src="{{ asset('img/sunmi-logo.png') }}" alt="Sunmi Logo" class="sunmi-logo">
+            <a href="https://www.sunmi.com/en/" target="_blank" rel="noopener noreferrer">
+                <img src="{{ asset('img/sunmi-logo.png') }}" alt="Sunmi Logo" class="sunmi-logo">
+            </a>
         </div>
         <div class="footer-socials">
             <a href="https://wa.me/2349062000393" target="_blank" class="social-link"><img src="{{ asset('img/whatsapp-icon.png') }}" alt="WhatsApp"></a>
