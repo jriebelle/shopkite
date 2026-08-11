@@ -8,23 +8,13 @@
 
     <div class="success-card">
 
-        <!-- Animation -->
+        <!-- Animation (PNG Sequence Canvas Player for Desktop & Mobile) -->
         <div class="success-video-wrap">
-            <!-- Desktop WEBM Video -->
-            <video
-                class="success-video success-media-desktop"
-                src="{{ asset('img/complete-check-light.webm') }}"
-                autoplay
-                muted
-                playsinline
-                aria-hidden="true">
-            </video>
-            <!-- Mobile PNG Sequence Canvas Player (000.png to 150.png, plays ONCE & stops on final frame) -->
             <canvas
                 id="sequenceCanvas"
                 width="500"
                 height="500"
-                class="success-canvas success-media-mobile"
+                class="success-canvas"
                 aria-label="Order Complete Animation">
             </canvas>
         </div>
@@ -52,7 +42,7 @@
     // Clear the cart from sessionStorage on successful order
     sessionStorage.removeItem('shopkite_cart');
 
-    // ── PNG Sequence Player (Mobile View) ─────────────────────────
+    // ── PNG Sequence Player (Desktop & Mobile Views) ──────────────
     (function() {
         const canvas = document.getElementById('sequenceCanvas');
         if (!canvas) return;

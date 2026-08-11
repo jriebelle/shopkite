@@ -661,14 +661,7 @@ select.field-error {
     width: 100%;
     height: 100%;
     object-fit: contain;
-}
-
-.success-media-desktop {
     display: block;
-}
-
-.success-media-mobile {
-    display: none;
 }
 
 /* Text */
@@ -735,13 +728,5 @@ select.field-error {
     .success-video-wrap {
         width: 140px;
         height: 140px;
-    }
-
-    .success-media-desktop {
-        display: none !important;
-    }
-
-    .success-media-mobile {
-        display: block !important;
     }
 }

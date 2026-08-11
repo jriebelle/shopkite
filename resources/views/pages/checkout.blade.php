@@ -610,18 +610,31 @@
     }
 
     // Attach live clear-on-input listeners to all validated fields
-    ['customer-first-name', 'customer-last-name', 'customer-address'].forEach(id => clearErrorOnInput(id));
+    ['customer-first-name', 'customer-last-name', 'customer-email', 'customer-address'].forEach(id => clearErrorOnInput(id));
     ['customer-mobile'].forEach(id => clearErrorOnInput(id));
     ['state', 'city', 'area'].forEach(id => clearErrorOnInput(id, 'change'));
+
+    // Special characters validator (Allowed: letters, numbers, spaces, @, fullstops ., hyphens -)
+    const hasInvalidSpecialChars = (str) => /[^a-zA-Z0-9\s@\.\-]/.test(str);
+    const ALLOWED_CHARS_MSG = 'contains invalid special characters. Only letters, numbers, spaces, @, hyphens (-), and fullstops (.) are allowed.';
+
+    // Special characters validator for Address (Allowed: letters, numbers, spaces, @, fullstops ., hyphens -, commas ,)
+    const hasInvalidAddressChars = (str) => /[^a-zA-Z0-9\s@\.\-\,]/.test(str);
+    const ALLOWED_ADDRESS_CHARS_MSG = 'contains invalid special characters. Only letters, numbers, spaces, @, hyphens (-), fullstops (.), and commas (,) are allowed.';
 
     function validateCheckoutForm() {
         let firstErrorId = null;
         let valid = true;
 
-        const requireText = (id, label) => {
+        const validateTextField = (id, label) => {
             const el = document.getElementById(id);
-            if (!el || !el.value.trim()) {
+            const val = el ? el.value.trim() : '';
+            if (!val) {
                 setError(id, `${label} is required.`);
+                if (!firstErrorId) firstErrorId = id;
+                valid = false;
+            } else if (hasInvalidSpecialChars(val)) {
+                setError(id, `${label} ${ALLOWED_CHARS_MSG}`);
                 if (!firstErrorId) firstErrorId = id;
                 valid = false;
             } else {
@@ -641,9 +654,28 @@
         };
 
         // First name
-        requireText('customer-first-name', 'First name');
-        // Last name
-        requireText('customer-last-name', 'Surname');
+        validateTextField('customer-first-name', 'First name');
+        // Surname / Last name
+        validateTextField('customer-last-name', 'Surname');
+
+        // Email address (optional, but if filled in, validate special chars & format)
+        const emailEl = document.getElementById('customer-email');
+        if (emailEl && emailEl.value.trim()) {
+            const emailVal = emailEl.value.trim();
+            if (hasInvalidSpecialChars(emailVal)) {
+                setError('customer-email', `Email address ${ALLOWED_CHARS_MSG}`);
+                if (!firstErrorId) firstErrorId = 'customer-email';
+                valid = false;
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+                setError('customer-email', 'Please enter a valid email address.');
+                if (!firstErrorId) firstErrorId = 'customer-email';
+                valid = false;
+            } else {
+                clearError('customer-email');
+            }
+        } else {
+            clearError('customer-email');
+        }
 
         // Mobile — must be exactly 11 digits
         const mobileEl = document.getElementById('customer-mobile');
@@ -664,8 +696,20 @@
         requireSelect('city', 'city');
         requireSelect('area', 'area');
 
-        // Street address
-        requireText('customer-address', 'Street address');
+        // Street address (Allows letters, numbers, spaces, @, hyphens -, fullstops ., and commas ,)
+        const addrEl = document.getElementById('customer-address');
+        const addrVal = addrEl ? addrEl.value.trim() : '';
+        if (!addrVal) {
+            setError('customer-address', 'Address is required.');
+            if (!firstErrorId) firstErrorId = 'customer-address';
+            valid = false;
+        } else if (hasInvalidAddressChars(addrVal)) {
+            setError('customer-address', `Address ${ALLOWED_ADDRESS_CHARS_MSG}`);
+            if (!firstErrorId) firstErrorId = 'customer-address';
+            valid = false;
+        } else {
+            clearError('customer-address');
+        }
 
         // Scroll to first error
         if (firstErrorId) {
