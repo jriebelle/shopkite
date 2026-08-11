@@ -51,7 +51,7 @@
                     <span class="store-item-type">Devices &amp; Services</span>
                 </div>
             </div>
-            <p class="store-item-desc">Official ShopKite recommended POS devices, Sunmi handheld terminals, receipt printers &amp; setup services.</p>
+            <p class="store-item-desc">Official ShopKite recommended inventory management devices, Sunmi handheld devices, receipt printers &amp; setup services.</p>
             <div class="store-item-footer">
                 <span class="store-item-location">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>

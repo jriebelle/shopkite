@@ -10,14 +10,23 @@
 
         <!-- Animation -->
         <div class="success-video-wrap">
+            <!-- Desktop WEBM Video -->
             <video
-                class="success-video"
+                class="success-video success-media-desktop"
                 src="{{ asset('img/complete-check-light.webm') }}"
                 autoplay
                 muted
                 playsinline
                 aria-hidden="true">
             </video>
+            <!-- Mobile PNG Sequence Canvas Player (000.png to 150.png, plays ONCE & stops on final frame) -->
+            <canvas
+                id="sequenceCanvas"
+                width="500"
+                height="500"
+                class="success-canvas success-media-mobile"
+                aria-label="Order Complete Animation">
+            </canvas>
         </div>
 
         <!-- Confirmation copy -->
@@ -42,5 +51,68 @@
 <script>
     // Clear the cart from sessionStorage on successful order
     sessionStorage.removeItem('shopkite_cart');
+
+    // ── PNG Sequence Player (Mobile View) ─────────────────────────
+    (function() {
+        const canvas = document.getElementById('sequenceCanvas');
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        const totalFrames = 151; // 000.png to 150.png
+        const basePath = "{{ asset('img/complete_check_light') }}";
+        const images = [];
+
+        // Preload PNG sequence images
+        for (let i = 0; i < totalFrames; i++) {
+            const padded = String(i).padStart(3, '0');
+            const img = new Image();
+            img.src = `${basePath}/${padded}.png`;
+            images.push(img);
+        }
+
+        let currentFrame = 0;
+        const targetFps = 50; // ~3 seconds smooth animation playback
+        const frameInterval = 1000 / targetFps;
+        let lastFrameTime = 0;
+
+        function renderFrame(timestamp) {
+            if (!lastFrameTime) lastFrameTime = timestamp;
+            const elapsed = timestamp - lastFrameTime;
+
+            if (elapsed >= frameInterval) {
+                lastFrameTime = timestamp - (elapsed % frameInterval);
+
+                const img = images[currentFrame];
+                if (img && (img.complete || img.naturalWidth > 0)) {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                }
+
+                if (currentFrame < totalFrames - 1) {
+                    currentFrame++;
+                    requestAnimationFrame(renderFrame);
+                } else {
+                    // Stopped on final frame 150.png permanently!
+                    if (images[totalFrames - 1].complete) {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(images[totalFrames - 1], 0, 0, canvas.width, canvas.height);
+                    }
+                }
+            } else {
+                requestAnimationFrame(renderFrame);
+            }
+        }
+
+        // Start playing as soon as frame 000 is ready
+        if (images[0].complete) {
+            ctx.drawImage(images[0], 0, 0, canvas.width, canvas.height);
+            requestAnimationFrame(renderFrame);
+        } else {
+            images[0].onload = () => {
+                ctx.drawImage(images[0], 0, 0, canvas.width, canvas.height);
+                requestAnimationFrame(renderFrame);
+            };
+        }
+    })();
 </script>
 @endpush

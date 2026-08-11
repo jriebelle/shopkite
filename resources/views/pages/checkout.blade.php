@@ -139,23 +139,24 @@
                         </div>
                     </div>
 
-                    <div class="checkout-form-row">
-                        <label for="area">Area <span class="req">*</span></label>
-                        <div class="select-wrap">
-                            <select id="area" required name="area">
-                                <option value="">— Select Area —</option>
-                            </select>
-                            <svg class="select-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    <div class="form-row-grid">
+                        <div class="checkout-form-row">
+                            <label for="area">Area <span class="req">*</span></label>
+                            <div class="select-wrap">
+                                <select id="area" required name="area" onchange="onAreaChange(this)">
+                                    <option value="">— Select Area —</option>
+                                </select>
+                                <svg class="select-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="checkout-form-row" id="estate-holder" style="display:none;">
-                        <label for="estates">Estate <small>(Optional)</small></label>
-                        <div class="select-wrap">
-                            <select name="estates" id="estates">
-                                <option value="0">— Select estate if applicable —</option>
-                            </select>
-                            <svg class="select-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                        <div class="checkout-form-row" id="estate-holder">
+                            <label for="estates">Estate <small>(Optional)</small></label>
+                            <div class="select-wrap">
+                                <select name="estates" id="estates" disabled>
+                                    <option value="0">— Select estate if applicable —</option>
+                                </select>
+                                <svg class="select-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            </div>
                         </div>
                     </div>
 
@@ -200,7 +201,13 @@
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
             </div>
             <h1>Confirm your order</h1>
-            <p class="popup-confirm-sub">Please review your items and delivery details before proceeding to payment.</p>
+            <p class="popup-confirm-sub">Please review your delivery details and items before proceeding to payment.</p>
+
+             <!-- Delivery Details -->
+            <div class="popup-confirm-section">
+                <span class="popup-confirm-label">Delivery details</span>
+                <div class="popup-confirm-details" id="confirmPopupDetails"><!-- JS populated --></div>
+            </div>
 
             <!-- Order Items -->
             <div class="popup-confirm-section">
@@ -209,12 +216,7 @@
                 <div class="popup-confirm-total" id="confirmPopupTotal"><!-- JS populated --></div>
             </div>
 
-            <!-- Delivery Details -->
-            <div class="popup-confirm-section">
-                <span class="popup-confirm-label">Delivery details</span>
-                <div class="popup-confirm-details" id="confirmPopupDetails"><!-- JS populated --></div>
-            </div>
-
+           
             <button class="popup-confirm-pay-btn" id="confirmPayBtn" onclick="confirmAndPay()">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 Proceed to Payment
@@ -434,10 +436,42 @@
         37: { cities: { 85: { name: 'Gusau', areas: ['Gusau', 'Anka', 'Kaura Namoda'] } } },
     };
 
+    // ── Nigerian location & estate data (static) ─────────────────────────
+    const estateData = {
+        // Lagos
+        'Lekki Phase 1': ['Admiralty Estate', 'Periwinkle Estate', 'Orange Island', 'Lekki Right Estate', 'Gracefield Island'],
+        'Lekki Phase 2': ['Inoyo Haven', 'Carlton Gate Estate', 'Mobil Estate', 'Lekki County Homes'],
+        'Ajah': ['Abraham Adesanya Estate', 'Crown Estate', 'Royal Gardens Estate', 'Ogombo Estate', 'Badore Estate'],
+        'Ikoyi': ['Banana Island', 'Parkview Estate', 'Old Ikoyi Estate', 'Osborne Foreshore Estate Phase 1', 'Osborne Foreshore Estate Phase 2'],
+        'Victoria Island': ['Oniru Private Estate', 'Victoria Garden City (VGC)', '1004 Housing Estate', 'Bishop Aboyade Cole Estate'],
+        'Ikeja': ['GRA Ikeja', 'Omole Phase 1', 'Omole Phase 2', 'Magodo Phase 1 (Isheri)', 'Magodo Phase 2 (Shangisha)', 'Allen Avenue Estate'],
+        'Surulere': ['Adeniran Ogunsanya Estate', 'Masha Estate', 'Ijesha Estate', 'Itire Estate'],
+        'Yaba': ['Abule Oja Estate', 'Akoka Estate', 'Alagomeji Estate'],
+        'Ojodu': ['Berger Estate', 'Yakoyo Estate', 'Ojodu Estate'],
+        'Abeokuta North': ['Elega Housing Estate', 'Laderin Estate', 'Idi-Aba Estate'],
+        // Abuja FCT
+        'Wuse': ['Wuse Zone 1 Estate', 'Wuse Zone 2 Estate', 'Wuse Zone 3 Estate', 'Wuse Zone 4 Estate', 'Wuse Zone 5 Estate', 'Wuse Zone 6 Estate'],
+        'Wuse 2': ['Wuse Housing Estate', 'Aminu Kano Estate', 'Adetokunbo Ademola Estate'],
+        'Maitama': ['Maitama Extension', 'Aso Grove Estate', 'Panoma Estate'],
+        'Asokoro': ['Asokoro Extension', 'Sunrise Hills Estate'],
+        'Garki': ['Garki Area 1 Estate', 'Garki Area 2 Estate', 'Garki Area 3 Estate', 'Garki Area 7 Estate', 'Garki Area 8 Estate', 'Garki Area 10 Estate', 'Garki Area 11 Estate'],
+        'Gwarinpa': ['Gwarinpa Housing Estate', 'Citec Estate', 'Kado Estate', 'Sun City Estate'],
+        'Kubwa': ['Kubwa PW Estate', 'FHA Kubwa Estate', 'Arab Road Estate'],
+        'Lugbe': ['FHA Lugbe Estate', 'Trademore Estate', 'Pyakasa Estate'],
+        'Jabi': ['Jabi Lake Estate', 'Jabi District Estate'],
+        'Utako': ['Utako District Estate'],
+        // Port Harcourt
+        'Port Harcourt City': ['Old GRA Estate', 'New GRA Phase 1', 'New GRA Phase 2', 'New GRA Phase 3', 'Ada George Estate'],
+        'Obio-Akpor': ['Rumuola Estate', 'Woji Housing Estate', 'Rumuibekwe Estate', 'Eliozu Estate']
+    };
+
     function onStateChange(stateEl) {
         const citySelect = document.getElementById('city');
         const areaSelect = document.getElementById('area');
+        const estateSelect = document.getElementById('estates');
         areaSelect.innerHTML = '<option value="">— Select Area —</option>';
+        estateSelect.innerHTML = '<option value="0">— Select estate if applicable —</option>';
+        estateSelect.disabled = true;
         citySelect.onchange = null;
 
         const stateId = parseInt(stateEl.value);
@@ -460,8 +494,12 @@
 
     function onCityChange(cityEl) {
         const areaSelect = document.getElementById('area');
+        const estateSelect = document.getElementById('estates');
         const stateId = parseInt(document.getElementById('state').value);
         const cityId = parseInt(cityEl.value);
+
+        estateSelect.innerHTML = '<option value="0">— Select estate if applicable —</option>';
+        estateSelect.disabled = true;
 
         if (!cityId || !stateId || !locationData[stateId]?.cities[cityId]) {
             areaSelect.innerHTML = '<option value="">— Select Area —</option>';
@@ -470,11 +508,33 @@
 
         const areas = locationData[stateId].cities[cityId].areas;
         areaSelect.innerHTML = '<option value="">— Select Area —</option>';
-        areas.forEach((area, idx) => {
+        areas.forEach((area) => {
             const opt = document.createElement('option');
             opt.value = area;
             opt.textContent = area;
             areaSelect.appendChild(opt);
+        });
+        areaSelect.onchange = () => onAreaChange(areaSelect);
+    }
+
+    function onAreaChange(areaEl) {
+        const estateSelect = document.getElementById('estates');
+        const areaName = areaEl.value;
+
+        estateSelect.innerHTML = '<option value="0">— Select estate if applicable —</option>';
+
+        if (!areaName || !estateData[areaName]) {
+            estateSelect.disabled = true;
+            return;
+        }
+
+        const estates = estateData[areaName];
+        estateSelect.disabled = false;
+        estates.forEach((estate) => {
+            const opt = document.createElement('option');
+            opt.value = estate;
+            opt.textContent = estate;
+            estateSelect.appendChild(opt);
         });
     }
 
@@ -666,8 +726,11 @@
         const state      = get('state');
         const city       = get('city');
         const area       = get('area');
+        const estate     = get('estates');
         const address    = get('customer-address');
         const promo      = get('promocode');
+
+        const isEstateSelected = estate && estate !== '0' && !estate.includes('Select estate');
 
         const rows = [
             ['Name',    `${firstName} ${lastName}`.trim()],
@@ -676,6 +739,7 @@
             ['State',   state],
             ['City',    city],
             ['Area',    area],
+            ...(isEstateSelected ? [['Estate', estate]] : []),
             ['Address', address],
             ['Promo',   promo || '—'],
         ];
