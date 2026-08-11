@@ -18,7 +18,7 @@
         </div>
         <div class="footer-col links-col">
             <a href="{{ route('store') }}">Our Store</a>
-            <a href="{{ route('stores.nigeria') }}">Stores in Nigeria</a>
+            <a href="{{ route('stores.nigeria') }}">Online stores (ShopKite Market)</a>
             <a href="{{ route('ibr') }}">Business Report</a>
             <a href="{{ route('devices') }}">Recommended Devices</a>
             <a href="{{ route('agent') }}">Become an Agent</a>

@@ -5,7 +5,7 @@
 /* ── Layout ── */
 .store-content-area {
     max-width: 860px;
-    margin: 50px auto 0 auto;
+    margin: 90px auto 0 auto;
     padding: 48px 24px 80px;
     box-sizing: border-box;
 }
@@ -997,6 +997,64 @@
         padding: 14px 20px;
         font-size: 14px;
     }
+}
+
+/* ── Country Dropdown (Stores List Page) ── */
+.country-dropdown-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.country-dropdown-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: rgba(255, 102, 0, 0.08);
+    color: #ff6600;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    border: 1px solid rgba(255, 102, 0, 0.25);
+    border-radius: 20px;
+    padding: 4px 28px 4px 12px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.country-dropdown-select:hover,
+.country-dropdown-select:focus {
+    background: rgba(255, 102, 0, 0.12);
+    border-color: #ff6600;
+    box-shadow: 0 2px 8px rgba(255, 102, 0, 0.15);
+}
+
+.country-dropdown-chevron {
+    position: absolute;
+    right: 9px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ff6600;
+    pointer-events: none;
+}
+
+/* ── Verified Stores Counter ── */
+.verified-stores-counter-wrap {
+    display: inline-flex;
+    align-items: center;
+    margin: 0;
+}
+
+.verified-stores-counter {
+    color: #ffffff;
+    background: #ff6600;
+    padding: 6px 10px;
+    font-size: 14px;
+    font-weight: 200;
+    border-radius: 48px;
+    display: inline-block;
+    box-shadow: 0 3px 12px rgba(255, 102, 0, 0.25);
 }
 
 

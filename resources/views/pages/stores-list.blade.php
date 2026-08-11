@@ -17,14 +17,36 @@
             <img class="store-dp-img" src="{{ asset('img/shopkite-store-profile-pic.png') }}" alt="ShopKite Stores Nigeria">
         </div>
         <div class="store-intro-variant">
-            <h2 class="store-section-label">Stores in Nigeria</h2>
-            <p>You can now buy your favourite products from verified stores across Nigeria in the comfort of your home and get them delivered to your doorstep.</p>
+            <h2 class="store-section-label">Online stores in ShopKite market</h2>
+            <p>You can now buy your favourite products from verified stores, across the country in the comfort of your home and get them delivered to your doorstep.</p>
             <div class="store-tags-wrap">
                 <span class="store-tag-label">Country:</span>
-                <span class="store-tag-pill">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    Nigeria
-                </span>
+                <div class="country-dropdown-wrap">
+                    <select id="countrySelect" class="country-dropdown-select">
+                        <option value="NG" selected>🇳🇬 Nigeria</option>
+                        <option value="GH">🇬🇭 Ghana</option>
+                        <option value="KE">🇰🇪 Kenya</option>
+                        <option value="ZA">🇿🇦 South Africa</option>
+                        <option value="RW">🇷🇼 Rwanda</option>
+                        <option value="EG">🇪🇬 Egypt</option>
+                        <option value="UG">🇺🇬 Uganda</option>
+                        <option value="TZ">🇹🇿 Tanzania</option>
+                        <option value="CM">🇨🇲 Cameroon</option>
+                        <option value="CI">🇨🇮 Côte d'Ivoire</option>
+                        <option value="SN">🇸🇳 Senegal</option>
+                        <option value="ET">🇪🇹 Ethiopia</option>
+                        <option value="AO">🇦🇴 Angola</option>
+                        <option value="ZM">🇿🇲 Zambia</option>
+                        <option value="ZW">🇿🇼 Zimbabwe</option>
+                        <option value="MA">🇲🇦 Morocco</option>
+                        <option value="TN">🇹🇳 Tunisia</option>
+                        <option value="DZ">🇩🇿 Algeria</option>
+                    </select>
+                    <svg class="country-dropdown-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+                <div class="verified-stores-counter-wrap" id="verifiedCounterWrap">
+                    <span class="verified-stores-counter" id="verifiedStoresCounter">Verified stores found: <strong>223</strong></span>
+                </div>
             </div>
         </div>
     </div>
@@ -258,10 +280,15 @@
 <script>
     const storeSearchInput = document.getElementById('storeSearchInput');
     const noStoresFound    = document.getElementById('noStoresFound');
+    const countrySelect    = document.getElementById('countrySelect');
 
     if (storeSearchInput) {
         storeSearchInput.addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase().trim();
+            const selectedCountry = countrySelect ? countrySelect.value : 'NG';
+            
+            if (selectedCountry !== 'NG') return;
+
             let visibleCount = 0;
 
             document.querySelectorAll('#storesGrid .store-item-card').forEach(card => {
@@ -279,7 +306,31 @@
             });
 
             if (noStoresFound) {
+                noStoresFound.textContent = 'No stores found matching your search query.';
                 noStoresFound.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+        });
+    }
+
+    if (countrySelect) {
+        countrySelect.addEventListener('change', (e) => {
+            const selectedVal = e.target.value;
+            const selectedText = e.target.options[e.target.selectedIndex].text.replace(/^[^\s]+\s*/, '');
+            const paginationNav = document.querySelector('.pagination-nav');
+            const counterWrap   = document.getElementById('verifiedCounterWrap');
+
+            if (selectedVal !== 'NG') {
+                document.querySelectorAll('#storesGrid .store-item-card').forEach(card => card.style.display = 'none');
+                if (paginationNav) paginationNav.style.display = 'none';
+                if (counterWrap) counterWrap.style.display = 'none';
+                if (noStoresFound) {
+                    noStoresFound.textContent = `No verified stores found in ${selectedText} yet.`;
+                    noStoresFound.style.display = 'block';
+                }
+            } else {
+                if (paginationNav) paginationNav.style.display = 'flex';
+                if (counterWrap) counterWrap.style.display = 'inline-flex';
+                if (storeSearchInput) storeSearchInput.dispatchEvent(new Event('input'));
             }
         });
     }
