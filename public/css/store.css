@@ -7,6 +7,13 @@
     max-width: 860px;
     margin: 50px auto 0 auto;
     padding: 48px 24px 80px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+    .store-content-area {
+        padding: 32px 16px 60px;
+    }
 }
 
 .store-intro { margin-bottom: 16px; }
@@ -627,3 +634,304 @@
 @media (max-width: 360px) {
     .product-grid { grid-template-columns: 1fr; }
 }
+
+/* ── Store Variant Header (DP + Intro Text Layout) ── */
+.store-header-variant {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-bottom: 24px;
+    width: 100%;
+}
+
+.store-dp-wrap {
+    width: 25%;
+    max-width: 140px;
+    flex-shrink: 0;
+}
+
+.store-dp-img {
+    width: 100%;
+    max-width: 140px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.store-intro-variant {
+    flex: 1;
+    min-width: 0;
+}
+
+.store-intro-variant .store-section-label {
+    margin: 0 0 8px 0;
+}
+
+.store-intro-variant p {
+    font-size: 15px;
+    color: #555;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.store-tags-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.store-tag-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.store-tag-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #ff6600;
+    background: rgba(255, 102, 0, 0.08);
+    border: 1px solid rgba(255, 102, 0, 0.2);
+    border-radius: 20px;
+    padding: 3px 10px;
+}
+
+@media (max-width: 540px) {
+    .store-header-variant {
+        gap: 16px;
+    }
+}
+
+/* ── Stores List Grid Section ── */
+.stores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+    gap: 24px;
+    margin-bottom: 56px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.store-item-card {
+    background: #ffffff;
+    border-radius: 24px;
+    border: 1px solid #f0f0f0;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.store-item-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.09);
+    border-color: #e2e8f0;
+}
+
+.store-item-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    min-width: 0;
+}
+
+.store-item-dp {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #f5f5f5;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid #eef2f6;
+}
+
+.store-item-title-wrap {
+    flex: 1;
+    min-width: 0;
+}
+
+.store-item-name {
+    font-family: "Roboto", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 4px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.25;
+}
+
+.store-item-type {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 2px 10px;
+    border-radius: 20px;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.store-item-desc {
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 1.6;
+    margin: 0;
+    flex: 1;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.store-item-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 14px;
+    border-top: 1px solid #f1f5f9;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.store-item-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #64748b;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.btn-visit-store {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+    background: #ff6600;
+    padding: 8px 18px;
+    border-radius: 40px;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 14px rgba(255, 102, 0, 0.25);
+    flex-shrink: 0;
+}
+
+.btn-visit-store:hover {
+    background: #e05500;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(255, 102, 0, 0.35);
+}
+
+@media (max-width: 768px) {
+    .stores-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .store-item-card {
+        padding: 20px 16px;
+        border-radius: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .store-item-footer {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .store-item-location {
+        white-space: normal;
+    }
+
+    .btn-visit-store {
+        justify-content: center;
+    }
+}
+
+
+/* ── Pagination Nav ── */
+.pagination-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 40px;
+    margin-bottom: 24px;
+}
+
+.pagination-number,
+.pagination-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 600;
+    color: #4b5563;
+    background: transparent;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    user-select: none;
+}
+
+.pagination-number:hover:not(.active),
+.pagination-arrow:hover:not(.disabled) {
+    background: #f0f0f0;
+    color: #ff6600;
+}
+
+.pagination-number.active {
+    background: #ff6600 !important;
+    color: #ffffff !important;
+    border-radius: 50% !important;
+    box-shadow: 0 4px 14px rgba(255, 102, 0, 0.35);
+}
+
+.pagination-arrow.disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.pagination-dots {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 40px;
+    font-size: 16px;
+    color: #94a3b8;
+}
+
+
+
+

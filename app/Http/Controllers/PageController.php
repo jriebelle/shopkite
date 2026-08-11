@@ -50,4 +50,19 @@ class PageController extends Controller
     {
         return view('pages.devices');
     }
+
+    public function orderSuccess()
+    {
+        return view('pages.order-success');
+    }
+
+    public function storeVariant()
+    {
+        return view('pages.store-variant');
+    }
+
+    public function storesList()
+    {
+        return view('pages.stores-list');
+    }
 }

@@ -11,7 +11,7 @@
 <main class="devices-main-wrapper">
   
   <div class="devices-page-title">
-      <h3>If ShopKite merchant was beans, this is the bread...</h3>
+      <h3>If <span class="highlight-shopkite">ShopKite</span> merchant was beans, this is the bread...</h3>
       <div class="devices-page-subtext">
           <p>The right device will guarantee the best <strong>ShopKite merchant </strong> experience. As a result, we've strategically partnered with "world-class retail device manufacturer" <strong>Sunmi</strong>, to provide "Steller" hardware. This combination of a solid hardware plus the ShopKite merchant application, will surely remind you of a classic Nigerian meal (Beans & Bread). This match-up will no doubt deliver the ultimate sales/inventory management experience designed for African merchants who mean business.</p>
       </div>
@@ -31,7 +31,7 @@
         </summary>
         <div class="content">
           <h4>Ken (Sunmi D3 Mini)</h4>
-          <p>Bring your checkout system to life with a 10.1 inch, android powered desktop (Ken) device. Has 1D/2D scanner for scanning product barcodes and a 58mm printer.</p>
+          <p>Bring your checkout system to life with a 10.1 inch, android powered desktop (Ken) device. Has 1D/2D scanner for scanning product barcodes, 3GB Ram, 32GB storage and a 58mm printer.</p>
           <a href="/store" class="buy-device">Get a Ken Device Now!</a>
         </div>
       </details>
@@ -101,7 +101,7 @@
       <div class="bento-content">
         <span class="bento-label">Desktop Device</span>
         <h3 class="bento-device-name">Ken <span class="bento-model">(Sunmi D3 Mini)</span></h3>
-        <p class="bento-description">Bring your checkout system to life with a 10.1 inch, android-powered desktop device. Comes with a built-in 1D/2D barcode scanner and a 58mm thermal printer for fast receipts.</p>
+        <p class="bento-description">Bring your checkout system to life with a 10.1 inch, android powered desktop (Ken) device. Has 1D/2D scanner for scanning product barcodes, 3GB Ram, 32GB storage and a 58mm printer.</p>
         <a href="/store" class="bento-cta" id="ken-buy-btn">Get Ken Now →</a>
       </div>
     </div>
@@ -219,6 +219,21 @@
           </div>
         </summary>
         <p class="accordion-content-text">Oppo tablets offer sleek design, fast performance, and battery efficiency. Designed for active store environments, making sale management and stock updates effortless on ShopKite Merchant.</p>
+      </details>
+
+      <!-- Item 7: Apple MacBook (M-Series) -->
+      <details class="simple-accordion-item">
+        <summary class="accordion-header">
+          <div class="header-left">
+            <h4 class="accordion-title">Apple MacBooks (M-Series)</h4>
+          </div>
+          <div class="header-right" style="background-image: url('{{ asset('img/recommended-devices/macbook-m1-laptop.png') }}');">
+            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+          </div>
+        </summary>
+        <p class="accordion-content-text">ShopKite Merchant supports all M-series Apple laptops (M1, M2, M3, M4 and newer) natively. Enjoy blazingly fast checkout performance, multi-tasking capabilities, and robust inventory management on desktop screens.</p>
       </details>
 
     </div>

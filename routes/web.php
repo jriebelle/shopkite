@@ -18,4 +18,8 @@ Route::get('/handbook', [PageController::class, 'handbook'])->name('handbook');
 Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy');
 Route::get('/invoice', [PageController::class, 'invoice'])->name('invoice');
 Route::get('/recommended-devices', [PageController::class, 'devices'])->name('devices');
+Route::get('/order-success', [PageController::class, 'orderSuccess'])->name('order.success');
+Route::get('/store-variant', [PageController::class, 'storeVariant'])->name('store.variant');
+Route::get('/stores', [PageController::class, 'storesList'])->name('stores.index');
+Route::get('/nigeria', [PageController::class, 'storesList'])->name('stores.nigeria');
 
