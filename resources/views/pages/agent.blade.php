@@ -4,7 +4,7 @@
 @section('meta_description', 'Talk to stores around you about ShopKite, earn money. Find neighbourhood supermarkets or pharmacies around you and start earning today.')
 
 @section('extra_css')
-<link rel="stylesheet" href="{{ asset('css/agent.css?v=1.1.0') }}">
+<link rel="stylesheet" href="{{ asset('css/agent.css') }}?v={{ filemtime(public_path('css/agent.css')) }}">
 @endsection
 
 @section('content')

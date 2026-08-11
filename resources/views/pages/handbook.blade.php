@@ -4,7 +4,7 @@
 @section('meta_description', 'The ShopKite Agent Handbook. Understand the ShopKite Merchant app, earnings, onboarding procedures, payouts, and benefits.')
 
 @section('extra_css')
-<link rel="stylesheet" href="{{ asset('css/agent.css?v=1.1.0') }}">
+<link rel="stylesheet" href="{{ asset('css/agent.css') }}?v={{ filemtime(public_path('css/agent.css')) }}">
 @endsection
 
 @section('content')

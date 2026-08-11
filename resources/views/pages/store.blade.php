@@ -4,7 +4,7 @@
 @section('meta_description', 'Browse and order recommended devices and ShopKite services directly.')
 
 @section('extra_css')
-<link rel="stylesheet" href="{{ asset('css/store.css') }}">
+<link rel="stylesheet" href="{{ asset('css/store.css') }}?v={{ filemtime(public_path('css/store.css')) }}">
 @endsection
 
 @section('content')

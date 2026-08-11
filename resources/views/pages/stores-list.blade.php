@@ -4,7 +4,7 @@
 @section('meta_description', 'Discover and shop directly from verified ShopKite merchant stores across Nigeria.')
 
 @section('extra_css')
-<link rel="stylesheet" href="{{ asset('css/store.css') }}">
+<link rel="stylesheet" href="{{ asset('css/store.css') }}?v={{ filemtime(public_path('css/store.css')) }}">
 @endsection
 
 @section('content')

@@ -1,7 +1,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="{{ asset('css/cityscape.css') }}">
-<link rel="stylesheet" href="{{ asset('css/main.css?v=1.1.2') }}">
+<link rel="stylesheet" href="{{ asset('css/cityscape.css') }}?v={{ filemtime(public_path('css/cityscape.css')) }}">
+<link rel="stylesheet" href="{{ asset('css/main.css') }}?v={{ filemtime(public_path('css/main.css')) }}">
 @yield('extra_css')
 @stack('styles')
 <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}">

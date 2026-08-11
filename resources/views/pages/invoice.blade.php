@@ -4,7 +4,7 @@
 @section('meta_description', 'Create, preview and download professional invoices instantly with ShopKite\'s free invoice generator. No sign-in required.')
 
 @section('extra_css')
-<link rel="stylesheet" href="{{ asset('css/invoice.css?v=1.0.4') }}">
+<link rel="stylesheet" href="{{ asset('css/invoice.css') }}?v={{ filemtime(public_path('css/invoice.css')) }}">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 @endsection
 

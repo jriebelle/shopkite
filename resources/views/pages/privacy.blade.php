@@ -4,7 +4,7 @@
 @section('meta_description', 'ShopKite Privacy Policy. Understand how we collect, use, and protect your personal data when using the ShopKite Merchant app and website.')
 
 @section('extra_css')
-<link rel="stylesheet" href="{{ asset('css/agent.css?v=1.1.1') }}">
+<link rel="stylesheet" href="{{ asset('css/agent.css') }}?v={{ filemtime(public_path('css/agent.css')) }}">
 @endsection
 
 @section('content')
