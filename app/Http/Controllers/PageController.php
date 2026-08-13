@@ -65,4 +65,9 @@ class PageController extends Controller
     {
         return view('pages.stores-list');
     }
+
+    public function faq()
+    {
+        return view('pages.faq');
+    }
 }

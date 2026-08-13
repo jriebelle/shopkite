@@ -22,4 +22,5 @@ Route::get('/order-success', [PageController::class, 'orderSuccess'])->name('ord
 Route::get('/store-variant', [PageController::class, 'storeVariant'])->name('store.variant');
 Route::get('/stores', [PageController::class, 'storesList'])->name('stores.index');
 Route::get('/nigeria', [PageController::class, 'storesList'])->name('stores.nigeria');
+Route::get('/faq', [PageController::class, 'faq'])->name('faq');
 

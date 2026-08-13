@@ -25,7 +25,7 @@
             <a href="{{ route('privacy') }}">Privacy Policy</a>
         </div>
         <div class="footer-col links-col">
-            <a href="#">FAQs</a>
+            <a href="{{ route('faq') }}">FAQs</a>
             <a href="#">Video Tutorial</a>
             <a href="#">Download for Android</a>
             <a href="#">Download for iOS</a>
