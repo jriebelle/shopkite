@@ -1,5 +1,9 @@
-html, body {
+html {
     overflow-x: clip;
+}
+
+body {
+    overflow: visible;
 }
 
 /* ── Top Navigation Backdrop Blur (FAQ Page Only) ── */
@@ -327,6 +331,13 @@ html, body {
     border-bottom: 1px solid rgba(226, 232, 240, 0.7);
 }
 
+.faq-search-inner {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
 .faq-search-input {
     width: 100%;
     padding: 14px 20px 14px 48px;
@@ -355,6 +366,8 @@ html, body {
     pointer-events: none;
     display: flex;
     align-items: center;
+    justify-content: center;
+    z-index: 2;
 }
 
 /* ── FAQ Category Sections & Accordion Cards Scroll Margin ── */
@@ -476,7 +489,7 @@ html {
 }
 
 .faq-accordion-card.open .faq-accordion-body {
-    max-height: 1000px;
+    max-height: 4500px;
     opacity: 1;
     padding: 0 22px 22px 22px;
 }
@@ -488,26 +501,99 @@ html {
     margin: 0;
 }
 
-.faq-accordion-content p {
+.faq-accordion-content p,
+.faq-text {
     margin-bottom: 12px;
+    line-height: 1.7;
 }
 
-.faq-accordion-content p:last-child {
+.faq-accordion-content p:last-child,
+.faq-text:last-child {
     margin-bottom: 0;
 }
 
 .faq-accordion-content ol,
-.faq-accordion-content ul {
-    margin: 8px 0 12px 20px;
+.faq-accordion-content ul,
+.faq-step-list {
+    margin: 8px 0 14px 20px;
     padding: 0;
 }
 
-.faq-accordion-content li {
+.faq-accordion-content li,
+.faq-step-list li {
     margin-bottom: 6px;
+    line-height: 1.6;
 }
 
-.faq-accordion-content strong {
+.faq-accordion-content strong,
+.faq-step-list li strong {
     color: #0f172a;
+}
+
+.faq-accordion-content a {
+    color: #ff6600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s ease;
+}
+
+.faq-accordion-content a:hover {
+    color: #e55c00;
+}
+
+/* Responsive video embed wrapper */
+.faq-video-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin: 14px 0 18px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #0f172a;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.faq-video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* FAQ image container */
+.faq-img-container {
+    margin: 16px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.faq-img-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Callout highlight banners */
+.faq-callout-banner {
+    background: #f8fafc;
+    border-left: 3px solid #ff6600;
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    margin: 14px 0 10px 0;
+    font-size: 14.5px;
+    color: #1e293b;
+}
+
+/* Subheadings inside FAQ answers */
+.faq-sub-heading {
+    font-size: 15.5px;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 18px 0 8px 0;
 }
 
 /* Empty search state */
@@ -659,7 +745,8 @@ html {
         overflow-y: auto;
     }
 
-    .faq-sidebar.open-mobile {
+    .faq-sidebar.open-mobile,
+    .faq-sidebar.mobile-open {
         transform: translateX(0);
     }
 

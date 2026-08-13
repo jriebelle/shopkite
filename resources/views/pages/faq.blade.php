@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Frequently Asked Questions — ShopKite Merchant')
-@section('meta_description', 'Find answers to common questions about using ShopKite Merchant POS app, managing products, sales, inventory, customers, supplies, and stores.')
+@section('meta_description', 'Find answers to common questions about using ShopKite Merchant POS app, managing products, sales, inventory, customers, supplies, deliveries, and stores.')
 
 @section('extra_css')
 <link rel="stylesheet" href="{{ asset('css/faq.css') }}?v={{ filemtime(public_path('css/faq.css')) }}">
@@ -9,8 +9,10 @@
 
 @section('content')
 <main class="faq-page-wrapper">
+    <!-- Overlay for Mobile Slide-in Drawer -->
+    <div class="faq-sidebar-overlay" id="faqSidebarOverlay"></div>
 
-    <!-- ── Left Collapsible Sidebar Navigation Panel ── -->
+    <!-- Left Sticky Sidebar Tree -->
     <aside class="faq-sidebar" id="faqSidebar">
         <div class="faq-sidebar-header">
             <span class="faq-sidebar-title">Categories</span>
@@ -19,173 +21,175 @@
                     <polyline points="15 18 9 12 15 6"/>
                 </svg>
                 <svg class="faq-toggle-icon-mobile" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
                 </svg>
             </button>
         </div>
 
         <nav class="faq-tree-nav">
-
-            <!-- Getting Started -->
             <div class="faq-tree-group open" data-category="getting-started">
                 <div class="faq-tree-header" data-tooltip="Getting Started">
                     <div class="faq-nav-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5-2 5-2"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 2-5 2-5"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
                     </div>
                     <span class="faq-nav-label">Getting Started</span>
                     <svg class="faq-tree-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
                 <div class="faq-tree-submenu">
-                    <a href="#gs-download" class="faq-tree-subitem sub-active" data-faq="gs-download">How To Download The Shopkite Merchant App</a>
-                    <a href="#gs-signup" class="faq-tree-subitem" data-faq="gs-signup">How To Sign Up</a>
-                    <a href="#gs-signin" class="faq-tree-subitem" data-faq="gs-signin">How To Sign In</a>
-                    <a href="#gs-pin" class="faq-tree-subitem" data-faq="gs-pin">How To Reset Your PIN</a>
+                    <a href="#gs-about" class="faq-tree-subitem sub-active" data-faq="gs-about">About Us & What is ShopKite?</a>
+                    <a href="#gs-download" class="faq-tree-subitem " data-faq="gs-download">How To Download The Shopkite Merchant App</a>
+                    <a href="#gs-signup" class="faq-tree-subitem " data-faq="gs-signup">How To Sign Up (Register Your Business)</a>
+                    <a href="#gs-signin" class="faq-tree-subitem " data-faq="gs-signin">How To Sign In</a>
                 </div>
             </div>
-
-            <!-- Products -->
-            <div class="faq-tree-group" data-category="products">
-                <div class="faq-tree-header" data-tooltip="Products">
-                    <div class="faq-nav-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
-                    </div>
-                    <span class="faq-nav-label">Products</span>
-                    <svg class="faq-tree-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-                </div>
-                <div class="faq-tree-submenu">
-                    <a href="#prod-search" class="faq-tree-subitem" data-faq="prod-search">How To Add A New Product By Searching</a>
-                    <a href="#prod-scan" class="faq-tree-subitem" data-faq="prod-scan">How To Add A New Product By Scanning</a>
-                    <a href="#prod-delete" class="faq-tree-subitem" data-faq="prod-delete">How To Delete A Product</a>
-                    <a href="#prod-reset-qty" class="faq-tree-subitem" data-faq="prod-reset-qty">How To Reset The Quantity Of A Product To Zero</a>
-                    <a href="#prod-pictures" class="faq-tree-subitem" data-faq="prod-pictures">How To Add Pictures To Products</a>
-                    <a href="#prod-expiry" class="faq-tree-subitem" data-faq="prod-expiry">How To Check Expiring Products</a>
-                    <a href="#prod-update" class="faq-tree-subitem" data-faq="prod-update">How To Update Existing Products</a>
-                    <a href="#prod-volume" class="faq-tree-subitem" data-faq="prod-volume">How To Add Volume Price To Products</a>
-                    <a href="#prod-move" class="faq-tree-subitem" data-faq="prod-move">How To Move Products Across Stores / Warehouses</a>
-                    <a href="#prod-receive" class="faq-tree-subitem" data-faq="prod-receive">How To Receive Products Moved From A Store</a>
-                    <a href="#prod-cancel" class="faq-tree-subitem" data-faq="prod-cancel">How To Cancel Products Moved From A Store</a>
-                    <a href="#prod-reset-all" class="faq-tree-subitem" data-faq="prod-reset-all">How To Reset Quantities Of All Products In A Store</a>
-                </div>
-            </div>
-
-            <!-- Sales -->
-            <div class="faq-tree-group" data-category="sales">
+            <div class="faq-tree-group " data-category="sales">
                 <div class="faq-tree-header" data-tooltip="Sales">
                     <div class="faq-nav-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
                     </div>
                     <span class="faq-nav-label">Sales</span>
                     <svg class="faq-tree-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
                 <div class="faq-tree-submenu">
-                    <a href="#sale-scan" class="faq-tree-subitem" data-faq="sale-scan">How To Make A Sale By Scanning A Barcode</a>
-                    <a href="#sale-search" class="faq-tree-subitem" data-faq="sale-search">How To Make A Sale By Searching For Product</a>
-                    <a href="#sale-receipt" class="faq-tree-subitem" data-faq="sale-receipt">How To Print Receipts After A Sale</a>
-                    <a href="#sale-pause" class="faq-tree-subitem" data-faq="sale-pause">How To Pause A Sale</a>
-                    <a href="#sale-owing" class="faq-tree-subitem" data-faq="sale-owing">How To Apply An Owing Record While Making A Sale</a>
-                    <a href="#sale-pending" class="faq-tree-subitem" data-faq="sale-pending">How To Check Pending Sales On A Device</a>
-                    <a href="#sale-refund" class="faq-tree-subitem" data-faq="sale-refund">How To Refund A Sale</a>
-                    <a href="#sale-payment" class="faq-tree-subitem" data-faq="sale-payment">How To Create A Payment Method</a>
+                    <a href="#sale-make" class="faq-tree-subitem " data-faq="sale-make">How To Make A Sale (Scanning & Searching)</a>
+                    <a href="#sale-discount" class="faq-tree-subitem " data-faq="sale-discount">How To Apply Discounts To A Sale</a>
+                    <a href="#sale-receipt" class="faq-tree-subitem " data-faq="sale-receipt">How To Print Receipts After A Sale</a>
+                    <a href="#sale-pause" class="faq-tree-subitem " data-faq="sale-pause">How To Pause A Sale</a>
+                    <a href="#sale-owing" class="faq-tree-subitem " data-faq="sale-owing">What Is An Owing Record & How To Apply It</a>
+                    <a href="#sale-pending" class="faq-tree-subitem " data-faq="sale-pending">How To Check For Pending Sales On A Device</a>
+                    <a href="#sale-refund" class="faq-tree-subitem " data-faq="sale-refund">How To Refund A Sale</a>
+                    <a href="#sale-transfer" class="faq-tree-subitem " data-faq="sale-transfer">How To Transfer A Sale To A Checkout Staff</a>
+                    <a href="#sale-receive" class="faq-tree-subitem " data-faq="sale-receive">How To Receive & Complete A Sale Sent By Sales Staff</a>
                 </div>
             </div>
-
-            <!-- Customer -->
-            <div class="faq-tree-group" data-category="customer">
-                <div class="faq-tree-header" data-tooltip="Customer">
+            <div class="faq-tree-group " data-category="products">
+                <div class="faq-tree-header" data-tooltip="Products & Inventory">
                     <div class="faq-nav-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
                     </div>
-                    <span class="faq-nav-label">Customer</span>
+                    <span class="faq-nav-label">Products & Inventory</span>
                     <svg class="faq-tree-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
                 <div class="faq-tree-submenu">
-                    <a href="#cust-add" class="faq-tree-subitem" data-faq="cust-add">How To Add A New Customer</a>
-                    <a href="#cust-update" class="faq-tree-subitem" data-faq="cust-update">How To Update Customer Details</a>
-                    <a href="#cust-birthday" class="faq-tree-subitem" data-faq="cust-birthday">How To Check Customer Birthdays</a>
+                    <a href="#prod-add" class="faq-tree-subitem " data-faq="prod-add">How To Add A New Product (Search, Scan & Custom)</a>
+                    <a href="#prod-delete" class="faq-tree-subitem " data-faq="prod-delete">How To Delete A Product</a>
+                    <a href="#prod-move" class="faq-tree-subitem " data-faq="prod-move">How To Move Products Across Stores / Warehouses</a>
+                    <a href="#prod-reset-qty" class="faq-tree-subitem " data-faq="prod-reset-qty">How To Reset The Quantity Of A Product To Zero</a>
+                    <a href="#prod-expiry" class="faq-tree-subitem " data-faq="prod-expiry">How To Check Expiring Products</a>
+                    <a href="#prod-min-qty" class="faq-tree-subitem " data-faq="prod-min-qty">What Is Minimum Quantity & Low-Stock Alerts?</a>
+                    <a href="#prod-volume" class="faq-tree-subitem " data-faq="prod-volume">What Is Volume Pricing & How To Set It?</a>
+                    <a href="#prod-history" class="faq-tree-subitem " data-faq="prod-history">How To Check A Product's History</a>
                 </div>
             </div>
-
-            <!-- Supply -->
-            <div class="faq-tree-group" data-category="supply">
-                <div class="faq-tree-header" data-tooltip="Supply">
+            <div class="faq-tree-group " data-category="customer">
+                <div class="faq-tree-header" data-tooltip="Customer Management">
                     <div class="faq-nav-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                     </div>
-                    <span class="faq-nav-label">Supply</span>
+                    <span class="faq-nav-label">Customer Management</span>
                     <svg class="faq-tree-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
                 <div class="faq-tree-submenu">
-                    <a href="#sup-add-supplier" class="faq-tree-subitem" data-faq="sup-add-supplier">How To Add New Suppliers</a>
-                    <a href="#sup-update-supplier" class="faq-tree-subitem" data-faq="sup-update-supplier">How To Update Your Supplier's Records</a>
-                    <a href="#sup-new-supply" class="faq-tree-subitem" data-faq="sup-new-supply">How To Add A New Supply</a>
-                    <a href="#sup-view" class="faq-tree-subitem" data-faq="sup-view">How To View Supply Records</a>
-                    <a href="#sup-refund" class="faq-tree-subitem" data-faq="sup-refund">How To Refund A Supply</a>
+                    <a href="#cust-add" class="faq-tree-subitem " data-faq="cust-add">How To Add A New Customer</a>
+                    <a href="#cust-update" class="faq-tree-subitem " data-faq="cust-update">How To Update Customer Details</a>
+                    <a href="#cust-birthday" class="faq-tree-subitem " data-faq="cust-birthday">How To Check Upcoming Customer Birthdays</a>
                 </div>
             </div>
-
-            <!-- Stores / Warehouses -->
-            <div class="faq-tree-group" data-category="stores">
-                <div class="faq-tree-header" data-tooltip="Stores / Staff">
+            <div class="faq-tree-group " data-category="delivery">
+                <div class="faq-tree-header" data-tooltip="Delivery & Orders">
                     <div class="faq-nav-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/><path d="M4 12a2 2 0 0 1 2-2 2 2 0 0 1 4 0 2 2 0 0 1 4 0 2 2 0 0 1 4 0 2 2 0 0 1 2 2"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
                     </div>
-                    <span class="faq-nav-label">Stores / Staff</span>
+                    <span class="faq-nav-label">Delivery & Orders</span>
                     <svg class="faq-tree-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
                 <div class="faq-tree-submenu">
-                    <a href="#store-managers" class="faq-tree-subitem" data-faq="store-managers">How To Create Store Managers</a>
-                    <a href="#store-agents" class="faq-tree-subitem" data-faq="store-agents">How To Create Sales Agents</a>
-                    <a href="#store-add" class="faq-tree-subitem" data-faq="store-add">How To Add A New Store</a>
-                    <a href="#store-update" class="faq-tree-subitem" data-faq="store-update">How To Update Your Store Details</a>
-                    <a href="#store-subscription" class="faq-tree-subitem" data-faq="store-subscription">How To Check My Subscription Status</a>
-                    <a href="#store-renew" class="faq-tree-subitem" data-faq="store-renew">How To Renew Your Subscription</a>
-                    <a href="#store-permissions" class="faq-tree-subitem" data-faq="store-permissions">How To Set Access Permission For Staff Accounts</a>
+                    <a href="#deliv-agents" class="faq-tree-subitem " data-faq="deliv-agents">Who Are Delivery Agents & How Do They Work?</a>
+                    <a href="#deliv-rates" class="faq-tree-subitem " data-faq="deliv-rates">How To Add Delivery Rates</a>
+                    <a href="#deliv-check" class="faq-tree-subitem " data-faq="deliv-check">How To Check & Manage Deliveries</a>
                 </div>
             </div>
-
-            <!-- Notification -->
-            <div class="faq-tree-group" data-category="notification">
-                <div class="faq-tree-header" data-tooltip="Notification">
+            <div class="faq-tree-group " data-category="supply">
+                <div class="faq-tree-header" data-tooltip="Supply & Restocking">
                     <div class="faq-nav-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
                     </div>
-                    <span class="faq-nav-label">Notification</span>
+                    <span class="faq-nav-label">Supply & Restocking</span>
                     <svg class="faq-tree-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
                 <div class="faq-tree-submenu">
-                    <a href="#notif-past" class="faq-tree-subitem" data-faq="notif-past">How To Check Your Past Notifications</a>
+                    <a href="#sup-add" class="faq-tree-subitem " data-faq="sup-add">How To Add New Suppliers</a>
+                    <a href="#sup-update" class="faq-tree-subitem " data-faq="sup-update">How To Update Supplier's Records</a>
+                    <a href="#sup-record" class="faq-tree-subitem " data-faq="sup-record">How To Record A New Supply</a>
+                    <a href="#sup-records" class="faq-tree-subitem " data-faq="sup-records">What Are Supply Records & How To Track Them?</a>
                 </div>
             </div>
-
-            <!-- Warehouse -->
-            <div class="faq-tree-group" data-category="warehouse">
-                <div class="faq-tree-header" data-tooltip="Warehouse">
+            <div class="faq-tree-group " data-category="expenses">
+                <div class="faq-tree-header" data-tooltip="Expenses">
                     <div class="faq-nav-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M3 7v14"/><path d="M21 7v14"/><path d="M6 21V10h12v11"/><path d="m3 7 9-4 9 4"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                     </div>
-                    <span class="faq-nav-label">Warehouse</span>
+                    <span class="faq-nav-label">Expenses</span>
                     <svg class="faq-tree-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
                 <div class="faq-tree-submenu">
-                    <a href="#wh-create" class="faq-tree-subitem" data-faq="wh-create">How To Create A Warehouse</a>
-                    <a href="#wh-view" class="faq-tree-subitem" data-faq="wh-view">How To View Your Warehouse</a>
-                    <a href="#wh-add-products" class="faq-tree-subitem" data-faq="wh-add-products">How To Add Products To Your Warehouse</a>
-                    <a href="#wh-move" class="faq-tree-subitem" data-faq="wh-move">How To Move Products From Warehouse</a>
-                    <a href="#wh-update" class="faq-tree-subitem" data-faq="wh-update">How To Update A Product In Your Warehouse</a>
+                    <a href="#exp-record" class="faq-tree-subitem " data-faq="exp-record">How To Record A New Expense</a>
+                    <a href="#exp-view" class="faq-tree-subitem " data-faq="exp-view">How To View All My Expenses</a>
                 </div>
             </div>
-
+            <div class="faq-tree-group " data-category="stores">
+                <div class="faq-tree-header" data-tooltip="Stores, Warehouses & Staff">
+                    <div class="faq-nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    </div>
+                    <span class="faq-nav-label">Stores, Warehouses & Staff</span>
+                    <svg class="faq-tree-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+                <div class="faq-tree-submenu">
+                    <a href="#store-create" class="faq-tree-subitem " data-faq="store-create">How To Create A New Store Or Warehouse</a>
+                    <a href="#store-switch" class="faq-tree-subitem " data-faq="store-switch">How To Switch Accounts Between Stores</a>
+                    <a href="#store-staff" class="faq-tree-subitem " data-faq="store-staff">How To Manage Staff & Permissions In My Store</a>
+                    <a href="#store-update" class="faq-tree-subitem " data-faq="store-update">How To Update Details On My Store / Warehouse</a>
+                    <a href="#store-subscription" class="faq-tree-subitem " data-faq="store-subscription">How To Check My Subscription Status</a>
+                </div>
+            </div>
+            <div class="faq-tree-group " data-category="general">
+                <div class="faq-tree-header" data-tooltip="General Settings & Data">
+                    <div class="faq-nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </div>
+                    <span class="faq-nav-label">General Settings & Data</span>
+                    <svg class="faq-tree-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+                <div class="faq-tree-submenu">
+                    <a href="#gen-notif" class="faq-tree-subitem " data-faq="gen-notif">How To Check Notifications</a>
+                    <a href="#gen-export" class="faq-tree-subitem " data-faq="gen-export">How To Export My Store Records</a>
+                    <a href="#gen-reset-store" class="faq-tree-subitem " data-faq="gen-reset-store">How To Reset Quantities Of All Products To Zero</a>
+                    <a href="#gen-payment" class="faq-tree-subitem " data-faq="gen-payment">How To Add Payment Methods To My Store</a>
+                </div>
+            </div>
+            <div class="faq-tree-group " data-category="extras">
+                <div class="faq-tree-header" data-tooltip="Extras & App Info">
+                    <div class="faq-nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    </div>
+                    <span class="faq-nav-label">Extras & App Info</span>
+                    <svg class="faq-tree-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+                <div class="faq-tree-submenu">
+                    <a href="#extra-devices" class="faq-tree-subitem " data-faq="extra-devices">Can I Use The ShopKite App On Multiple Devices?</a>
+                    <a href="#extra-update" class="faq-tree-subitem " data-faq="extra-update">How To Update The ShopKite Merchant App</a>
+                    <a href="#extra-pin" class="faq-tree-subitem " data-faq="extra-pin">How To Reset Your PIN</a>
+                    <a href="#extra-insights" class="faq-tree-subitem " data-faq="extra-insights">ShopKite Insights & Performance Analytics</a>
+                </div>
+            </div>
         </nav>
     </aside>
 
-    <!-- Mobile Drawer Overlay -->
-    <div class="faq-sidebar-overlay" id="faqSidebarOverlay"></div>
-
-    <!-- ── Main FAQ Content Area ── -->
+    <!-- Main Content Area -->
     <section class="faq-main-content">
-
-        <!-- Mobile Category Trigger Button (above page title) -->
+        <!-- Mobile Drawer Trigger Button -->
         <button type="button" class="faq-mobile-drawer-btn" id="faqMobileDrawerBtn">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             <span>Browse Category Topics</span>
@@ -200,805 +204,728 @@
         <!-- Sticky Search Bar -->
         <div class="faq-search-wrap">
             <div class="faq-search-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
             </div>
-            <input type="text" id="faqSearchInput" class="faq-search-input" placeholder="Search FAQs by question or topic (e.g. sign up, receipt, stock)...">
+            <input type="text" id="faqSearchInput" class="faq-search-input" placeholder="Search FAQs by question or topic (e.g. sign up, receipt, stock)..." aria-label="Search FAQs">
         </div>
 
-        <!-- ── Section 1: Getting Started ── -->
-        <div class="faq-category-section" id="getting-started">
-            <div class="faq-category-header">
-                <div class="faq-category-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5-2 5-2"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 2-5 2-5"/></svg>
-                </div>
-                <span>Getting Started</span>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="gs-download">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Download The Shopkite Merchant App</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To download the ShopKite Merchant application on your mobile device or POS terminal:</p>
-                    <ol>
-                        <li>Open the <strong>Google Play Store</strong> (for Android devices/Sunmi terminals) or the <strong>Apple App Store</strong> (for iOS devices).</li>
-                        <li>Search for <strong>"ShopKite Merchant"</strong>.</li>
-                        <li>Tap <strong>Install</strong> or <strong>Get</strong> to download the application onto your device.</li>
-                        <li>Once downloaded, launch the app to sign up or sign in to your store account.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="gs-signup">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Sign Up</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>Creating a new store account on ShopKite takes less than 2 minutes:</p>
-                    <ol>
-                        <li>Open the ShopKite Merchant App and tap <strong>Sign Up</strong>.</li>
-                        <li>Enter your <strong>Store Name</strong>, select your primary business category, and choose your location.</li>
-                        <li>Enter your valid <strong>Phone Number</strong> and email address.</li>
-                        <li>Set up your secure 4-digit PIN for daily sign-in.</li>
-                        <li>Tap <strong>Create Store Account</strong> to get started immediately.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="gs-signin">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Sign In</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>Signing in to your existing ShopKite account:</p>
-                    <ol>
-                        <li>Open the ShopKite Merchant App.</li>
-                        <li>Enter your registered phone number or select your staff profile name.</li>
-                        <li>Type in your secure 4-digit security PIN.</li>
-                        <li>Tap <strong>Sign In</strong> to open your store dashboard and point of sale terminal.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="gs-pin">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Reset Your PIN</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>If you or your staff forget your security PIN:</p>
-                    <ol>
-                        <li>On the sign-in screen, tap <strong>Forgot PIN?</strong>.</li>
-                        <li>An SMS verification code will be sent to the owner's registered phone number.</li>
-                        <li>Enter the 6-digit OTP code received via SMS.</li>
-                        <li>Create and confirm your new 4-digit security PIN.</li>
-                    </ol>
-                </div></div>
-            </div>
-        </div>
-
-        <!-- ── Section 2: Products ── -->
-        <div class="faq-category-section" id="products">
-            <div class="faq-category-header">
-                <div class="faq-category-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
-                </div>
-                <span>Products</span>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="prod-search">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Add A New Product By Searching</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>ShopKite features a pre-loaded master catalog of over 100,000 retail products:</p>
-                    <ol>
-                        <li>Go to the <strong>Products</strong> menu and tap <strong>Add Product</strong>.</li>
-                        <li>Type the brand name or product description in the search bar.</li>
-                        <li>Select the matching product from the catalog list to auto-fill the name, image, and category.</li>
-                        <li>Enter your cost price, selling price, and current stock quantity.</li>
-                        <li>Tap <strong>Save Product</strong>.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="prod-scan">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Add A New Product By Scanning</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>Use the device camera or built-in Sunmi scanner to add products by barcode:</p>
-                    <ol>
-                        <li>Go to <strong>Products</strong> → <strong>Add Product</strong> → tap the <strong>Scan</strong> icon.</li>
-                        <li>Point your device camera at the product barcode.</li>
-                        <li>ShopKite will automatically look up the product in the global catalog.</li>
-                        <li>Set your pricing and stock count, then tap <strong>Save Product</strong>.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="prod-delete">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Delete A Product</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To permanently remove a product from your store inventory:</p>
-                    <ol>
-                        <li>Open the <strong>Products</strong> list and find the item you want to remove.</li>
-                        <li>Tap and hold the product card (or tap the three-dot menu icon).</li>
-                        <li>Select <strong>Delete Product</strong> and confirm the prompt.</li>
-                        <li>The product will be removed from your active inventory and POS screen.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="prod-reset-qty">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Reset The Quantity Of A Product To Zero</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>If you need to zero out a single product's stock count:</p>
-                    <ol>
-                        <li>Open the product from your <strong>Products</strong> list.</li>
-                        <li>Tap <strong>Edit</strong> and navigate to the stock quantity field.</li>
-                        <li>Set the quantity to <strong>0</strong> and tap <strong>Save</strong>.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="prod-pictures">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Add Pictures To Products</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>Adding images to products makes them easier to identify on the POS screen:</p>
-                    <ol>
-                        <li>Open a product from your <strong>Products</strong> list and tap <strong>Edit</strong>.</li>
-                        <li>Tap the image placeholder at the top of the product form.</li>
-                        <li>Choose to take a photo with your camera or select from your gallery.</li>
-                        <li>Crop and confirm the image, then tap <strong>Save</strong>.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="prod-expiry">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Check Expiring Products</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>ShopKite automatically monitors stock expiration dates to prevent inventory losses:</p>
-                    <ul>
-                        <li>When adding stock, enter the <strong>Batch Expiry Date</strong>.</li>
-                        <li>ShopKite sends notification alerts 30, 15, and 7 days before expiration.</li>
-                        <li>View all expiring items by going to <strong>Reports</strong> → <strong>Expiry Alerts</strong>.</li>
-                    </ul>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="prod-update">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Update Existing Products</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To update a product's name, price, or stock details:</p>
-                    <ol>
-                        <li>Go to <strong>Products</strong> and find the item to edit.</li>
-                        <li>Tap the product card and select <strong>Edit</strong>.</li>
-                        <li>Make your changes to any field (name, price, stock, category, image).</li>
-                        <li>Tap <strong>Save</strong> to apply the update immediately across all devices.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="prod-volume">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Add Volume Price To Products</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>Volume pricing lets you offer bulk discounts automatically at checkout:</p>
-                    <ol>
-                        <li>Open the product from your <strong>Products</strong> list and tap <strong>Edit</strong>.</li>
-                        <li>Scroll to the <strong>Volume Pricing</strong> section and tap <strong>Add Tier</strong>.</li>
-                        <li>Set the minimum quantity and the price per unit for that tier.</li>
-                        <li>Add as many tiers as needed, then tap <strong>Save</strong>.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="prod-move">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Move Products Across Stores / Warehouses</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>Transfer stock between your store branches or warehouses:</p>
-                    <ol>
-                        <li>Go to <strong>Products</strong> → <strong>Stock Transfer</strong>.</li>
-                        <li>Select the <strong>Source Location</strong> (store or warehouse).</li>
-                        <li>Select the <strong>Destination Location</strong>.</li>
-                        <li>Add the products and quantities to transfer, then tap <strong>Issue Transfer</strong>.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="prod-receive">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Receive Products Moved From A Store</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To accept an incoming stock transfer at the destination store:</p>
-                    <ol>
-                        <li>You'll receive an in-app notification for the incoming transfer.</li>
-                        <li>Go to <strong>Products</strong> → <strong>Incoming Transfers</strong>.</li>
-                        <li>Review the items and quantities being transferred.</li>
-                        <li>Tap <strong>Accept Transfer</strong> to add the stock to your active inventory.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="prod-cancel">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Cancel Products Moved From A Store</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To cancel a stock transfer that has not yet been accepted:</p>
-                    <ol>
-                        <li>Go to <strong>Products</strong> → <strong>Stock Transfers</strong>.</li>
-                        <li>Find the pending transfer you wish to cancel.</li>
-                        <li>Tap <strong>Cancel Transfer</strong> and confirm. The stock will be returned to the source location.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="prod-reset-all">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Reset Quantities Of All Products In A Store</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To zero out all stock quantities across an entire store or warehouse (e.g. for a full stocktake reset):</p>
-                    <ol>
-                        <li>Go to <strong>Settings</strong> → <strong>Inventory</strong>.</li>
-                        <li>Tap <strong>Reset All Quantities</strong>.</li>
-                        <li>Confirm the action — this will set all product stock counts to zero in the selected store.</li>
-                        <li>Re-enter stock counts after your physical stocktake.</li>
-                    </ol>
-                </div></div>
-            </div>
-        </div>
-
-        <!-- ── Section 3: Sales ── -->
-        <div class="faq-category-section" id="sales">
-            <div class="faq-category-header">
-                <div class="faq-category-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-                </div>
-                <span>Sales</span>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="sale-scan">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Make A Sale By Scanning A Barcode</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>Making a sale using the barcode scanner on your POS device:</p>
-                    <ol>
-                        <li>Open the <strong>Sales / POS</strong> screen.</li>
-                        <li>Tap the <strong>Scan</strong> icon or use the Sunmi built-in scanner.</li>
-                        <li>Scan each product barcode to add items to the cart.</li>
-                        <li>Tap <strong>Checkout</strong>, select payment method, and complete the sale.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="sale-search">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Make A Sale By Searching For Product</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>Adding items to a sale by name search:</p>
-                    <ol>
-                        <li>Open the <strong>Sales / POS</strong> screen.</li>
-                        <li>Type the product name in the search bar at the top of the POS grid.</li>
-                        <li>Tap the matching product to add it to the cart.</li>
-                        <li>Adjust quantity if needed, then tap <strong>Checkout</strong>.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="sale-receipt">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Print Receipts After A Sale</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>ShopKite supports thermal receipt printing and digital sharing:</p>
-                    <ol>
-                        <li>After completing a sale, the receipt preview will appear automatically.</li>
-                        <li>Tap <strong>Print Receipt</strong> to print on a connected Sunmi or Bluetooth thermal printer.</li>
-                        <li>Alternatively, tap <strong>Share</strong> to send the receipt via WhatsApp or SMS.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="sale-pause">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Pause A Sale</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To put a customer's cart on hold while serving another customer:</p>
-                    <ol>
-                        <li>On the active POS cart, tap the <strong>Pause</strong> or <strong>Hold Sale</strong> button.</li>
-                        <li>The cart is saved as a pending sale.</li>
-                        <li>You can start a new transaction immediately.</li>
-                        <li>To resume, tap <strong>Pending Sales</strong> and select the held cart.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="sale-owing">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Apply An Owing Record While Making A Sale</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To record a credit sale (customer pays later):</p>
-                    <ol>
-                        <li>Add items to the cart and tap <strong>Checkout</strong>.</li>
-                        <li>Select the customer's profile (or add a new customer).</li>
-                        <li>Choose <strong>Store Credit / Owing</strong> as the payment method.</li>
-                        <li>Confirm the sale — the amount is logged under the customer's debt record.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="sale-pending">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Check Pending Sales On A Device</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To view and resume paused or unsynced sales:</p>
-                    <ol>
-                        <li>From the POS screen, tap the <strong>Pending Sales</strong> icon (clock or queue icon).</li>
-                        <li>A list of all paused or held carts on this device will appear.</li>
-                        <li>Tap any pending sale to resume it and complete the checkout.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="sale-refund">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Refund A Sale</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To process a customer refund on a completed transaction:</p>
-                    <ol>
-                        <li>Go to <strong>Sales History</strong> and find the transaction to refund.</li>
-                        <li>Tap the sale and select <strong>Refund</strong>.</li>
-                        <li>Choose full or partial refund and confirm the amount.</li>
-                        <li>The stock is automatically restocked and the transaction log is updated.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="sale-payment">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Create A Payment Method</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>ShopKite supports multiple custom payment options including Cash, POS Card, Bank Transfer, and Store Credit:</p>
-                    <ol>
-                        <li>Go to <strong>Settings</strong> → <strong>Payment Methods</strong>.</li>
-                        <li>Tap <strong>Add Payment Method</strong>.</li>
-                        <li>Enter the payment name (e.g. "GTBank Transfer", "Moniepoint POS").</li>
-                        <li>Toggle active status and tap <strong>Save</strong> to make it available at checkout.</li>
-                    </ol>
-                </div></div>
-            </div>
-        </div>
-
-        <!-- ── Section 4: Customer ── -->
-        <div class="faq-category-section" id="customer">
-            <div class="faq-category-header">
-                <div class="faq-category-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                </div>
-                <span>Customer</span>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="cust-add">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Add A New Customer</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>Build your customer database for loyalty and credit tracking:</p>
-                    <ol>
-                        <li>Tap <strong>Customers</strong> → <strong>Add Customer</strong>.</li>
-                        <li>Enter the customer's Name, Phone Number, Email, and optional Birthday.</li>
-                        <li>Tap <strong>Save Customer</strong>.</li>
-                        <li>The customer can now be linked to sales and credit records.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="cust-update">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Update Customer Details</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To edit an existing customer's contact information:</p>
-                    <ol>
-                        <li>Go to <strong>Customers</strong> and search for the customer by name or phone.</li>
-                        <li>Tap on their profile and select <strong>Edit</strong>.</li>
-                        <li>Update their details and tap <strong>Save</strong>.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="cust-birthday">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Check Customer Birthdays</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>ShopKite notifies you of upcoming customer birthdays so you can send special offers:</p>
-                    <ul>
-                        <li>When a customer birthday approaches, you'll receive a notification in the app.</li>
-                        <li>Go to <strong>Customers</strong> → <strong>Birthdays</strong> to see a calendar view of upcoming birthdays.</li>
-                        <li>Use this to offer birthday discounts and build customer loyalty.</li>
-                    </ul>
-                </div></div>
-            </div>
-        </div>
-
-        <!-- ── Section 5: Supply ── -->
-        <div class="faq-category-section" id="supply">
-            <div class="faq-category-header">
-                <div class="faq-category-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-                </div>
-                <span>Supply</span>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="sup-add-supplier">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Add New Suppliers</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To add a new supplier to your records:</p>
-                    <ol>
-                        <li>Go to <strong>Supply</strong> → <strong>Suppliers</strong> → <strong>Add Supplier</strong>.</li>
-                        <li>Enter the supplier's name, phone number, and address.</li>
-                        <li>Tap <strong>Save Supplier</strong>. They can now be selected when logging new supplies.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="sup-update-supplier">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Update Your Supplier's Records</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To update an existing supplier's contact details:</p>
-                    <ol>
-                        <li>Go to <strong>Supply</strong> → <strong>Suppliers</strong>.</li>
-                        <li>Find and tap the supplier you want to edit.</li>
-                        <li>Tap <strong>Edit</strong>, make your changes, and tap <strong>Save</strong>.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="sup-new-supply">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Add A New Supply</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>Log new inventory restocking and supplier invoices:</p>
-                    <ol>
-                        <li>Go to <strong>Supply</strong> → <strong>New Inward Supply</strong>.</li>
-                        <li>Select or add the <strong>Supplier Name</strong>.</li>
-                        <li>Add the supplied products, quantities, and purchase cost prices.</li>
-                        <li>Mark payment status (Paid, Partial, or Unpaid/Credit).</li>
-                        <li>Tap <strong>Save Supply Log</strong> to update stock levels instantly.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="sup-view">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To View Supply Records</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To review your restocking history and supplier invoices:</p>
-                    <ol>
-                        <li>Go to <strong>Supply</strong> → <strong>Supply History</strong>.</li>
-                        <li>Filter by date range, supplier, or payment status.</li>
-                        <li>Tap any supply record to view its full details and line items.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="sup-refund">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Refund A Supply</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To return goods to a supplier and log the refund:</p>
-                    <ol>
-                        <li>Go to <strong>Supply</strong> → <strong>Supply History</strong> and find the supply record.</li>
-                        <li>Tap the record and select <strong>Refund Supply</strong>.</li>
-                        <li>Specify the items and quantities being returned.</li>
-                        <li>Confirm to deduct the returned quantity from your stock and log the supplier credit.</li>
-                    </ol>
-                </div></div>
-            </div>
-        </div>
-
-        <!-- ── Section 6: Stores / Staff ── -->
-        <div class="faq-category-section" id="stores">
-            <div class="faq-category-header">
-                <div class="faq-category-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/><path d="M4 12a2 2 0 0 1 2-2 2 2 0 0 1 4 0 2 2 0 0 1 4 0 2 2 0 0 1 4 0 2 2 0 0 1 2 2"/></svg>
-                </div>
-                <span>Stores / Staff</span>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="store-managers">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Create Store Managers</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To add a Store Manager with elevated staff permissions:</p>
-                    <ol>
-                        <li>Go to <strong>Settings</strong> → <strong>Staff Management</strong>.</li>
-                        <li>Tap <strong>Add New Staff</strong> and select <strong>Manager</strong> as the role.</li>
-                        <li>Enter their name and assign a 4-digit PIN.</li>
-                        <li>Configure their access permissions and tap <strong>Save</strong>.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="store-agents">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Create Sales Agents</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To add a cashier or sales agent with limited permissions:</p>
-                    <ol>
-                        <li>Go to <strong>Settings</strong> → <strong>Staff Management</strong> → <strong>Add New Staff</strong>.</li>
-                        <li>Select <strong>Sales Agent / Cashier</strong> as the role.</li>
-                        <li>Enter the agent's name and create a PIN for daily sign-in.</li>
-                        <li>Toggle their access permissions (e.g. restrict profit viewing or price editing).</li>
-                        <li>Tap <strong>Save Staff Profile</strong>.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="store-add">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Add A New Store</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To register a new branch or outlet under your account:</p>
-                    <ol>
-                        <li>Go to <strong>Settings</strong> → <strong>Stores</strong> → <strong>Add New Store</strong>.</li>
-                        <li>Enter the store name, address, and contact details.</li>
-                        <li>Assign a manager and configure store-specific settings.</li>
-                        <li>Tap <strong>Save Store</strong> to activate the branch.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="store-update">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Update Your Store Details</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To update your store name, address, or contact info:</p>
-                    <ol>
-                        <li>Go to <strong>Settings</strong> → <strong>Store Profile</strong>.</li>
-                        <li>Tap <strong>Edit</strong> and update the relevant fields.</li>
-                        <li>Tap <strong>Save Changes</strong> to apply the update across all devices.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="store-subscription">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Check My Subscription Status</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To view your current subscription plan and expiry date:</p>
-                    <ol>
-                        <li>Go to <strong>Settings</strong> → <strong>Subscription</strong>.</li>
-                        <li>Your plan name, start date, and renewal date are displayed.</li>
-                        <li>You'll also see an alert if your subscription is expiring soon.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="store-renew">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Renew Your Subscription</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To renew or upgrade your ShopKite subscription:</p>
-                    <ol>
-                        <li>Go to <strong>Settings</strong> → <strong>Subscription</strong> → <strong>Renew Plan</strong>.</li>
-                        <li>Select your preferred plan duration (Monthly or Annual).</li>
-                        <li>Complete payment via card, bank transfer, or USSD.</li>
-                        <li>Your subscription is renewed immediately upon payment confirmation.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="store-permissions">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Set Access Permission For Staff Accounts</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>Control what each staff member can see and do in the app:</p>
-                    <ol>
-                        <li>Go to <strong>Settings</strong> → <strong>Staff Management</strong>.</li>
-                        <li>Tap on a staff member and select <strong>Edit Permissions</strong>.</li>
-                        <li>Toggle individual permissions: view reports, edit prices, void sales, view profit margins, etc.</li>
-                        <li>Tap <strong>Save</strong> to apply the restrictions immediately.</li>
-                    </ol>
-                </div></div>
-            </div>
-        </div>
-
-        <!-- ── Section 7: Notification ── -->
-        <div class="faq-category-section" id="notification">
-            <div class="faq-category-header">
-                <div class="faq-category-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                </div>
-                <span>Notification</span>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="notif-past">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Check Your Past Notifications</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>Reviewing historical store alerts and staff activities:</p>
-                    <ol>
-                        <li>Tap the <strong>Bell Icon</strong> in the top header of the ShopKite app.</li>
-                        <li>Filter by <strong>Sales Alerts</strong>, <strong>Low Stock Alerts</strong>, <strong>Expiry Warnings</strong>, or <strong>System Logs</strong>.</li>
-                        <li>Tap any notification to view detailed timestamps and transaction summaries.</li>
-                    </ol>
-                </div></div>
-            </div>
-        </div>
-
-        <!-- ── Section 8: Warehouse ── -->
-        <div class="faq-category-section" id="warehouse">
-            <div class="faq-category-header">
-                <div class="faq-category-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M3 7v14"/><path d="M21 7v14"/><path d="M6 21V10h12v11"/><path d="m3 7 9-4 9 4"/></svg>
-                </div>
-                <span>Warehouse</span>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="wh-create">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Create A Warehouse</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To set up a central warehouse for bulk storage:</p>
-                    <ol>
-                        <li>Go to <strong>Warehouse</strong> → <strong>Add Warehouse</strong>.</li>
-                        <li>Enter the warehouse name and location address.</li>
-                        <li>Assign a warehouse manager if needed.</li>
-                        <li>Tap <strong>Save Warehouse</strong> to activate it.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="wh-view">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To View Your Warehouse</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To see current stock levels in your warehouse:</p>
-                    <ol>
-                        <li>Go to the <strong>Warehouse</strong> section from the main menu.</li>
-                        <li>Select the warehouse you want to view.</li>
-                        <li>Browse all products stored there with their current quantities.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="wh-add-products">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Add Products To Your Warehouse</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To stock a warehouse with products:</p>
-                    <ol>
-                        <li>Open the warehouse from <strong>Warehouse</strong> in the main menu.</li>
-                        <li>Tap <strong>Add Products</strong>.</li>
-                        <li>Search for or scan the products to add and enter the quantities.</li>
-                        <li>Tap <strong>Save</strong> to update the warehouse inventory.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="wh-move">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Move Products From Warehouse</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>Transfer stock from warehouse to a store branch:</p>
-                    <ol>
-                        <li>Go to <strong>Warehouse</strong> → <strong>Stock Transfer</strong>.</li>
-                        <li>Select the warehouse as the <strong>Source</strong> and choose the destination store.</li>
-                        <li>Add products and quantities, then tap <strong>Issue Transfer</strong>.</li>
-                        <li>The destination store manager receives a prompt to accept the incoming stock.</li>
-                    </ol>
-                </div></div>
-            </div>
-
-            <div class="faq-accordion-card" data-faq="wh-update">
-                <div class="faq-accordion-header">
-                    <h3 class="faq-accordion-title">How To Update A Product In Your Warehouse</h3>
-                    <div class="faq-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
-                </div>
-                <div class="faq-accordion-body"><div class="faq-accordion-content">
-                    <p>To edit a product's details or stock level in the warehouse:</p>
-                    <ol>
-                        <li>Open the warehouse and find the product.</li>
-                        <li>Tap the product and select <strong>Edit</strong>.</li>
-                        <li>Update the stock quantity, cost price, or expiry date.</li>
-                        <li>Tap <strong>Save</strong> to apply the changes.</li>
-                    </ol>
-                </div></div>
-            </div>
-        </div>
-
-        <!-- No Results Fallback -->
+        <!-- No Results Box -->
         <div class="faq-no-results" id="faqNoResults">
-            No matching questions found for your search query. Try searching for different keywords like "sign up", "sales", "stock", or "receipt".
+            <p>No matching questions found. Try searching with different keywords or browse the categories on the left.</p>
         </div>
+
+        <!-- FAQ Categories & Accordion Groups -->
+        <!-- Category: Getting Started -->
+        <section class="faq-category-section" id="getting-started">
+            <h2 class="faq-category-header">
+                <span class="faq-cat-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                </span>
+                Getting Started
+            </h2>
+            <div class="faq-accordion-group">
+                <div class="faq-accordion-card open" id="gs-about" data-faq="gs-about">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">About Us & What is ShopKite?</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <h5 class="faq-sub-heading">What is ShopKite?</h5><p class="faq-text">ShopKite Merchant is an inventory management tool that makes it very easy to run your business. It caters to a variety of businesses including supermarkets, pharmacies, grocery stores, bookstores, and home-based sellers. Here's how ShopKite Merchant can benefit your business:</p><p class="faq-text">1. <strong>Inventory Management</strong>: Track inventory levels across different products easily. No need for additional hardware like a computer, UPS, or barcode scanner. All management can be done conveniently through a mobile device.</p><p class="faq-text">2. <strong>Sales Monitoring</strong>: Monitor daily sales on the go. Keep track of sales records by day, week, month, or year to assess business performance instantly. Carry your business with you wherever you go!</p><p class="faq-text">3. <strong>Online Selling</strong>: Easily transition to online sales with ShopKite Merchant. Reach a wider customer base by selling products online directly through the app.</p><p class="faq-text">4. <strong>Accessibility</strong>: Available for both Android and iOS (iPhone &amp; iPad) users, making it accessible to a wide range of mobile devices.</p><p class="faq-text">5. <strong>User-Friendly Interface:</strong> Download, set up, and start selling quickly without complex setup processes. Manage day-to-day sales and products seamlessly through a seamless interface.</p><p class="faq-text">6. <strong>Business Insights</strong>: Gain insights into business performance with analytics and reports available at your fingertips.</p><p class="faq-text">Overall, ShopKite Merchant offers a comprehensive solution for retail businesses looking to streamline operations, increase sales, and manage inventory effectively, all from the convenience of a mobile device.</p><p class="faq-text">Find out more about us here:</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="gs-download" data-faq="gs-download">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Download The Shopkite Merchant App</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <div class="faq-video-container"><iframe src="https://www.youtube.com/embed/njxZ6hXpALU?showinfo=0&autoplay=0" title="ShopKite Video Guide" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div><p class="faq-text">To download the ShopKite Merchant App, follow these steps:</p><ol class="faq-step-list"><li>Open your device's app store:</li></ol><ul class="faq-step-list"><li><strong>Play Store</strong> for Android devices.</li><li><strong>App Store</strong> for iPhone/iPad.</li></ul><ol class="faq-step-list"><li>Search for "ShopKite Merchant". Look for the app with a logo featuring a white kite on an orange background.</li><li>Tap on 'Install' or the download icon to install the app on your device.</li><li>Once the download is complete, open the app to sign up and get started.</li></ol><p class="faq-text"><em>(Direct link to the ShopKite Merchant App on the Play Store and App Store)</em></p><p class="faq-text"><strong>Additional Tips</strong></p><ul class="faq-step-list"><li>Remember to keep your app updated for the latest features and security improvements.</li><li>Review the app permissions before installation to understand what access the app requires.</li><li>If you encounter any issues during the download, try restarting your device and attempt downloading again.</li></ul><p class="faq-text"><strong>Troubleshooting Steps</strong></p><ul class="faq-step-list"><li>Ensure you have a stable internet connection before attempting to download the app.</li><li>Confirm that you are searching for the correct app name and logo.</li><li>Check if your device is compatible with the app requirements.</li></ul><p class="faq-text"><strong>Related Questions</strong></p><ul class="faq-step-list"><li><span>Can I use the ShopKite Merchant App on multiple devices?</span></li><li><span>How do I update the ShopKite Merchant App?</span></li></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="gs-signup" data-faq="gs-signup">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Sign Up (Register Your Business)</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <div class="faq-video-container"><iframe src="https://www.youtube.com/embed/fO9j_3r2Ejc?showinfo=0&autoplay=0" title="ShopKite Video Guide" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div><h4 class="faq-sub-heading">How To Sign Up (Register)</h4><p class="faq-text">To register your business on the ShopKite Merchant App, follow these simple steps:</p><ol class="faq-step-list"><li>Open the <strong>ShopKite Merchant app</strong> on your device.</li><li>Tap on <strong>“Next”</strong> or swipe left four times to learn about the app's features.</li><li>After the last hint, tap <strong>“Continue”</strong> to go to the sign-up page.</li><li>Enter your <strong>First Name</strong>, for example, "Uche".</li><li>Put in your <strong>Last Name</strong> or Surname, for example, "Olufemi".</li><li>Type in your <strong>business name</strong>, such as "WAZOBIA Enterprises".</li><li>Click on <strong>Store Type</strong> and choose the option that fits your business, like "Supermarket", or select <strong>“Others”</strong> and type it manually.</li><li>Provide your <strong>Business Email Address</strong>.</li><li>Add your <strong>Business Phone Number</strong>; make sure it's one we can contact you on.</li><li>Create a <strong>4-digit PIN</strong> for security.</li><li>Select the <strong>Country</strong> where your business is based.</li><li>Choose the <strong>State</strong> and then the <strong>City</strong> where your business operates.</li><li>Pick the <strong>Area</strong> within the city where your business is located.</li><li>Select your <strong>local currency</strong> from the options provided.</li><li>Check the box that says <strong>“I agree…”</strong> to enable the “Sign Up” button.</li><li>Finally, tap on <strong>“Sign Up”</strong> to finish your registration!</li></ol><p class="faq-text">Make sure to check your email afterward. You'll need to click on the link sent to you to verify your email address.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="gs-signin" data-faq="gs-signin">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Sign In</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <p class="faq-text">Follow the steps below to sign in to the ShopKite Merchant App</p><ol class="faq-step-list"><li>Open the<strong> ShopKite Merchant app</strong></li><li>If you're new to the app, tap on <strong>"Skip"</strong> at the bottom left of your screen to head straight to the "Sign in" page.</li><li>Enter your <strong>phone number</strong>—make sure it's the one you used when you signed up(registered).</li><li>Type in the <strong>4-digit PIN</strong> that you set during registration. This will light up the “Sign In” button.</li><li>Select <strong>"Sign In"</strong> at the bottom of the page</li><li>You'll see a list of all your stores and warehouses. Choose one to open by clicking on it.</li><li>Hit <strong>"Continue"</strong> to log into the selected store or warehouse.</li><li>Hang tight while ShopKite gets your records ready. Keep the app open and don't let your screen go to sleep.</li><li>A message will pop up asking if you want to <strong>"Allow"</strong> or <strong>"Don't Allow"</strong> notifications from ShopKite Merchant. Choose <strong>"Allow"</strong> to stay updated on what's happening in your store.</li><li>Watch for the completion animation, then tap <strong>"Continue"</strong> to jump into selling!</li></ol><p class="faq-text">Congratulations! You're all signed in and ready to take on the business world!</p><p class="faq-text"><strong>Troubleshooting</strong>:</p><ul class="faq-step-list"><li>If you can't sign in or the app isn't responding, try closing and reopening the app, or check your internet connection. If problems persist, uninstall and reinstall the app.</li><li>Ensure that you are signing in with the correct phone number.</li></ul><p class="faq-text"><strong>Contact Support</strong>:</p><p class="faq-text">For further assistance, please send us an email: <a href="mailto:hello@shopkite.com.ng" target="_blank" rel="noopener noreferrer">hello@shopkite.com.ng</a></p><p class="faq-text">or WhatsApp on +234 906 2000 393</p><p class="faq-text"><strong>Related Questions</strong></p><ul class="faq-step-list"><li><span>How do I reset my PIN?</span></li><li><span>How do I sign into a different store?</span></li></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Category: Sales -->
+        <section class="faq-category-section" id="sales">
+            <h2 class="faq-category-header">
+                <span class="faq-cat-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                </span>
+                Sales
+            </h2>
+            <div class="faq-accordion-group">
+                <div class="faq-accordion-card " id="sale-make" data-faq="sale-make">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Make A Sale (Scanning & Searching)</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <h5 class="faq-sub-heading">How do I Make A Sale by Scanning the Product Barcode?</h5><div class="faq-video-container"><iframe src="https://www.youtube.com/embed/mZsX8B7p5tE?showinfo=0&autoplay=0" title="ShopKite Video Guide" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div><p class="faq-text">Follow these steps to Make a Sale by Scanning the Product Barcode:</p><p class="faq-text">1. Open the ShopKite Merchant app.</p><p class="faq-text">2. On the “<strong>Sales</strong>” page, tap “Tap here to scan product barcode.”</p><p class="faq-text">3. Optionally, tap “Turn On Flash” for easier scanning.</p><p class="faq-text">4. Hold your phone over the product barcode and wait for it to scan.</p><p class="faq-text">5. Tap on the scanned product name to adjust the quantity:</p><ul class="faq-step-list"><li>Use the minus (-) sign to <strong>reduce</strong>.</li><li>Use the plus (+) sign to <strong>add</strong>.</li><li>Tap “OK” when done.</li></ul><p class="faq-text">6. If you want to add more products, tap “Search or Scan.” Otherwise, tap “Continue” at the bottom of the page.</p><p class="faq-text">7. Optionally, add details like <span>Owing</span>, <span>Customer</span>, and <span>Discount</span>.</p><p class="faq-text">8. Tap “Confirm Sales.”</p><p class="faq-text">9. Choose the payment type and enter the amount paid.</p><p class="faq-text">10. Tap “<strong>Proceed</strong>” to confirm payment.</p><p class="faq-text">11. Tap “Continue.”</p><p class="faq-text">You have successfully completed a sale! Repeat the process to sell more products.</p><p class="faq-text"><strong>Related Questions</strong></p><h5 class="faq-sub-heading">How to Make a Sale by Searching for the Product Name</h5><div class="faq-video-container"><iframe src="https://www.youtube.com/embed/2G3OA-J8_NA?showinfo=0&autoplay=0" title="ShopKite Video Guide" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div><p class="faq-text">Follow the steps below to Make a Sale by Searching for the Product Name:</p><p class="faq-text">1. Open the ShopKite Merchant app.</p><p class="faq-text">2. On the “Sales” page, tap “<strong>Tap here to search for a product.</strong>”</p><p class="faq-text">3. Type the full name of the product into the search bar at the top of the page.</p><p class="faq-text">4. Choose to sell as Retail or Wholesale.</p><p class="faq-text">5. Optionally, select a volume price and add the quantity if applicable.</p><p class="faq-text">6. Tap “<strong>Add to Sales List</strong>.”</p><p class="faq-text">7. If you want to add more products, tap “Search or Scan.” Otherwise, tap “Continue” at the bottom of the page.</p><p class="faq-text">8. Optionally, add details like <span>Owing</span>, <span>Customer</span>, and <span>Discount</span>.</p><p class="faq-text">9. Tap “Confirm Sales.”</p><p class="faq-text">10. Choose the Payment Type and enter the amount paid.</p><p class="faq-text">11. Tap “Proceed” to confirm payment.</p><p class="faq-text">12. Tap “Continue.”</p><p class="faq-text">You have successfully completed a sale! Repeat the process to sell more products.</p><p class="faq-text"><strong>Related Questions</strong></p><ul class="faq-step-list"><li><span>How do I use the "Owing" feature?</span></li><li><span>How do I attach a customer to a sale?</span></li><li><span>How do I apply discount to a sale?</span></li><li><span>How do I refund a sale?</span></li></ul><h5 class="faq-sub-heading">How to View Sales Record</h5><ol class="faq-step-list"><li>Open the ShopKite Merchant app.</li><li>Tap the three-bar menu button at the top right corner of the page.</li><li>Tap on “<strong>Sales Records</strong>”</li><li>You can "<strong>Search with receipt</strong>"</li><li>You also have options to search by "<strong>Time of sale</strong>", "Payment Method", "Customer", "Staff" or "Type of sale, such as <strong>Refunded sales</strong> or <strong>Discounted sales.</strong>"</li><li>Then tap "<strong>View Sales Records</strong>"</li><li>A list will be displayed. You can tap on any of the record to see further details.</li></ol>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="sale-discount" data-faq="sale-discount">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Apply Discounts To A Sale</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <h5 class="faq-sub-heading">How to apply discounts to a sale</h5><ol class="faq-step-list"><li>Open the ShopKite Merchant app</li><li>The “Sales” page has two options; “Tap here to search for a product” or “Tap here to scan product barcode”</li><li>Make a new sale either by searching or scanning the product barcode.</li><li>Towards the end of the sale, tap on “<strong>Discount</strong>” at the bottom right corner of the page</li><li>Apply discount:</li></ol><ul class="faq-step-list"><li>Choose “<strong>Figure</strong>” and enter the amount (e.g., N100 for a N100 discount),</li><li>or choose “<strong>Percentage</strong>” and enter the percentage (e.g., 5% for a 5% discount).</li></ul><ol class="faq-step-list"><li>You can use the "<span>Customer</span>" feature to attach a customer to this discount sale</li><li>Tap “<strong>Confirm Sales</strong>” once you are done</li><li>Select your payment method and tap “Proceed”</li><li>Tap “Continue”</li></ol><p class="faq-text">You have successfully added a discount to a sale.</p><p class="faq-text"><strong>Related Questions</strong></p><ul class="faq-step-list"><li><span>How do I attach a customer to a discount sale?</span></li><li><span>How do I see the record of all discounted sales?</span></li></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="sale-receipt" data-faq="sale-receipt">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Print Receipts After A Sale</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <h5 class="faq-sub-heading">How To Print Receipts After A Sale</h5><ol class="faq-step-list"><li>Open the ShopKite Merchant app</li><li>The “Sales” page has two options; “Tap here to search for a product” or “Tap here to scan product barcode”</li><li>Make a new sale either by searching or scanning</li><li>At the end of the sale, tap on “<strong>Print Receipt</strong>” at the bottom left corner of the page</li><li>Select your printer and tap “<strong>Print</strong>”(make sure your printer is already turned on and connected to the Bluetooth of your Mobile Device)</li></ol><p class="faq-text">Follow this steps whenever you want to print a receipt after a sale.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="sale-pause" data-faq="sale-pause">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Pause A Sale</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <ol class="faq-step-list"><li>Open the ShopKite Merchant app, you will see a Sales page</li><li><strong>Add products</strong> to the sale using the search or barcode scan method.</li><li>If you need to pause the sale, tap <strong>“Pause”</strong> at the bottom middle of the page.</li><li>Choose to either add a name to the paused sale or add it to an existing paused sale.</li></ol><p class="faq-text">Your sale is now paused.</p><p class="faq-text">Paused sales will appear on the Sales page for you to continue or discard as needed.</p><p class="faq-text"><strong>Related Questions</strong></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="sale-owing" data-faq="sale-owing">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">What Is An Owing Record & How To Apply It</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <p class="faq-text">If a customer will owe you for a sale (credit sale), you can record the amount owed along with the sale.</p><p class="faq-text">First, you need to make a sale by scanning a barcode or sell by searching for the product name.</p><p class="faq-text">After this, you can follow the steps to apply owing record to a sale.</p><h5 class="faq-sub-heading">How do I apply owing record to a sale?</h5><ol class="faq-step-list"><li>When you are about to confirm a sale, you will notice a " <strong>Owing </strong>" button at the bottom left corner of the page.</li><li>Tap on the owing button to show a pop-up where the amount owed</li><li>By default, the toggle button just below the "<strong>Who is owing</strong>?" header points to "Me" indicating that the business owes the customer. You can tap on this button to change it to customer if the customer is the one owing.</li><li>Type in the amount owed and tap on "<strong>Attach customer</strong>" to select the customer in question.</li><li>Use the search option to find the customer. If the customer is not on the list then you can choose "<strong>Tap here to add new customer</strong>"</li><li>Fill in the details and tap "<strong>Save</strong>". Now you can attach the customer to that sale.</li><li>Proceed to “confirm sales”</li><li>Choose payment method and tap "Continue"</li></ol><p class="faq-text">When you have confirmed the sale, you will be able to view the customers that owe you (or that you owe) in the "Owing Records" section.</p><h5 class="faq-sub-heading">How to view Owing Record</h5><ol class="faq-step-list"><li>Open the ShopKite Merchant app.</li><li>Tap the three-bar menu button at the top right corner of the page.</li><li>Tap on “<strong>Owing Records</strong>”</li><li>You can use the "Search Customers" feature to find owing records for a particular customer.</li><li>You can also "<strong>Filter</strong>" records to show "all", "Paid" or "Unpaid" records.</li></ol>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="sale-pending" data-faq="sale-pending">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Check For Pending Sales On A Device</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <h5 class="faq-sub-heading">How to check for pending sales on a device</h5><ol class="faq-step-list"><li>Open the ShopKite Merchant app</li><li>Tap on the three-bar <strong>Menu</strong> button at the top right corner of the page</li><li>Scroll down to the bottom where you see a version number</li><li>Hold down the version number (E.g  Version 4.4.35) for 3 to 5 seconds</li><li>You will see the <strong>Pending Sales</strong> section.</li></ol><p class="faq-text"><strong>Note: </strong></p><ul class="faq-step-list"><li>Pending sales are only available on the device where the sale was made.</li><li>Pending sales are automatically uploaded once the device is connected to an internet source and if it is not, just tap on “<strong>Update Sales</strong>” at the bottom of the pending sales page to update all pending sales.</li></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="sale-refund" data-faq="sale-refund">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Refund A Sale</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <p class="faq-text">To initiate a refund for a sale, please follow these steps:</p><ol class="faq-step-list"><li>Open the ShopKite Merchant app.</li><li>Tap on the three-bar menu button located at the top right corner of the page.</li><li>Navigate to the <strong>Sales</strong> section and select Sales Record.</li><li>Choose your preferred time duration from the "Time of sale" dropdown and tap "View sales record."</li><li>Select the specific sale you wish to refund, then tap "Refund Sale."</li><li>Check the products you intend to refund and specify the quantity for each.</li><li>Tap "Confirm Refund," followed by "<strong>Make Refund</strong>."</li></ol><p class="faq-text">You will be prompted to enter your 4-digit code to confirm the refund.</p><p class="faq-text">Congratulations! You have successfully processed a refund for the sale.</p><p class="faq-text"><strong>Note:</strong> Refunding a sale will add the refunded quantities back to the respective products.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="sale-transfer" data-faq="sale-transfer">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Transfer A Sale To A Checkout Staff</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <p class="faq-text">Before you begin:</p><p class="faq-text">Both the Sales Staff and the Checkout Staff must be connected to the same router/Wi-Fi (e.g., the store Wi-Fi).</p><p class="faq-text">Steps:</p><ol class="faq-step-list"><li>Open the ShopKite Merchant App and go to the <strong>Sales page</strong>.</li></ol><p class="faq-text">Initiate a new sale. See</p><ol class="faq-step-list"><li>Tap "<strong>Pause Sale"</strong>.</li><li>Enter a name/identifier for the paused sale (e.g., “John-Drinks” or “POS-1”).</li><li>Once you type in a name, an option will appear: "<strong>Send sale to a checkout staff"</strong>.</li><li>Tap this option.</li><li>The checkout staff will receive a notification that a new paused sale has been sent to them.</li></ol><p class="faq-text">You have successfully transferred the sale. The checkout staff will now complete it.</p><p class="faq-text">Repeat the process to transfer more sales.</p><p class="faq-text"><strong>Related Questions</strong></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="sale-receive" data-faq="sale-receive">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Receive & Complete A Sale Sent By Sales Staff</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <p class="faq-text">Before you begin:</p><p class="faq-text">Both the Sales Staff and the Checkout Staff must be connected to the same router/Wi-Fi (e.g., the store Wi-Fi).</p><p class="faq-text">Steps:</p><ol class="faq-step-list"><li>When a sales staff sends you a sale, you will receive a notification on your device.</li><li>Open the ShopKite Merchant App and go to the <strong>Sales page</strong>.</li><li>Tap the ShopKite logo at the top middle of the screen to refresh page.</li><li>This will activate a button that says "<strong>Click here to resume paused sale"</strong>.</li><li>Tap the button to view all paused sales.</li><li>Select the paused sale that was transferred to you.</li><li>Tap "<strong>Continue"</strong>.</li><li>Confirm the sale and process the payment to complete the transaction.</li></ol><p class="faq-text">You have successfully completed a sale transferred to you by a sales staff.</p><p class="faq-text"><strong>Related Questions</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Category: Products & Inventory -->
+        <section class="faq-category-section" id="products">
+            <h2 class="faq-category-header">
+                <span class="faq-cat-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                </span>
+                Products & Inventory
+            </h2>
+            <div class="faq-accordion-group">
+                <div class="faq-accordion-card " id="prod-add" data-faq="prod-add">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Add A New Product (Search, Scan & Custom)</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <h5 class="faq-sub-heading">Add a new Product by Searching</h5><div class="faq-video-container"><iframe src="https://www.youtube.com/embed/GeXjxa88Qiw?showinfo=0&autoplay=0" title="ShopKite Video Guide" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div><p class="faq-text">Follow the steps below to add a product to your store by searching for the product name.</p><p class="faq-text">You have signed up and want to add your products to your store.</p><p class="faq-text">Here's what you do:</p><ol class="faq-step-list"><li>Open the ShopKite Merchant App.</li><li>On the "Sales" page, tap the "<strong>Products</strong>" icon at the bottom.</li><li>On the "Products" page, choose "Tap here to search for a product".</li><li>To search, type the product name in the search bar.</li></ol><ul class="faq-step-list"><li>Select the product from the results and fill in the required details.</li><li>If not found, tap "Tap here to add new product."</li></ul><ol class="faq-step-list"><li>Tap "<strong>Add photo</strong>" and choose an image from the Gallery or Camera (use a white background).</li><li>Fill in the required fields:</li></ol><ul class="faq-step-list"><li>Size (e.g., 35cl)</li><li>Product category</li><li>Cost/Supplier price</li><li>Unit/Selling price</li><li>Quantity</li><li>Minimum quantity</li><li>Volume price</li><li>Expiry date</li></ul><ol class="faq-step-list"><li>Tap "<strong>Add product</strong>" at the bottom, then tap "Continue."</li><li>Repeat the process for each product you want to add.</li></ol><p class="faq-text">You have successfully added a new product</p><p class="faq-text">Repeat the process as many times as needed until all your products have been added to your list.</p><h5 class="faq-sub-heading">Add a new Product by scanning the product barcode</h5><div class="faq-video-container"><iframe src="https://www.youtube.com/embed/jj3dVPmwJg8?showinfo=0&autoplay=0" title="ShopKite Video Guide" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div><p class="faq-text">To add a new product by scanning the product barcode, follow the steps below.</p><ol class="faq-step-list"><li>Open the ShopKite Merchant App</li><li>You will see a “Sales” page</li><li>At the bottom of the “Sales” page, you will see three Icons namely; “Sales” “Insights” and “Products”</li><li>Tap on the <strong>“Products”</strong> icon to reveal the Product page</li><li>The “Products” page has two options; “Tap here to search for a product” or “Tap here to scan product barcode”</li><li>Tap on “<strong>Tap here to scan product barcode</strong>”</li><li>Tap on the flash icon to turn on your flash to make scanning easier (optional)</li><li>Hold your phone over the barcode of the product you wish to add and wait for it to scan</li><li>The product will be displayed with spaces for you to fill in the details of the product</li><li>If the product is not displayed, Tap on “Tap here to add new product”</li><li>Tap on “Add photo”</li><li>Choose how you want to add the image. Either “from Gallery” if you already have the picture on your phone or “from Camera” if you want to take the picture on the spot. Whichever one you choose, try to use a white background for it</li><li>Proceed to fill  in the required fields; size, Cost/supplier price, Unit/selling price, Add Quantity, Minimum Quantity, Add Volume Price, and Expiry date</li><li>Tap “Add product” at the bottom of the page</li><li>Tap “Continue”</li><li>Tap on “Add Product” at the bottom of the page, wait a few seconds for the page to load then</li><li>Tap “Continue”</li></ol><p class="faq-text">You have successfully added a new product</p><p class="faq-text">Repeat the process as many times as you need to until all your products have been added to your product list.</p><h5 class="faq-sub-heading">How to add pictures to new products on my store</h5><div class="faq-video-container"><iframe src="https://www.youtube.com/embed/mVTHHBo6pL0?showinfo=0&autoplay=0" title="ShopKite Video Guide" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div><p class="faq-text">Follow these steps to Add Pictures to New Products on the Shopkite App</p><p class="faq-text">1. Open the ShopKite Merchant app.</p><p class="faq-text">2. Tap the <strong>three-bar menu</strong> at the top right corner of the page.</p><p class="faq-text">3. Select “<strong>Add or search products</strong>” from the options.</p><p class="faq-text">4. Enter the product name in full or scan the product barcode.</p><p class="faq-text">5. Tap “<strong>Tap here to add new product”</strong>.</p><p class="faq-text">6. Tap “Add photo”.</p><p class="faq-text">7. Choose how you want to add the image:</p><p class="faq-text">- Select “From Gallery” if you already have the picture on your phone.</p><p class="faq-text">- Select “From Camera” if you want to take the picture on the spot.</p><p class="faq-text">Tip: Use a white background for better image quality.</p><p class="faq-text">8. Fill in the product details.</p><p class="faq-text">9. Tap “Add product” at the bottom of the page.</p><p class="faq-text">10. Tap “Continue”.</p><p class="faq-text">You have successfully attached a photo to a new product. Repeat the process to add more products.</p><h5 class="faq-sub-heading">How do I update a product in my store?</h5><div class="faq-video-container"><iframe src="https://www.youtube.com/embed/dpi3NSOgfr8?showinfo=0&autoplay=0" title="ShopKite Video Guide" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div><p class="faq-text">Follow these steps to update the details of existing Products in your store</p><ol class="faq-step-list"><li>Open the ShopKite App</li><li>Tap on the Product icon at the bottom right corner of the page</li><li>Either type in the name of the product or use the barcode scanner to search for the Product you wish to update</li><li>Update any of the fields you wish to update</li><li>Tap “Update Product” at the bottom of the page</li><li>Tap “Continue”</li></ol><p class="faq-text">Repeat the process if you wish to update more Products.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="prod-delete" data-faq="prod-delete">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Delete A Product</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <div class="faq-video-container"><iframe src="https://www.youtube.com/embed/XYP5U6N6AcQ?showinfo=0&autoplay=0" title="ShopKite Video Guide" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div><p class="faq-text">Follow these steps to Delete a Product from your store:</p><ol class="faq-step-list"><li>Open the ShopKite Merchant app</li><li>Tap on the three-bar menu button at the top right corner of the page</li><li>Tap on “<strong>Products List</strong>” in the options listed</li><li>Type in the name of the product you want to delete in the search box provided</li><li>Tap on the product when it appears</li><li>Scroll down and tap “<strong>Delete</strong>”, located at the bottom left corner of the page</li><li>Tap yes to confirm delete. Note that you cannot undo it once you confirm!</li><li>Enter your 4-digit <strong>PIN</strong> in the box provided</li><li>Tap “<strong>Delete</strong>” to proceed</li><li>Tap “ Continue”</li></ol><p class="faq-text">You have deleted a product from your store, repeat the process to delete more.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="prod-move" data-faq="prod-move">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Move Products Across Stores / Warehouses</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <h5 class="faq-sub-heading">How to Move products across stores</h5><p class="faq-text"><strong>Note:</strong> Before you can move products to a store, the following conditions must be met:</p><ul class="faq-step-list"><li>The receiving Staff must be added to the receiving store as a staff member.</li><li>The <strong>“Move Products”</strong> permission must be enabled for this staff.</li><li>The <strong>“Show Staff”</strong> permission must also be enabled for this staff.</li></ul><p class="faq-text"><em>Example: Uche, who is signed in to Store A</em>, wants to move product XYZ to <em>Store B</em>. For this to work, Uche must first be added as a staff member in <em>Store B</em> and must be granted both the <em>“Move Products”</em> and <em>“Show Staff”</em> permissions within <em>Store B</em>.</p><p class="faq-text">Once all conditions are met, follow these steps to Move Products:</p><p class="faq-text">1. Open the ShopKite Merchant app.</p><p class="faq-text">2. Tap the three-bar menu at the top right corner.</p><p class="faq-text">3. Tap “<strong>Move Products.</strong>”</p><p class="faq-text">4. You will see two tabs: “Sent” and “Received.”</p><p class="faq-text">5. Tap “Move Products” again.</p><p class="faq-text">6. Scan or search for the products you want to move.</p><p class="faq-text">7. Specify the quantity, minimum quantity, selling price, and expiry date of the products.</p><p class="faq-text">8. Tap “<strong>Add to List.</strong>”</p><p class="faq-text">9. To move additional products, tap the search or scan button at the bottom of the page and repeat steps 6-8.</p><p class="faq-text">10. Tap “Continue” and select the receiving store from your list of stores.</p><p class="faq-text">11. Choose the staff member who will receive the products at the receiving store.</p><p class="faq-text">12. Optionally, add any remarks.</p><p class="faq-text">13. Tap “Confirm” and enter your 4-digit PIN to complete the process.</p><p class="faq-text">You have successfully initiated the product move to the receiving store. Repeat the process to move more products.</p><p class="faq-text">💡 <em>Tip:</em> Using the <strong>“Copy Products”</strong> option when creating subsequent stores makes moving products easier. Also, ensure you are signed in to the store/warehouse you want to move products <strong>from</strong> before starting.</p><h5 class="faq-sub-heading">How to Receive Products moved to your store</h5><p class="faq-text">How to Receive Products Moved from Another Store/Warehouse:</p><p class="faq-text">To receive products transferred from another store, branch, or warehouse, follow these steps:</p><p class="faq-text"><strong>Note:</strong> Using the "Copy products" option when creating subsequent stores makes managing transfers easier.</p><p class="faq-text">1. Open the ShopKite Merchant app.</p><p class="faq-text">2. Tap the three-bar menu at the top right corner</p><p class="faq-text">3. Tap “<strong>Move Products</strong>.”</p><p class="faq-text">4. Select the “Received” tab.</p><p class="faq-text">5. Review the list of transfer requests and their statuses (e.g., "pending", "cancelled", "approved").</p><p class="faq-text">6. Tap on the pending move request you wish to receive.</p><p class="faq-text">7. Review the list of products to confirm accuracy.</p><p class="faq-text">8. Tap “<strong>Receive Product(s)</strong>” and validate with your 4-digit PIN.</p><p class="faq-text">9. Wait for the process to complete.</p><p class="faq-text">10. The received products will be successfully added to your product list.</p><p class="faq-text">You have now successfully received the transferred products.</p><h5 class="faq-sub-heading">How to Cancel requests to move products</h5><p class="faq-text">1. Open the ShopKite Merchant app.</p><p class="faq-text">2. Tap the three-bar menu at the top right corner</p><p class="faq-text">3. Tap “<strong>Move Products</strong>.”</p><p class="faq-text">4. Select the “Received” tab.</p><p class="faq-text">5. Review the list of transfer requests and their statuses (e.g., "pending", "cancelled", "approved").</p><p class="faq-text">6. Tap on the pending move request you wish to receive.</p><p class="faq-text">7. Review the list of products to confirm accuracy.</p><p class="faq-text">8. Tap “<strong>Cancel Request</strong>” and validate with your 4-digit PIN.</p><p class="faq-text">9. Add a reason for cancelling (optional).</p><p class="faq-text">10. Tap "Confirm"</p><p class="faq-text">You have successfully cancelled the request.</p><h5 class="faq-sub-heading">How to Export Moved Product details</h5><ol class="faq-step-list"><li>Open the ShopKite Merchant app.</li><li>Tap the three-bar menu at the top right corner</li><li>Tap “<strong>Move Products</strong>.”</li><li>Select the “Sent" or "Received” tab and select the move details you want to share</li><li>Tap on it and the details will be displayed. Then select "<strong>Share</strong>" at the bottom of the page.</li><li>Select the file destination' that is, where you want to share it to</li></ol><p class="faq-text">You have successfully exported details for a moved product.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="prod-reset-qty" data-faq="prod-reset-qty">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Reset The Quantity Of A Product To Zero</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <div class="faq-video-container"><iframe src="https://www.youtube.com/embed/rLp2L5bKcw8?showinfo=0&autoplay=0" title="ShopKite Video Guide" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div><p class="faq-text">Follow these steps to Reset the Quantity of a Product to Zero</p><p class="faq-text">1. Open the ShopKite Merchant app.</p><p class="faq-text">2. Tap the three-bar <strong>Menu</strong> button at the top right corner of the page.</p><p class="faq-text">3. Select “Products List” from the options.</p><p class="faq-text">4. Enter the name of the product you wish to reset in the search box.</p><p class="faq-text">5. Tap on the product when it appears.</p><p class="faq-text">6. Scroll down and tap “<strong>Reset Quantity</strong>” at the bottom right corner of the page.</p><p class="faq-text">7. Enter your 4-digit <strong>PIN</strong> in the provided box.</p><p class="faq-text">8. Tap “<strong>Confirm</strong>” to proceed.</p><p class="faq-text">9. Tap “Continue”.</p><p class="faq-text">You have successfully reset the quantity of the product to zero. Repeat the process to reset additional products.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="prod-expiry" data-faq="prod-expiry">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Check Expiring Products</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <p class="faq-text">Follow these steps to check what products are expired or nearing their expiry date:</p><ol class="faq-step-list"><li>Open the ShopKite Merchant app</li><li>Tap on the three-bar menu button at the top right corner of the page</li><li>Tap on “<strong>Product List</strong>” under the “Product” option</li><li>You will see an option to view “Products”, “Expiring”, and “Low Stock”.</li><li>Tap on “Expiring”</li></ol><p class="faq-text">All expiring products or products nearing their expiring date will be displayed for you to see</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="prod-min-qty" data-faq="prod-min-qty">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">What Is Minimum Quantity & Low-Stock Alerts?</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <h5 class="faq-sub-heading">What is Minimum Quantity?</h5><p class="faq-text">The minimum quantity is the lowest number of items you want to keep in your store. When the inventory level, that is, the number of remaining products falls below this amount, you will get a notification to restock that particular product.</p><p class="faq-text">For example, if you set your minimum quantity for Coca-Cola to 12, you will automatically get a notification to restock Coca-Cola when the quantity drops to 12.</p><h5 class="faq-sub-heading">How to check Low-stock products</h5><p class="faq-text">Follow the steps below to check low-stock products.</p><ol class="faq-step-list"><li>Open the ShopKite Merchant app</li><li>Tap on the three-bar menu button at the top right corner of the page</li><li>Tap on “<strong>Product List</strong>” under the “Product” option</li><li>You will see an option to view “ Products”, “Expiring”, and “Low Stock”.</li><li>Tap on “<strong>Low Stock</strong>”</li><li>All low-stock products will be displayed for you to see</li></ol>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="prod-volume" data-faq="prod-volume">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">What Is Volume Pricing & How To Set It?</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <h5 class="faq-sub-heading">What is Volume pricing?</h5><p class="faq-text">Volume pricing allows you to set multiple prices for different quantities of a product, enhancing the existing wholesale unit price feature.</p><p class="faq-text">For example, a 35cl PET bottle of Coke sells for N100 each. Typically, twelve bottles would sell for N1,200 (N100 x 12). However, you might offer a discount and sell them for N1,100 as a wholesale price. Volume pricing simplifies setting fixed prices for various quantities, making it easier to apply these prices during a sale.</p><p class="faq-text">You can set volume prices for various packaging types, such as Pack, Roll, Tin, Bag, Crate, Sachet, Carton, and Box. Examples include:</p><p class="faq-text">1. Half (½) carton of biscuits</p><p class="faq-text">2. Three-quarter (¾) crate of eggs</p><p class="faq-text">3. One (1) sachet of a pain-relieving drug</p><p class="faq-text">4. One quarter (¼) of a bag of rice</p><p class="faq-text">Volume pricing helps you manage prices for different quantities of your products.</p><h5 class="faq-sub-heading">How do I add Volume prices to products in my store?</h5><p class="faq-text">Follow these steps to add Volume Price To Products Already Added To Your Store</p><ol class="faq-step-list"><li>Open the ShopKite Merchant app.</li><li>On the “<strong>Sales</strong>” page, tap the “Products” icon at the bottom.</li><li>Search for the product you want to add Volume Pricing by using the "Search for Product" or "Scan Product Barcode" feature.</li><li>Tap on "<strong>Add Volume Price</strong>."</li><li>Choose the relevant option for your product: Pack, Carton, Sachet, Crate, or Bag.</li><li>Select the volume size: Quarter (¼), Half (½), Three-Quarter (¾), or One (1).</li><li>Enter the unit count and selling price for the selected volume size. For example, for Half (½) pack of Coke (35cl), enter a unit count of six (6) and the price.</li><li>Tap "<strong>Add</strong>" at the bottom of the page.</li><li>Repeat steps 6-8 for other volume sizes if applicable (e.g., Half (½), Three-Quarter (¾), One (1)).</li><li>When finished, tap "<strong>Save</strong>" at the bottom of the page.</li></ol><p class="faq-text">11. Tap "Update Product."</p><p class="faq-text">You have successfully added Volume Pricing to a product in your store. Repeat the process to add Volume Pricing to other products.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="prod-history" data-faq="prod-history">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Check A Product's History</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <p class="faq-text">Follow these steps to Check a Product's History:</p><p class="faq-text">1. Open the ShopKite App.</p><p class="faq-text">2. Tap on the “Product” icon at the bottom right corner of the page.</p><p class="faq-text">3. Enter the product name or use the barcode scanner to search for the product you want to check.</p><p class="faq-text">4. Tap on “<strong>Product History</strong>” at the bottom of the page.</p><p class="faq-text">5. You can Select the duration (e.g., Last Seven days).</p><p class="faq-text">6. The product history will be displayed.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Category: Customer Management -->
+        <section class="faq-category-section" id="customer">
+            <h2 class="faq-category-header">
+                <span class="faq-cat-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </span>
+                Customer Management
+            </h2>
+            <div class="faq-accordion-group">
+                <div class="faq-accordion-card " id="cust-add" data-faq="cust-add">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Add A New Customer</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <h5 class="faq-sub-heading">How do I Add a New Customer</h5><div class="faq-video-container"><iframe src="https://www.youtube.com/embed/UiXI3F0YjnU?showinfo=0&autoplay=0" title="ShopKite Video Guide" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div><p class="faq-text">The customer feature allows you to keep a detailed record of all your regular customers.</p><p class="faq-text">When making a sale, you can attach your customer to the sale.</p><p class="faq-text">Follow these steps to add a new customer:</p><ol class="faq-step-list"><li>Open the ShopKite Merchant app.</li><li>Tap the three-bar menu button at the top right corner of the page.</li><li>Scroll down and tap on the “<strong>Customer</strong>” button.</li><li>Tap on “<strong>New Customer</strong>” from the listed options.</li><li>Fill in the required details and any Extra Details you want to include</li><li>Tap the “<strong>Save</strong>” button at the bottom of the page.</li><li>Tap “<strong>Continue</strong>” to complete the process.</li></ol><p class="faq-text">You have successfully added a new customer!</p><p class="faq-text">Repeat the process to add more customers as needed.</p><h5 class="faq-sub-heading">How do I attach a Customer to a Sale?</h5><p class="faq-text">When making a new sale, use the customer feature to attach a customer to your sale.</p><ol class="faq-step-list"><li>Make a new sale either by searching or scanning the product barcode.</li><li>When you are about to confirm a sale, tap on "<strong>Customer</strong>" button at the bottom middle of the page.</li><li>You can either select the Customer from the list of or use the search option</li><li>If you can't find the customer then choose "<strong>Tap here to add a new customer</strong>"</li><li>Fill in the required details and tap "<strong>Save</strong>"</li><li>Now you can attach the customer to your sale.</li></ol>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="cust-update" data-faq="cust-update">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Update Customer Details</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <div class="faq-video-container"><iframe src="https://www.youtube.com/embed/geUDz6Wdw98?showinfo=0&autoplay=0" title="ShopKite Video Guide" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div><p class="faq-text">Follow these steps to update your Customer Details:</p><ol class="faq-step-list"><li>Open the ShopKite Merchant app</li><li>Tap on the three-bar menu button at the top right corner of the page</li><li>Scroll down and tap on the “<strong>Customer</strong>” button</li><li>Tap on “<strong>List of Customers</strong>” under the options listed</li><li>Type in the name of the Customer in the box labeled “Tap here to search”</li><li>Tap on the Customer you want</li><li>Tap on the “<strong>Edit</strong>” button at the end of the page</li><li>Update any detail of your choice in the filled-displayed</li><li>Tap “<strong>Save</strong>” at the bottom of the page</li><li>Tap “Continue” at the bottom of the page</li></ol><p class="faq-text">You have successfully updated a Customer detail!</p><p class="faq-text">Repeat the process again if you want to Update more Customer details.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="cust-birthday" data-faq="cust-birthday">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Check Upcoming Customer Birthdays</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <ol class="faq-step-list"><li>Open the ShopKite Merchant app.</li><li>Tap the three-bar <strong>menu </strong>button at the top right corner of the page.</li><li>Scroll down and tap on “<strong>Customer</strong>.”</li><li>Tap on “Birthdays” from the listed options.</li></ol><p class="faq-text">You will see a list of merchant birthdays displayed.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Category: Delivery & Orders -->
+        <section class="faq-category-section" id="delivery">
+            <h2 class="faq-category-header">
+                <span class="faq-cat-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                </span>
+                Delivery & Orders
+            </h2>
+            <div class="faq-accordion-group">
+                <div class="faq-accordion-card " id="deliv-agents" data-faq="deliv-agents">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">Who Are Delivery Agents & How Do They Work?</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <p class="faq-text">The "delivery" side of the menu is only activated for merchants who have their store online. To request online hosting on ShopKite, merchants must have been taking inventory with the Shopkite app for at least 6 months.</p><h5 class="faq-sub-heading">Who are Delivery Agents?</h5><p class="faq-text">Delivery agents are individuals, companies, or entities that a merchant collaborates with for logistics services. Merchants can add multiple agents, and assign orders to these agents as they come in.</p><h5 class="faq-sub-heading">How do I add Delivery Agents?</h5><p class="faq-text">Follow the steps below to add delivery agents to your store.</p><ol class="faq-step-list"><li>Open the ShopKite Merchant app</li><li>Tap on the three-bar menu button at the top right corner of the page</li><li>Scroll down and tap on “Delivery”</li><li>Select “<strong>Delivery Agents</strong>”</li><li>Tap on “<strong>Add Delivery Agent</strong>” at the bottom of the page</li><li>Proceed to fill in the required details; business name, first name, last name, business contact numbers, business type, and email address.</li><li>Tap “<strong>Add Delivery Agent</strong>”</li><li>Tap “<strong>Continue</strong>”</li></ol><p class="faq-text">You have successfully added a delivery agent to your store.</p><p class="faq-text">Repeat the process to add more.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="deliv-rates" data-faq="deliv-rates">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Add Delivery Rates</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <p class="faq-text">Follow the steps below to add delivery rates for different locations.</p><ol class="faq-step-list"><li>Open the ShopKite Merchant app</li><li>Tap on the three-bar menu button at the top right corner of the page</li><li>Scroll down and tap on “Delivery”</li><li>Select “<strong>Delivery Rates</strong>”</li><li>Tap on “<strong>Add Delivery Rate</strong>” at the bottom of the page</li><li>Proceed to fill in the required details; Delivery cost, country, state, city, area, estate (if applicable).</li><li>Tap “<strong>Add Delivery Rate</strong>”</li><li>Tap “Continue”</li></ol><p class="faq-text">You have successfully added a delivery rate.</p><p class="faq-text">Repeat the process to add more.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="deliv-check" data-faq="deliv-check">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Check & Manage Deliveries</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <p class="faq-text">Once a payment is made on your online store, the details automatically appear on your "deliveries" page.</p><h5 class="faq-sub-heading">How to check my Deliveries.</h5><p class="faq-text">Follow the steps below to see the list of your deliveries.</p><ol class="faq-step-list"><li>Open the Shopkite Merchant app</li><li>Tap on the three-bar menu button at the top right corner of the page</li><li>Scroll down and tap on “<strong>Delivery</strong>”</li><li>Select “<strong>Deliveries</strong>”</li><li>You will see the list of all your deliveries.</li><li>Tap "<strong>Filter</strong>" to specify what delivery you want to see. Choose from Pending, Processing, In transit, Delivered or Cancelled.</li><li>The selected filter will be applied and displayed</li></ol><h5 class="faq-sub-heading">How to Update delivery status</h5><ol class="faq-step-list"><li>Open the ShopKite Merchant app</li><li>Tap on the three-bar menu button at the top right corner of the page</li><li>Scroll down and tap on “Delivery”</li><li>Select “<strong>Deliveries</strong>”</li><li>Select the delivery you want to update.</li><li>Scroll down and tap "<strong>Set Delivery Agent"</strong> to select the agent attached to that customer</li><li>Then select "<strong>Set Delivery Status</strong>" box to choose the current status of the despatch. Example, In transit.</li><li>Tap "<strong>Set Delivery Status</strong>" to complete the update.</li></ol><p class="faq-text">suggestions</p><p class="faq-text">. set delivery status to "update delivery status".</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Category: Supply & Restocking -->
+        <section class="faq-category-section" id="supply">
+            <h2 class="faq-category-header">
+                <span class="faq-cat-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                </span>
+                Supply & Restocking
+            </h2>
+            <div class="faq-accordion-group">
+                <div class="faq-accordion-card " id="sup-add" data-faq="sup-add">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Add New Suppliers</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <ol class="faq-step-list"><li>Open the Shopkite Merchant app</li><li>Tap on the three-bar menu button at the top right corner of the page</li><li>Scroll down and tap on “<strong>Supply</strong>”</li><li>Tap on “<strong>New Supplier</strong>”</li><li>Fill in the required details of the Supplier</li><li>Tap “<strong>Save</strong>” at the bottom of the page</li><li>Tap “<strong>Continue</strong>”</li></ol><p class="faq-text">You have successfully added a new Supplier!</p><p class="faq-text">Repeat the process if you wish to add more Suppliers.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="sup-update" data-faq="sup-update">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Update Supplier's Records</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <ol class="faq-step-list"><li>Open the ShopKite Merchant app</li><li>Tap on the three-bar <strong>Menu</strong> button at the top right corner of the page</li><li>Scroll down and tap on “Supply”</li><li>Tap on “<strong>List of Suppliers</strong>”</li><li>Type the name of the supplier in the search box</li><li>Choose the supplier of your choice to update their records</li><li>Tap “<strong>Edit</strong>” at the bottom of the page</li><li>Edit the fields you wish to</li><li>Tap “<strong>Save</strong>”</li><li>Tap “Continue”</li></ol><p class="faq-text">You have successfully updated your Supplier"s record!</p><p class="faq-text">Repeat the process if you wish to update more.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="sup-record" data-faq="sup-record">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Record A New Supply</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <ol class="faq-step-list"><li>Open the ShopKite Merchant app.</li><li>Tap the three-bar menu button at the top right corner.</li><li>Scroll down and tap “Supply.”</li><li>Tap “<strong>New Supply</strong>.”</li><li>Search for the product or scan the product barcode.</li><li>Choose the product from the list or tap "<strong>Add new product</strong>" to create a new one.</li><li>Enter supply details:</li></ol><ul class="faq-step-list"><li>Total Quantity Supplied/Bought: Fill in the total number of single units (e.g., 12 bottles for one pack of Coca-Cola).</li><li>Total Cost of Product Supplied: Enter the total amount paid for the product.</li><li>Unit/Selling Price: Enter the selling price per unit (e.g., #350 per bottle of Coca-Cola).</li><li>Minimum Quantity: Enter your stock reorder level.</li><li>Add Volume Price: Select volume sizes, then enter the count and volume prices.</li><li>Expiry Date: Select the most recent expiry date on the batch.</li><li>Supply To: Indicate if supplying to a store or warehouse, and choose the warehouse if applicable.</li></ul><ol class="faq-step-list"><li>Tap “<strong>Add to Supply List</strong>.”</li><li>Add more products if needed by tapping "Search" or "Scan," then “Add to List.”</li><li>Tap “<strong>Continue</strong>.”</li><li>Select the Supplier and enter the amount paid. If fully paid, leave the field as is.</li><li>Select Supply Date and, if applicable, set a notification date for any balance payment.</li><li>Add Remarks if necessary.</li><li>Tap “<strong>Make Supply</strong>.”</li></ol><p class="faq-text">You have successfully added a new supply! Repeat the process to add more supplies as needed.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="sup-records" data-faq="sup-records">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">What Are Supply Records & How To Track Them?</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <p class="faq-text"><strong>ShopKite Merchant</strong> helps you keep a record of all supplies received in your store. Each supply record includes supplier details, product information, and the date of receipt.</p><h5 class="faq-sub-heading">How To View Supply Records</h5><p class="faq-text">Follow the steps below to view the list of all supplies recorded in your store.</p><ol class="faq-step-list"><li>Open the ShopKite Merchant app</li><li>Tap on the three-bar menu button at the top right corner of the page</li><li>Scroll down and tap on “Supply”</li><li>Tap on “<strong>Supply Records</strong>” under the options given</li><li>Tap on the Supply record you wish to view</li></ol><p class="faq-text">All record will be displayed for you to see</p><h5 class="faq-sub-heading">How to export Supply Records</h5><p class="faq-text">You can share supply records with your supplier or send them to any other destination outside the ShopKite Merchant app by following these steps.</p><ol class="faq-step-list"><li>Open the ShopKite Merchant app</li><li>Tap on the three-bar menu button at the top right corner of the page</li><li>Scroll down and tap on “Supply”</li><li>Tap on “<strong>Supply Records</strong>” under the options given</li><li>Tap on the Supply record you wish to view</li><li>Tap on "<strong>Share Receipt</strong>" at the bottom right corner of the page.</li><li>Choose where to share your file</li></ol><p class="faq-text">You have successfully shared the receipt for your supply record.</p><h5 class="faq-sub-heading">How to Refund A Supply</h5><p class="faq-text">Received an incorrect supply? Don't worry! You can easily refund it by following these steps:</p><ol class="faq-step-list"><li>Open the ShopKite Merchant app.</li><li>Tap the three-bar menu button at the top right.</li><li>Scroll down and select "Supply."</li><li>Choose "<strong>Supply Records</strong>."</li><li>Select the supply record you wish to refund.</li><li>Tap "<strong>Refund Supply</strong>" at the bottom left.</li><li>Check the box(es) to refund all or use "<strong>Refund Qty</strong>" to specify quantities.</li><li>Tap "<strong>Confirm Refund</strong>" at the bottom.</li><li>Review and confirm the refund, then tap "Make Refund."</li><li>Enter your 4-digit PIN to confirm.</li><li>Tap "<strong>Refund</strong>" to complete the process.</li></ol><p class="faq-text">Afterward, your supply records will update automatically to reflect the refund.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Category: Expenses -->
+        <section class="faq-category-section" id="expenses">
+            <h2 class="faq-category-header">
+                <span class="faq-cat-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </span>
+                Expenses
+            </h2>
+            <div class="faq-accordion-group">
+                <div class="faq-accordion-card " id="exp-record" data-faq="exp-record">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Record A New Expense</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <ol class="faq-step-list"><li>Open the ShopKite Merchant app</li><li>Tap on the three-bar menu button at the top right corner of the page</li><li>Scroll down and tap on “Expenses”</li><li>Select “<strong>New Expense</strong>”</li><li>Type in the expense title in the space provided. Examples: Security dues, staff salaries, etc</li><li>Tap on “<strong>Continue</strong>”</li><li>Fill in the required details correctly; Expense category, amount, quantity, description.</li><li>Tap “add to list”</li><li>Tap “<strong>Confirm”</strong></li><li>Select the expense date</li><li>Tap “<strong>confirm expense”</strong></li><li>Tap “<strong>Continue</strong>”</li></ol><p class="faq-text">You have successfully recorded a new expense.</p><p class="faq-text">Repeat the process to record more.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="exp-view" data-faq="exp-view">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To View All My Expenses</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <ol class="faq-step-list"><li>Open the Shopkite Merchant app</li><li>Tap on the three-bar menu button at the top right corner of the page</li><li>Scroll down and tap on “Expenses”</li><li>Select “<strong>All Expenses</strong>”</li><li>Tap “Select Date Duration” to pick the start and end date period for which you want to view.</li><li>Or type in the title of the expense in the “search” box</li><li>You can also filter by “<strong>category</strong>”</li><li>The expenses will be listed for you to see.</li></ol><p class="faq-text">You can do this whenever you want to view your expenses.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Category: Stores, Warehouses & Staff -->
+        <section class="faq-category-section" id="stores">
+            <h2 class="faq-category-header">
+                <span class="faq-cat-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </span>
+                Stores, Warehouses & Staff
+            </h2>
+            <div class="faq-accordion-group">
+                <div class="faq-accordion-card " id="store-create" data-faq="store-create">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Create A New Store Or Warehouse</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <h5 class="faq-sub-heading"><strong>How do I create a new Store/Warehouse?</strong></h5><p class="faq-text">Follow the steps below to create a new Store/Warehouse</p><ol class="faq-step-list"><li>Open the ShopKite Merchant app</li><li>Tap on the three-bar menu button at the top right corner of the page</li><li>Scroll down and tap on “<strong>Stores/Warehouse</strong>”</li><li>Tap on “New Store/ Warehouse” under the options listed</li><li>Fill in the required details of the Warehouse</li><li>Tap on “<strong>Add Store</strong>” at the bottom of the page</li><li>Tap “<strong>Continue</strong>”</li></ol><p class="faq-text">Repeat the process if you want to create more.</p><p class="faq-text"><strong>Note</strong>: Using the "Copy products" option when creating new stores makes moving products easier. Before starting, ensure you are signed in to the store/warehouse you want to move products from.</p><h5 class="faq-sub-heading">How do I see the list of all my Stores/ Warehouse?</h5><ol class="faq-step-list"><li>Open the ShopKite Merchant app</li><li>Tap on the three-bar <strong>menu</strong> button at the top right corner of the page</li><li>Scroll down and tap on “<strong>Store/Warehouse</strong>”</li><li>Tap on “List of Stores/ Warehouses” under the options listed</li><li>Tap on the warehouse you wish to view from the list displayed</li></ol>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="store-switch" data-faq="store-switch">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Switch Accounts Between Stores</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <h5 class="faq-sub-heading">How To Sign in to a Different Store/Warehouse.</h5><p class="faq-text">Follow the steps below to switch between stores/warehouses.</p><ol class="faq-step-list"><li>Open the ShopKite Merchant app</li><li>Tap on the three-bar menu button at the top right corner of the page</li><li>Scroll down and tap on “Stores/ Warehouse”</li><li>Tap on “<strong>List of Stores/ Warehouses</strong>” under the options listed</li><li>Tap on the warehouse you wish to sign in to</li><li>Tap on “Yes” to confirm the switch to the selected store/warehouse</li><li>Tap “Continue”</li></ol><p class="faq-text">You have successfully signed into a different Store/warehouse!</p><p class="faq-text">Repeat the process if you want to switch to the previous store or a different one.</p><h5 class="faq-sub-heading">How to Switch Staff</h5><p class="faq-text">Follow this steps to sign in to a different staff account.</p><ol class="faq-step-list"><li>Open the ShopKite Merchant App</li><li>Tap on the three-bar <strong>menu</strong></li><li>Scroll down and tap on "Sign Out"</li><li>Then choose "<strong>Switch Staff</strong>"</li><li>Type in the number linked to that staff account</li><li>Type in the 4-digit <strong>PIN </strong></li><li>Tap "Switch Staff" to proceed</li><li>Tap "Continue".</li></ol><p class="faq-text">You have successfully switched to a different staff account.</p><p class="faq-text">Repeat the process to switch back to the previous account or a different one.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="store-staff" data-faq="store-staff">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Manage Staff & Permissions In My Store</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <h5 class="faq-sub-heading">How to create store managers</h5><ol class="faq-step-list"><li>Open the ShopKite Merchant App</li><li>Tap on the three-bar menu button at the top right corner of the page</li><li>Scroll down and Tap on “<strong>Stores/Warehouses</strong>”</li><li>Tap on “<strong>My Staff</strong>” under the options listed</li><li>Tap on “<strong>Managers</strong>”</li><li>Tap on “Create Manager” at the bottom of the page</li><li>Fill in the required details then set access permissions.</li><li>Tap on the “<strong>Save</strong>” button at the bottom of the page</li><li>Tap “Continue”</li></ol><p class="faq-text">You have successfully added a new Store Manager!</p><p class="faq-text">Repeat the process if you want to add more Managers.</p><h5 class="faq-sub-heading">How to create sales Agents</h5><ol class="faq-step-list"><li>Open the Shopkite Merchant app.</li><li>Tap the three-bar menu button at the top right corner.</li><li>Scroll down and tap on “<strong>Stores/Warehouses</strong>.”</li><li>Tap on “<strong>My Staff</strong>.”</li><li>Select “Sales Agents.”</li><li>Tap on “Create Sales Agent” at the bottom of the page.</li><li>Fill in the required details and <span>set access permissions</span>.</li><li>Tap the “Save” button.</li><li>Tap “Continue.”</li></ol><p class="faq-text">You have successfully added a new sales agent.</p><p class="faq-text">Repeat the process to add more agents as needed.</p><h5 class="faq-sub-heading">How to set access permissions for Staff accounts</h5><p class="faq-text">You can control which sections or pages of the Shopkite Merchant app your staff can access. Follow these steps:</p><ol class="faq-step-list"><li>Open the ShopKite Merchant app.</li><li>Tap on the Menu (three-bar icon at the top right).</li><li>Tap on “<strong>Stores/Warehouses</strong>” and select “My Staff.”</li><li>Choose the category of the staff (e.g., Manager).</li><li>Select the staff member's name.</li><li>Tap on “<strong>View/Set Permissions</strong>.”</li><li>You will see a list of app sections where you can set permissions for the selected staff.</li><li>Select the sections to view all possible permissions, and update the permissions as needed. Each permission includes a short description for clarity.</li><li>When finished, tap on “<strong>Update Permissions</strong>.”</li><li>You will return to the staff's page. Tap on “Update” to save the permissions.</li></ol><p class="faq-text"><strong>Troubleshooting Steps</strong>:</p><ul class="faq-step-list"><li>Ensure you are connected to a stable internet</li><li>Ask the staff to sign out and sign back in to reflect the changes you made</li></ul><h5 class="faq-sub-heading">How to remove a Staff from your store</h5><p class="faq-text">To remove a staff from your store, kindly follow the steps below:</p><ol class="faq-step-list"><li>Open the ShopKite Merchant app.</li><li>Tap on the Menu (three-bar icon at the top right). Tap on My Staff.</li><li>Choose the role of the staff member.</li><li>Tap on the staff member’s name.</li><li>Scroll to the bottom of the page and then tap on "Remove Agent"</li><li>Tap "Yes" to confirm</li><li>Enter your 4-digit PIN</li></ol><p class="faq-text">You have successfully removed a staff.</p><p class="faq-text">Repeat the process to remove more staff as needed.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="store-update" data-faq="store-update">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Update Details On My Store / Warehouse</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <h5 class="faq-sub-heading"><strong>How do I update details on my store/warehouse?</strong></h5><p class="faq-text">Follow these steps to Update your Store/warehouse Details</p><ol class="faq-step-list"><li>Open the ShopKite Merchant app</li><li>Tap on the three-bar menu located at the top right corner of the page</li><li>Scroll down, tap on "<strong>Stores/Warehouses</strong>"</li><li>Tap on "List of Stores/Warehouses" from the options given</li><li>Select the store you wish to update</li><li>Tap "<strong>Edit</strong>" to Update the detail(s)</li><li>Tap "Update Store"</li></ol><p class="faq-text">You have successfully updated your store details.</p><h5 class="faq-sub-heading"><strong>How do I Update a product In my Store/ Warehouse?</strong></h5><ol class="faq-step-list"><li>Open the ShopKite Merchant app</li><li>Tap on the three-bar menu button at the top right corner of the page</li><li>Scroll down and tap on “<strong>Warehouse</strong>”</li><li>Tap on “List of Warehouses” under the options listed</li><li>Tap on the warehouse you wish to update products from</li><li>Tap on the product you wish to update</li><li>Tap on “<strong>Update Quantity</strong>”</li><li>Enter the new update by typing or using the minus(-)sign to reduce and plus(+) sign to add.</li><li>Tap “<strong>Update</strong>” at the bottom of the page</li><li>Tap “Continue”</li></ol><p class="faq-text">You have successfully updated a product in your warehouse!</p><p class="faq-text">Repeat the process if you wish to update more.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="store-subscription" data-faq="store-subscription">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Check My Subscription Status</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <h5 class="faq-sub-heading">How do I Check my Subscription Status?</h5><p class="faq-text">To find out your current subscription status and view your next renewal date:</p><ol class="faq-step-list"><li>Open the ShopKite Merchant app.</li><li>Tap on three-bar Menu</li><li>Tap on "<strong>Stores/Warehouses</strong>"</li><li>Select "List of Stores/Warehouses".</li><li>Tap on the "<strong>Subscribe</strong>" button at the bottom of the page.</li></ol><p class="faq-text">Your subscription status and next renewal date will be displayed.</p><h5 class="faq-sub-heading">How do I Renew my Subscription?</h5><p class="faq-text">To renew your subscription and make a payment:</p><ol class="faq-step-list"><li>Open the ShopKite Merchant app.</li><li>Tap on Menu</li><li>Scroll down and tap on "<strong>Stores/Warehouses</strong>"</li><li>Select "<strong>List of Stores</strong>".</li><li>Tap on the "Subscribe" button at the bottom of the page.</li><li>If this is your first subscription, select a subscription package from the list.</li><li>Confirm your details and subscription package, then tap on "<strong>Make Payment</strong>."</li><li>After making payment, keep the app open for about 60 seconds for your subscription to reflect.</li></ol><p class="faq-text"><strong>Troubleshooting Steps:</strong></p><ul class="faq-step-list"><li>Ensure you have a stable internet connection</li><li>Close the app and re open it</li><li>Sign out and sign back into your store</li></ul><p class="faq-text">If you still experience any difficulties with the process, send us an email hello@shopkite.com.ng   or send a message on Whatsapp at +234 906 2000 393</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Category: General Settings & Data -->
+        <section class="faq-category-section" id="general">
+            <h2 class="faq-category-header">
+                <span class="faq-cat-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                </span>
+                General Settings & Data
+            </h2>
+            <div class="faq-accordion-group">
+                <div class="faq-accordion-card " id="gen-notif" data-faq="gen-notif">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Check Notifications</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <p class="faq-text">Follow these steps to Check Your Notifications</p><ol class="faq-step-list"><li>Open the ShopKite Merchant app.</li><li>Tap the three-bar Menu button at the top right corner of the page.</li><li>Scroll down and select “<strong>General</strong>.”</li><li>Tap on “<strong>Notifications</strong>” from the listed options to see your recent notifications.</li><li>To view notifications for a specific period, tap on “<strong>Select Duration.</strong>”</li><li>Tap on the start date, then tap on the end date, and finally tap “OK.”</li></ol><p class="faq-text">The list of notifications for the selected period will be displayed.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="gen-export" data-faq="gen-export">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Export My Store Records</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <h5 class="faq-sub-heading">How to Export Records</h5><ol class="faq-step-list"><li>Open the ShopKite Merchant app</li><li>Tap on the three-bar Menu button at the top right corner of the page</li><li>Scroll down and select “<strong>General</strong>”</li><li>Tap on “<strong>Export Records</strong>” under the options listed</li><li>Select the “<strong>Category</strong>”, and “<strong>Duration</strong>”</li><li>Tap on “Proceed”</li><li>Type in your 4-digit <strong>PIN </strong>and tap “Confirm”</li><li>Check your email for the document.</li></ol><p class="faq-text">You have successfully exported your selected record.</p><p class="faq-text">Repeat the process to export other records.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="gen-reset-store" data-faq="gen-reset-store">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Reset Quantities Of All Products To Zero</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <p class="faq-text">Follow the steps below to Reset the Quantity of a Store/Warehouse to Zero</p><ol class="faq-step-list"><li>Open the ShopKite Merchant app.</li><li>Tap the three-bar <strong>Menu</strong> button at the top right corner of the page.</li><li>Scroll down and select “<strong>General.</strong>”</li><li>Tap on “<strong>Reset Quantity</strong>” from the listed options.</li><li>Choose whether you want to reset the quantity for a store or warehouse.</li><li>Select the specific store or warehouse.</li><li>Tap “<strong>Reset Quantity.</strong>”</li><li>Enter your 4-digit <strong>PIN</strong>.</li><li>Tap “Confirm.”</li></ol><p class="faq-text"><strong>Note:</strong> This action cannot be undone, so ensure you are certain before confirming the reset.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="gen-payment" data-faq="gen-payment">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Add Payment Methods To My Store</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <p class="faq-text"><strong>How to Create Payment Methods</strong></p><p class="faq-text">You can set up multiple payment methods for each of your stores in the ShopKite Merchant app to track payment sources like cash, bank transfers, and more.</p><p class="faq-text">These methods aid in tracking, not in processing transactions.</p><p class="faq-text">Before making sales on the ShopKite Merchant app, you need to set up your payment methods. The default payment method "Cash" is already created for all stores.</p><p class="faq-text">The "Create Payment Method" feature is accessible only to the merchant (business owner).</p><p class="faq-text"><strong>Steps to Create Payment Methods:</strong></p><ol class="faq-step-list"><li>Open the ShopKite Merchant app.</li><li>Tap the Menu (three bars at the top right).</li><li>Tap on "<strong>General</strong>" and then "Payment Methods."</li><li>Tap on "<strong>Add Payment Method</strong>."</li><li>Tap the "<strong>Select Payment Method</strong>" dropdown to select a method</li><li>If your payment method is attached to a bank, tap on "Search for Bank," type your bank's name, and select it from the suggestions. If your bank is not listed, contact customer support for assistance.</li><li>Select the store(s) you want to add the payment method to. You can select multiple stores.</li><li>Add extra information in the "<strong>Extra Info</strong>" field (optional).</li><li>Tap "Save" when you are done.</li></ol><p class="faq-text">You can create multiple payment methods to suit your business needs.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Category: Extras & App Info -->
+        <section class="faq-category-section" id="extras">
+            <h2 class="faq-category-header">
+                <span class="faq-cat-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                </span>
+                Extras & App Info
+            </h2>
+            <div class="faq-accordion-group">
+                <div class="faq-accordion-card " id="extra-devices" data-faq="extra-devices">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">Can I Use The ShopKite App On Multiple Devices?</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <p class="faq-text">Yes, you can use the ShopKite Merchant App on multiple devices.</p><p class="faq-text">It is available for both Android and iOS devices.</p><p class="faq-text">Simply log into your account on each device and all your data will be synchronized. This allows you to manage your store and perform various tasks seamlessly from different devices.</p><p class="faq-text">Visit our online store to see the range of devices ShopKite offers. <a href="https://shopkite.com.ng/pay" target="_blank" rel="noopener noreferrer">Visit store</a></p><p class="faq-text">These devices are designed to enhance your store management experience.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="extra-update" data-faq="extra-update">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Update The ShopKite Merchant App</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <p class="faq-text">How do I update the ShopKite Merchant App?</p><p class="faq-text">To update the ShopKite Merchant App, follow these steps:</p><p class="faq-text">1. <strong>For iOS Devices:</strong></p><ul class="faq-step-list"><li>Open the App Store.</li><li>Tap on your profile icon at the top of the screen.</li><li>Scroll down to see pending updates and release notes.</li><li>Find the ShopKite Merchant App and tap "Update."</li></ul><p class="faq-text">2. <strong>For Android Devices:</strong></p><ul class="faq-step-list"><li>Open the Google Play Store.</li><li>Tap the menu icon (three horizontal lines) in the top-left corner.</li><li>Select "My apps &amp; games."</li><li>Find the ShopKite Merchant App in the list of pending updates and tap "Update."</li></ul><p class="faq-text">Alternatively, you can enable automatic updates for the app to ensure you always have the latest version.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="extra-pin" data-faq="extra-pin">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">How To Reset Your PIN</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <p class="faq-text">Follow these steps to reset your pin</p><ol class="faq-step-list"><li>Go to the sign-in page of your ShopKite Merchant app</li><li>Tap on "forgot your <strong>PIN</strong>?"</li><li>Type in the eleven-digit phone number you registered with</li><li>Then Tap "<strong>Continue</strong>"</li><li>A 6-digit OTP Verification code will be sent to you via SMS and WhatsApp</li><li>Type in the code in the space provided for "<strong>Verification code</strong>"</li><li>Type in the new password you want to use</li><li>Tap "<strong>Continue</strong>"</li></ol><p class="faq-text">You have successfully changed your PIN.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-accordion-card " id="extra-insights" data-faq="extra-insights">
+                    <div class="faq-accordion-header">
+                        <h3 class="faq-accordion-title">ShopKite Insights & Performance Analytics</h3>
+                        <span class="faq-chevron">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                        </span>
+                    </div>
+                    <div class="faq-accordion-body">
+                        <div class="faq-accordion-content">
+                            <ol class="faq-step-list"><li>Open the ShopKite Merchant App</li><li>Select "Insights" at the bottom of the Sales Page</li></ol><p class="faq-text">This feature provides comprehensive insights into your product performance, highlighting everything from top-selling items to the least selling ones.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Contact Support Callout Box -->
         <div class="faq-support-box">
@@ -1016,127 +943,167 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-
-        // ── 1. Collapsible Sidebar & Mobile Drawer Toggle ───────────────
-        const sidebar   = document.getElementById('faqSidebar');
-        const toggleBtn = document.getElementById('faqSidebarToggle');
-        const mobileBtn = document.getElementById('faqMobileDrawerBtn');
-        const overlay   = document.getElementById('faqSidebarOverlay');
-
-        function openMobileSidebar() {
-            if (sidebar) sidebar.classList.add('open-mobile');
-            if (overlay) overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeMobileSidebar() {
-            if (sidebar) sidebar.classList.remove('open-mobile');
-            if (overlay) overlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        if (mobileBtn) {
-            mobileBtn.addEventListener('click', openMobileSidebar);
-        }
-
-        if (overlay) {
-            overlay.addEventListener('click', closeMobileSidebar);
-        }
-
-        if (toggleBtn) {
-            toggleBtn.addEventListener('click', () => {
-                if (window.innerWidth <= 900) {
-                    closeMobileSidebar();
-                } else if (sidebar) {
-                    sidebar.classList.toggle('collapsed');
-                }
-            });
-        }
-
-        // ── 2. References ──────────────────────────────────────────────
-        const treeGroups       = document.querySelectorAll('.faq-tree-group');
+        const sidebar          = document.getElementById('faqSidebar');
+        const sidebarToggle    = document.getElementById('faqSidebarToggle');
+        const mobileDrawerBtn  = document.getElementById('faqMobileDrawerBtn');
+        const sidebarOverlay   = document.getElementById('faqSidebarOverlay');
         const treeHeaders      = document.querySelectorAll('.faq-tree-header');
         const subItems         = document.querySelectorAll('.faq-tree-subitem');
         const accordionHeaders = document.querySelectorAll('.faq-accordion-header');
         const categorySections = document.querySelectorAll('.faq-category-section');
 
-        // Helper: highlight a single active sub-item (or clear if null)
-        function setActiveSubItem(faqId) {
-            subItems.forEach(s => s.classList.remove('sub-active'));
-            if (faqId) {
-                const match = document.querySelector(`.faq-tree-subitem[data-faq="${faqId}"]`);
-                if (match) match.classList.add('sub-active');
-            }
-        }
-
-        // Helper: open only one category group and collapse all others
+        // ── 1. Helper: Open only one category group in the sidebar ─────
         function openCategoryGroupOnly(catId) {
-            treeGroups.forEach(group => {
-                if (group.getAttribute('data-category') === catId) {
-                    group.classList.add('open');
+            document.querySelectorAll('.faq-tree-group').forEach(g => {
+                if (g.getAttribute('data-category') === catId) {
+                    g.classList.add('open');
                 } else {
-                    group.classList.remove('open');
+                    g.classList.remove('open');
                 }
             });
         }
 
-        // ── 3. Tree parent header manual toggle & scroll ──────────────
+        // ── 2. Helper: Set active sub-item highlight ───────────────────
+        function setActiveSubItem(faqId) {
+            subItems.forEach(item => {
+                if (faqId && item.getAttribute('data-faq') === faqId) {
+                    item.classList.add('sub-active');
+                } else {
+                    item.classList.remove('sub-active');
+                }
+            });
+        }
+
+        // ── 3. Helper: Smooth scroll to element header without glitch ──
+        let isProgrammaticScroll = false;
+        let programmaticScrollTimer = null;
+
+        function scrollToTarget(element) {
+            if (!element) return;
+
+            // Lock intersection observer during programmatic scroll
+            isProgrammaticScroll = true;
+            clearTimeout(programmaticScrollTimer);
+            programmaticScrollTimer = setTimeout(() => {
+                isProgrammaticScroll = false;
+            }, 800);
+
+            const isMob = isMobile();
+            const headerOffset = isMob ? 190 : 166;
+            const headerEl = element.querySelector('.faq-accordion-header') || element;
+            const rect = headerEl.getBoundingClientRect();
+            const targetY = rect.top + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+                top: Math.max(0, targetY),
+                behavior: 'smooth'
+            });
+        }
+
+        // ── 4. Sidebar Collapse/Expand Toggle & Mobile Drawer ──────────
+        function isMobile() {
+            return window.innerWidth <= 900;
+        }
+
+        function openMobileDrawer() {
+            if (sidebar) {
+                sidebar.classList.add('open-mobile');
+                sidebar.classList.add('mobile-open');
+            }
+            if (sidebarOverlay) sidebarOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileDrawer() {
+            if (sidebar) {
+                sidebar.classList.remove('open-mobile');
+                sidebar.classList.remove('mobile-open');
+            }
+            if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => {
+                if (isMobile()) {
+                    closeMobileDrawer();
+                } else {
+                    sidebar.classList.toggle('collapsed');
+                }
+            });
+        }
+
+        if (mobileDrawerBtn) {
+            mobileDrawerBtn.addEventListener('click', () => {
+                openMobileDrawer();
+            });
+        }
+
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', () => {
+                closeMobileDrawer();
+            });
+        }
+
+        // ── 5. Sidebar Tree Parent Accordion ───────────────────────────
         treeHeaders.forEach(header => {
-            header.addEventListener('click', (e) => {
-                e.stopPropagation();
+            header.addEventListener('click', () => {
                 const group = header.closest('.faq-tree-group');
-                const catId = group.getAttribute('data-category');
-                openCategoryGroupOnly(catId);
-
-                const section = document.getElementById(catId);
-                if (section) {
-                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-
-                if (window.innerWidth <= 900) {
-                    closeMobileSidebar();
-                }
-            });
-        });
-
-        // ── 4. Sub-item click → open accordion card & sync sidebar ───
-        subItems.forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.preventDefault();
-                const faqId = item.getAttribute('data-faq');
-                const card  = document.querySelector(`.faq-accordion-card[data-faq="${faqId}"]`);
-
-                // Mark active sub-item
-                setActiveSubItem(faqId);
-
-                // Open parent tree group & collapse others
-                const group = item.closest('.faq-tree-group');
                 if (group) {
+                    if (sidebar && sidebar.classList.contains('collapsed') && !isMobile()) {
+                        sidebar.classList.remove('collapsed');
+                    }
+                    const isOpen = group.classList.contains('open');
                     const catId = group.getAttribute('data-category');
-                    openCategoryGroupOnly(catId);
-                }
-
-                if (window.innerWidth <= 900) {
-                    closeMobileSidebar();
-                }
-
-                if (card) {
-                    // Open target card
-                    card.classList.add('open');
-                    // Scroll smoothly to card
-                    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    if (isOpen) {
+                        group.classList.remove('open');
+                    } else {
+                        openCategoryGroupOnly(catId);
+                    }
                 }
             });
         });
 
-        // ── 5. Main content Accordion card header click → sync sidebar ─
+        // ── 6. Sub-Item Click -> Smooth Scroll & Expand Content Card ───
+        subItems.forEach(subItem => {
+            subItem.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetFaqId = subItem.getAttribute('data-faq');
+                const targetCard  = document.getElementById(targetFaqId);
+
+                if (targetCard) {
+                    // Highlight sub-item
+                    setActiveSubItem(targetFaqId);
+
+                    // Ensure parent tree group is open
+                    const parentGroup = subItem.closest('.faq-tree-group');
+                    if (parentGroup) {
+                        const catId = parentGroup.getAttribute('data-category');
+                        openCategoryGroupOnly(catId);
+                    }
+
+                    // Open target card
+                    targetCard.classList.add('open');
+
+                    // Close mobile drawer on item selection
+                    if (isMobile()) {
+                        closeMobileDrawer();
+                    }
+
+                    // Scroll smoothly and accurately to target card
+                    scrollToTarget(targetCard);
+                }
+            });
+        });
+
+        // ── 7. Main Content Accordion Cards Toggle ─────────────────────
         accordionHeaders.forEach(header => {
             header.addEventListener('click', () => {
-                const card   = header.closest('.faq-accordion-card');
+                const card = header.closest('.faq-accordion-card');
                 const isOpen = card.classList.contains('open');
 
-                // Toggle card state
-                card.classList.toggle('open', !isOpen);
+                // Toggle card
+                card.classList.toggle('open');
 
                 const section = card.closest('.faq-category-section');
                 const catId   = section ? section.getAttribute('id') : null;
@@ -1151,7 +1118,6 @@
                 } else {
                     // Card was COLLAPSED
                     setActiveSubItem(null);
-                    // Check if any other cards in this category section are still open
                     if (section) {
                         const anyOpen = section.querySelector('.faq-accordion-card.open');
                         if (!anyOpen && catId) {
@@ -1163,7 +1129,7 @@
             });
         });
 
-        // ── 6. Scroll observer: auto-expand ONLY active category section 
+        // ── 8. Scroll observer: auto-expand ONLY active category section 
         const observerOptions = {
             root: null,
             rootMargin: '-20% 0px -60% 0px',
@@ -1171,6 +1137,7 @@
         };
 
         const catObserver = new IntersectionObserver((entries) => {
+            if (isProgrammaticScroll) return;
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const catId = entry.target.getAttribute('id');
@@ -1181,7 +1148,7 @@
 
         categorySections.forEach(s => catObserver.observe(s));
 
-        // ── 7. Live FAQ Search Filter ──────────────────────────────────
+        // ── 9. Live FAQ Search Filter ──────────────────────────────────
         const searchInput = document.getElementById('faqSearchInput');
         const noResults   = document.getElementById('faqNoResults');
         let searchScrollTimeout = null;
@@ -1219,12 +1186,29 @@
                 clearTimeout(searchScrollTimeout);
                 if (query !== '' && firstMatchCard) {
                     searchScrollTimeout = setTimeout(() => {
-                        firstMatchCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        scrollToTarget(firstMatchCard);
                     }, 150);
                 }
             });
         }
 
+        // ── 10. URL Hash deep link handling on initial load ────────────
+        if (window.location.hash) {
+            const hash = window.location.hash.substring(1);
+            const targetCard = document.getElementById(hash);
+            if (targetCard && targetCard.classList.contains('faq-accordion-card')) {
+                targetCard.classList.add('open');
+                setActiveSubItem(hash);
+                const section = targetCard.closest('.faq-category-section');
+                if (section) {
+                    const catId = section.getAttribute('id');
+                    openCategoryGroupOnly(catId);
+                }
+                setTimeout(() => {
+                    scrollToTarget(targetCard);
+                }, 400);
+            }
+        }
     });
 </script>
 @endpush
