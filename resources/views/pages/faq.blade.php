@@ -203,13 +203,21 @@
 
         <!-- Sticky Search Bar -->
         <div class="faq-search-wrap">
-            <div class="faq-search-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"/>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                </svg>
+            <div class="faq-search-inner">
+                <div class="faq-search-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                </div>
+                <input type="text" id="faqSearchInput" class="faq-search-input" placeholder="Search FAQs by question or topic (e.g. sign up, receipt, stock)..." aria-label="Search FAQs">
+                <button type="button" class="faq-search-clear" id="faqSearchClear" aria-label="Clear search" title="Clear search">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
             </div>
-            <input type="text" id="faqSearchInput" class="faq-search-input" placeholder="Search FAQs by question or topic (e.g. sign up, receipt, stock)..." aria-label="Search FAQs">
         </div>
 
         <!-- No Results Box -->
@@ -1148,46 +1156,185 @@
 
         categorySections.forEach(s => catObserver.observe(s));
 
-        // ── 9. Live FAQ Search Filter ──────────────────────────────────
+        // ── 9. Live FAQ Search Filter (Multi-Word Combination & Highlight) ─
         const searchInput = document.getElementById('faqSearchInput');
+        const searchClear = document.getElementById('faqSearchClear');
         const noResults   = document.getElementById('faqNoResults');
         let searchScrollTimeout = null;
 
-        if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
-                const query = e.target.value.toLowerCase().trim();
-                let totalVisible = 0;
-                let firstMatchCard = null;
+        function updateClearButton() {
+            if (!searchClear || !searchInput) return;
+            if (searchInput.value.trim().length > 0) {
+                searchClear.classList.add('visible');
+            } else {
+                searchClear.classList.remove('visible');
+            }
+        }
 
-                categorySections.forEach(section => {
-                    let sectionCount = 0;
-                    section.querySelectorAll('.faq-accordion-card').forEach(card => {
-                        const title = card.querySelector('.faq-accordion-title')?.textContent.toLowerCase() || '';
-                        const body  = card.querySelector('.faq-accordion-content')?.textContent.toLowerCase() || '';
-                        const match = query === '' || title.includes(query) || body.includes(query);
-                        card.style.display = match ? 'block' : 'none';
-                        if (match && query !== '') {
-                            card.classList.add('open');
-                            if (!firstMatchCard) firstMatchCard = card;
-                        }
-                        if (!match && query !== '') {
-                            card.classList.remove('open');
-                        }
-                        if (match) { sectionCount++; totalVisible++; }
-                    });
-                    section.style.display = (sectionCount === 0 && query !== '') ? 'none' : 'block';
+        function removeHighlights(container) {
+            const marks = container.querySelectorAll('mark.faq-search-highlight');
+            marks.forEach(mark => {
+                const parent = mark.parentNode;
+                if (parent) {
+                    parent.replaceChild(document.createTextNode(mark.textContent), mark);
+                    parent.normalize();
+                }
+            });
+        }
+
+        function highlightNode(node, regex) {
+            if (node.nodeType === Node.TEXT_NODE) {
+                const text = node.textContent;
+                if (!text || !regex.test(text)) return;
+                regex.lastIndex = 0;
+
+                const fragment = document.createDocumentFragment();
+                let lastIdx = 0;
+                text.replace(regex, (match, p1, offset) => {
+                    if (offset > lastIdx) {
+                        fragment.appendChild(document.createTextNode(text.substring(lastIdx, offset)));
+                    }
+                    const mark = document.createElement('mark');
+                    mark.className = 'faq-search-highlight';
+                    mark.textContent = match;
+                    fragment.appendChild(mark);
+                    lastIdx = offset + match.length;
                 });
 
-                if (noResults) {
-                    noResults.style.display = (totalVisible === 0 && query !== '') ? 'block' : 'none';
+                if (lastIdx < text.length) {
+                    fragment.appendChild(document.createTextNode(text.substring(lastIdx)));
                 }
 
-                // Smoothly scroll first matching result below the sticky search bar
-                clearTimeout(searchScrollTimeout);
-                if (query !== '' && firstMatchCard) {
-                    searchScrollTimeout = setTimeout(() => {
-                        scrollToTarget(firstMatchCard);
-                    }, 150);
+                node.parentNode.replaceChild(fragment, node);
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+                const tag = node.tagName.toLowerCase();
+                if (tag === 'script' || tag === 'style' || tag === 'iframe' || tag === 'svg' || tag === 'mark') {
+                    return;
+                }
+                Array.from(node.childNodes).forEach(child => highlightNode(child, regex));
+            }
+        }
+
+        function handleLiveSearch() {
+            if (!searchInput) return;
+            updateClearButton();
+            const query = searchInput.value.toLowerCase().trim();
+            // Disregard single characters; match whole words of length >= 2
+            const rawTokens = query.split(/\s+/).filter(t => t.length >= 2);
+            let totalVisible = 0;
+            let firstMatchCard = null;
+
+            // Remove existing highlights from all category sections
+            categorySections.forEach(section => {
+                removeHighlights(section);
+            });
+
+            if (rawTokens.length === 0) {
+                // Search bar cleared or single character: restore default state
+                categorySections.forEach(section => {
+                    section.style.display = 'block';
+                    section.querySelectorAll('.faq-accordion-card').forEach(card => {
+                        card.style.display = 'block';
+                    });
+                });
+                if (noResults) noResults.style.display = 'none';
+
+                // Restore sidebar visibility
+                document.querySelectorAll('.faq-tree-group').forEach(group => {
+                    group.style.display = 'block';
+                    group.querySelectorAll('.faq-tree-subitem').forEach(sub => {
+                        sub.style.display = 'flex';
+                        removeHighlights(sub);
+                    });
+                });
+                return;
+            }
+
+            // Prepare word-boundary regex for highlighting matching whole words/phrases
+            const escaped = rawTokens.map(t => t.replace(/[^a-zA-Z0-9]/g, '\$&'));
+            const highlightRegex = new RegExp('\\b(' + escaped.join('|') + ')\\b', 'gi');
+
+            // Filter content cards by whole words
+            categorySections.forEach(section => {
+                let sectionCount = 0;
+                section.querySelectorAll('.faq-accordion-card').forEach(card => {
+                    const titleEl = card.querySelector('.faq-accordion-title');
+                    const contentEl = card.querySelector('.faq-accordion-content');
+
+                    const titleText = titleEl ? titleEl.textContent : '';
+                    const contentText = contentEl ? contentEl.textContent : '';
+                    const fullText = titleText + ' ' + contentText;
+
+                    // Match whole word for every entered token
+                    const matches = rawTokens.every(token => {
+                        const tokenRegex = new RegExp('\\b' + token.replace(/[^a-zA-Z0-9]/g, '\$&') + '\\b', 'i');
+                        return tokenRegex.test(fullText);
+                    });
+
+                    if (matches) {
+                        card.style.display = 'block';
+                        card.classList.add('open');
+                        if (!firstMatchCard) firstMatchCard = card;
+                        sectionCount++;
+                        totalVisible++;
+
+                        // Highlight matching whole words
+                        if (titleEl) highlightNode(titleEl, highlightRegex);
+                        if (contentEl) highlightNode(contentEl, highlightRegex);
+                    } else {
+                        card.style.display = 'none';
+                        card.classList.remove('open');
+                    }
+                });
+                section.style.display = sectionCount > 0 ? 'block' : 'none';
+            });
+
+            // Sync sidebar categories
+            document.querySelectorAll('.faq-tree-group').forEach(group => {
+                let catMatches = 0;
+                group.querySelectorAll('.faq-tree-subitem').forEach(sub => {
+                    removeHighlights(sub);
+                    const subFaqId = sub.getAttribute('data-faq');
+                    const targetCard = document.getElementById(subFaqId);
+                    const isVisible = targetCard && targetCard.style.display !== 'none';
+                    sub.style.display = isVisible ? 'flex' : 'none';
+                    if (isVisible) {
+                        catMatches++;
+                        highlightNode(sub, highlightRegex);
+                    }
+                });
+                group.style.display = catMatches > 0 ? 'block' : 'none';
+                if (catMatches > 0) {
+                    group.classList.add('open');
+                } else {
+                    group.classList.remove('open');
+                }
+            });
+
+            if (noResults) {
+                noResults.style.display = totalVisible === 0 ? 'block' : 'none';
+            }
+
+            // Smoothly scroll to the first matching result below the sticky search bar
+            clearTimeout(searchScrollTimeout);
+            if (firstMatchCard) {
+                searchScrollTimeout = setTimeout(() => {
+                    scrollToTarget(firstMatchCard);
+                }, 200);
+            }
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', handleLiveSearch);
+            searchInput.addEventListener('search', handleLiveSearch);
+        }
+
+        if (searchClear) {
+            searchClear.addEventListener('click', () => {
+                if (searchInput) {
+                    searchInput.value = '';
+                    searchInput.focus();
+                    handleLiveSearch();
                 }
             });
         }
