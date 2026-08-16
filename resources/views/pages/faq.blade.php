@@ -997,7 +997,7 @@
             }, 800);
 
             const isMob = isMobile();
-            const headerOffset = isMob ? 190 : 166;
+            const headerOffset = isMob ? 205 : 166;
             const headerEl = element.querySelector('.faq-accordion-header') || element;
             const rect = headerEl.getBoundingClientRect();
             const targetY = rect.top + window.pageYOffset - headerOffset;
@@ -1219,8 +1219,8 @@
             if (!searchInput) return;
             updateClearButton();
             const query = searchInput.value.toLowerCase().trim();
-            // Disregard single characters; match whole words of length >= 2
-            const rawTokens = query.split(/\s+/).filter(t => t.length >= 2);
+            // Match individual characters and words/phrases in sequence
+            const rawTokens = query.split(/\s+/).filter(t => t.length > 0);
             let totalVisible = 0;
             let firstMatchCard = null;
 
@@ -1230,7 +1230,7 @@
             });
 
             if (rawTokens.length === 0) {
-                // Search bar cleared or single character: restore default state
+                // Search bar cleared: restore default state
                 categorySections.forEach(section => {
                     section.style.display = 'block';
                     section.querySelectorAll('.faq-accordion-card').forEach(card => {
@@ -1250,26 +1250,23 @@
                 return;
             }
 
-            // Prepare word-boundary regex for highlighting matching whole words/phrases
+            // Regex for highlighting exact sequential character sequences
             const escaped = rawTokens.map(t => t.replace(/[^a-zA-Z0-9]/g, '\$&'));
-            const highlightRegex = new RegExp('\\b(' + escaped.join('|') + ')\\b', 'gi');
+            const highlightRegex = new RegExp('(' + escaped.join('|') + ')', 'gi');
 
-            // Filter content cards by whole words
+            // Filter content cards by exact sequential character matches
             categorySections.forEach(section => {
                 let sectionCount = 0;
                 section.querySelectorAll('.faq-accordion-card').forEach(card => {
                     const titleEl = card.querySelector('.faq-accordion-title');
                     const contentEl = card.querySelector('.faq-accordion-content');
 
-                    const titleText = titleEl ? titleEl.textContent : '';
-                    const contentText = contentEl ? contentEl.textContent : '';
+                    const titleText = titleEl ? titleEl.textContent.toLowerCase() : '';
+                    const contentText = contentEl ? contentEl.textContent.toLowerCase() : '';
                     const fullText = titleText + ' ' + contentText;
 
-                    // Match whole word for every entered token
-                    const matches = rawTokens.every(token => {
-                        const tokenRegex = new RegExp('\\b' + token.replace(/[^a-zA-Z0-9]/g, '\$&') + '\\b', 'i');
-                        return tokenRegex.test(fullText);
-                    });
+                    // Match every token as a contiguous character sequence
+                    const matches = rawTokens.every(token => fullText.includes(token));
 
                     if (matches) {
                         card.style.display = 'block';
@@ -1278,7 +1275,7 @@
                         sectionCount++;
                         totalVisible++;
 
-                        // Highlight matching whole words
+                        // Highlight matching character sequences
                         if (titleEl) highlightNode(titleEl, highlightRegex);
                         if (contentEl) highlightNode(contentEl, highlightRegex);
                     } else {
@@ -1315,9 +1312,13 @@
                 noResults.style.display = totalVisible === 0 ? 'block' : 'none';
             }
 
-            // Smoothly scroll to the first matching result below the sticky search bar
+            // Smoothly scroll to the first matching result OR no-results box below the sticky search bar
             clearTimeout(searchScrollTimeout);
-            if (firstMatchCard) {
+            if (totalVisible === 0 && rawTokens.length > 0 && noResults) {
+                searchScrollTimeout = setTimeout(() => {
+                    scrollToTarget(noResults);
+                }, 150);
+            } else if (firstMatchCard) {
                 searchScrollTimeout = setTimeout(() => {
                     scrollToTarget(firstMatchCard);
                 }, 200);

@@ -294,6 +294,7 @@ body {
 .faq-main-content {
     flex: 1;
     min-width: 0;
+    min-height: 70vh;
 }
 
 .faq-header {
@@ -653,6 +654,8 @@ mark.faq-search-highlight,
     color: #64748b;
     font-size: 16px;
     display: none;
+    margin: 20px 0 40px 0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
 }
 
 /* Contact support box */
