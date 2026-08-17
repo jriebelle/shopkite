@@ -160,14 +160,18 @@ document.addEventListener("DOMContentLoaded", function () {
         // ── Custom "Menu" cursor pill ─────────────────────────────────────────
         const menuCursor = document.getElementById("menu-cursor");
         if (menuCursor) {
+            const isTouchOrMobile = () => window.innerWidth <= 768 || window.matchMedia("(hover: none)").matches || window.matchMedia("(pointer: coarse)").matches;
+
             // Move pill to follow the mouse precisely (fixed positioning = clientX/Y)
             menuBtn.addEventListener("mousemove", (e) => {
+                if (isTouchOrMobile()) return;
                 menuCursor.style.left = e.clientX + "px";
                 menuCursor.style.top  = e.clientY + "px";
             });
 
             // Show on enter, hide on leave
             menuBtn.addEventListener("mouseenter", () => {
+                if (isTouchOrMobile()) return;
                 menuCursor.classList.add("visible");
             });
 

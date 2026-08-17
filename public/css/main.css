@@ -276,6 +276,20 @@ a {
   transform: translate(0, 0) scale(1);
 }
 
+@media (max-width: 768px), (hover: none), (pointer: coarse) {
+  #menu-cursor,
+  #menu-cursor.visible {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  .menu-btn {
+    cursor: pointer !important;
+  }
+}
+
 .top-nav-right {
   display: flex;
   align-items: center;
@@ -412,6 +426,7 @@ a {
   right: 50px;
   /* Space for button */
   overflow: hidden;
+  font-weight: 300;
 }
 
 .top-nav-info .sub-text .marquee-text {
@@ -571,6 +586,7 @@ a {
 .welcome-text .sub-text {
   color: #6e6e6e;
   font-size: 18px;
+  font-weight: 300;
   min-height: 40px;
   margin-top: 10px;
   overflow: hidden;
@@ -578,6 +594,7 @@ a {
 
 .welcome-text .sub-text p {
   display: inline-block;
+  font-weight: 300;
   margin: 0;
 }
 
@@ -1482,7 +1499,7 @@ a {
 
 .bento-title .sub-text p {
   font-size: 18px;
-  font-weight: 200;
+  font-weight: 300;
   color: #4e4e4e;
   margin-top: 10px;
   margin-bottom: 0;
