@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Close when clicking outside
         document.addEventListener("click", (e) => {
-            if (!navDropdown.contains(e.target) && e.target !== menuBtn) {
+            if (!navDropdown.contains(e.target) && !menuBtn.contains(e.target)) {
                 navDropdown.classList.remove("open");
                 menuBtn.classList.remove("open");
                 menuBtn.setAttribute("aria-expanded", false);

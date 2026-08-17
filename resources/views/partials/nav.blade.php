@@ -20,13 +20,15 @@
         </div>
         <div class="menu-btn-wrap">
             <button class="menu-btn" id="menu-btn" aria-label="Open menu">
-                <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect class="line-1" width="20" height="2" rx="1" fill="white"/>
-                    <rect class="line-2" y="6" width="20" height="2" rx="1" fill="white"/>
-                    <rect class="line-3" y="12" width="20" height="2" rx="1" fill="white"/>
+                <svg width="20" height="10" viewBox="0 0 20 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect class="line-1" y="1" width="20" height="2" rx="1" fill="white"/>
+                    <rect class="line-2" y="7" width="20" height="2" rx="1" fill="white"/>
                 </svg>
+                <span class="menu-btn-text">Menu</span>
             </button>
             <nav class="nav-dropdown" id="nav-dropdown" aria-hidden="true">
+                <a href="{{ route('home') }}" class="nav-item {{ request()->routeIs('home') ? 'nav-active' : '' }}" data-text="Home"><span>Home</span></a>
+                <a href="{{ route('store') }}" class="nav-item {{ request()->routeIs('store', 'store.*') ? 'nav-active' : '' }}" data-text="Visit our store"><span>Visit our store</span></a>
                 <a href="{{ route('faq') }}" class="nav-item {{ request()->routeIs('faq') ? 'nav-active' : '' }}" data-text="FAQs"><span>FAQs</span></a>
                 <a href="#" class="nav-item" data-text="Contact Us" onclick="openPopupSupport(); return false;"><span>Get help from a human</span></a>
                 <a href="{{ route('ibr') }}" class="nav-item {{ request()->routeIs('ibr') ? 'nav-active' : '' }}" data-text="IBR"><span>Intelligent Business Report</span><span class="nav-item-pill">new</span></a>

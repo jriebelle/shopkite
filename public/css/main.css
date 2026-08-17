@@ -221,13 +221,29 @@ a {
   background: #ff6600;
   border: none;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 3px;
   cursor: none;
   /* native cursor hidden — replaced by #menu-cursor */
   flex-shrink: 0;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   box-shadow: 0 8px 24px rgba(255, 102, 0, 0.35);
+  padding: 0;
+}
+
+.menu-btn-text {
+  font-family: "Roboto", sans-serif;
+  font-size: 7px;
+  font-weight: 500;
+  color: #ffffff;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 /* Custom cursor pill shown when hovering over the menu button */
@@ -273,22 +289,32 @@ a {
   /* anchor for the dropdown */
 }
 
+.menu-btn svg {
+  display: block;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .menu-btn svg rect {
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
-  transform-origin: 10px 7px;
+  transform-origin: 10px 4px;
+}
+
+.menu-btn.open svg {
+  transform: translateY(3px);
 }
 
 .menu-btn.open .line-1 {
-  transform: translateY(6px) rotate(45deg);
+  transform: translateY(3px) rotate(45deg);
 }
 
 .menu-btn.open .line-2 {
-  opacity: 0;
-  transform: scaleX(0);
+  transform: translateY(-3px) rotate(-45deg);
 }
 
-.menu-btn.open .line-3 {
-  transform: translateY(-6px) rotate(-45deg);
+.menu-btn.open .menu-btn-text {
+  opacity: 0;
+  transform: translateY(2px);
+  pointer-events: none;
 }
 
 /* Floating dropdown panel */
