@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="{{ asset('css/main.css') }}?v={{ filemtime(public_path('css/main.css')) }}">
 @yield('extra_css')
 @stack('styles')
-<link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}">
+<link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}?v={{ filemtime(public_path('img/favicon.png')) }}">
 <title>@yield('title', 'ShopKite — Selling made easy')</title>
 <meta name="description" content="@yield('meta_description', 'ShopKite merchant is a simple, easy to use point of sale app for stores.')">
 <style>html.loading, html.loading body { overflow: hidden !important; touch-action: none; }</style>
