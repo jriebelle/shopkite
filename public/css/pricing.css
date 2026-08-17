@@ -899,9 +899,15 @@
         line-height: 22px;
     }
 
+    /* Hide billing toggle switcher on mobile */
+    .pricing-toggle-container {
+        display: none;
+    }
+
     .pricing-cards-grid {
         grid-template-columns: 1fr;
         max-width: 440px;
+        margin-top: 36px;
     }
 
     /* Tabbed mobile comparison table — No horizontal scrolling needed */
