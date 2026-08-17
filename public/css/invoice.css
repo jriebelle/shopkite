@@ -239,7 +239,7 @@
     margin-bottom: 14px;
 }
 
-.logo-upload-area:hover { border-color: #e65c00; background: #fff3ea; }
+.logo-upload-area:hover { border-color: #ff6600; background: #fff3ea; }
 
 .logo-upload-area input[type="file"] {
     position: absolute;

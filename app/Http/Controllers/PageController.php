@@ -70,4 +70,9 @@ class PageController extends Controller
     {
         return view('pages.faq');
     }
+
+    public function pricing()
+    {
+        return view('pages.pricing');
+    }
 }

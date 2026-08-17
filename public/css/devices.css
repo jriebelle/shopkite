@@ -566,7 +566,8 @@
 }
 
 .devices-page-subtext a:hover {
-  color: #e05500;
+  color: #ff6600;
+  filter: brightness(0.92);
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -866,7 +867,8 @@ section.devices-plugin-section {
 }
 
 .bento-cta:hover {
-  background: #e05500;
+  background: #ff6600;
+  filter: brightness(0.92);
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(255, 102, 0, 0.42);
 }

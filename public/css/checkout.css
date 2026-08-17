@@ -37,7 +37,8 @@ body:has(.checkout-area) {
 }
 
 .checkout-back-link:hover {
-    background: #e55c00;
+    background: #ff6600;
+    filter: brightness(0.92);
     transform: translateY(-1px);
     box-shadow: 0 6px 18px rgba(255, 102, 0, 0.35);
 }
@@ -601,7 +602,7 @@ select.field-error {
 }
 
 .popup-confirm-pay-btn:hover:not(:disabled) {
-    background: #e05500;
+    background: #ff6600;
     transform: translateY(-2px);
     box-shadow: 0 12px 28px rgba(255, 102, 0, 0.38);
 }
@@ -710,7 +711,7 @@ select.field-error {
 }
 
 .success-back-btn:hover {
-    background: #e05500;
+    background: #ff6600;
     transform: translateY(-2px);
     box-shadow: 0 10px 26px rgba(255, 102, 0, 0.38);
 }

@@ -29,6 +29,7 @@
             <nav class="nav-dropdown" id="nav-dropdown" aria-hidden="true">
                 <a href="{{ route('home') }}" class="nav-item {{ request()->routeIs('home') ? 'nav-active' : '' }}" data-text="Home"><span>Home</span></a>
                 <a href="{{ route('store') }}" class="nav-item {{ request()->routeIs('store', 'store.*') ? 'nav-active' : '' }}" data-text="Visit our store"><span>Visit our store</span></a>
+                <a href="{{ route('pricing') }}" class="nav-item {{ request()->routeIs('pricing') ? 'nav-active' : '' }}" data-text="Pricing"><span>Pricing</span></a>
                 <a href="{{ route('faq') }}" class="nav-item {{ request()->routeIs('faq') ? 'nav-active' : '' }}" data-text="FAQs"><span>FAQs</span></a>
                 <a href="#" class="nav-item" data-text="Contact Us" onclick="openPopupSupport(); return false;"><span>Get help from a human</span></a>
                 <a href="{{ route('ibr') }}" class="nav-item {{ request()->routeIs('ibr') ? 'nav-active' : '' }}" data-text="IBR"><span>Intelligent Business Report</span><span class="nav-item-pill">new</span></a>

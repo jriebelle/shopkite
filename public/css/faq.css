@@ -313,18 +313,21 @@ body {
 
 .faq-title {
     font-family: "Roboto", sans-serif;
-    font-size: 34px;
-    font-weight: 100;
-    color: #1a1a1a;
-    margin: 0 0 10px 0;
-    line-height: 1.2;
+    font-size: 54px;
+    font-weight: 200;
+    color: #4f4f4f;
+    margin: 0 0 12px 0;
+    line-height: 1.15;
 }
 
 .faq-subtitle {
-    font-size: 15px;
-    color: #64748b;
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+    font-weight: 200;
+    color: #4e4e4e;
     margin: 0 0 24px 0;
-    line-height: 1.6;
+    line-height: 24px;
+    max-width: 860px;
 }
 
 /* Search Bar (Sticky on scroll with backdrop blur filter) */
@@ -594,7 +597,7 @@ html {
 }
 
 .faq-accordion-content a:hover {
-    color: #e55c00;
+    color: #ff6600;
 }
 
 /* Responsive video embed wrapper */
@@ -719,7 +722,7 @@ mark.faq-search-highlight,
 }
 
 .faq-support-btn:hover {
-    background: #e05500;
+    background: #ff6600;
     transform: translateY(-2px);
     box-shadow: 0 8px 22px rgba(255, 102, 0, 0.35);
 }
