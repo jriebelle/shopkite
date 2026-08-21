@@ -1369,10 +1369,33 @@ html.sidebar-collapsed .admin-main-wrapper,
     .admin-sidebar {
         transform: translateX(-100%);
         width: 280px;
+        z-index: 100000;
+        background: #ffffff !important;
+        box-shadow: 10px 0 35px rgba(0, 0, 0, 0.18);
+        isolation: isolate;
     }
 
     .admin-sidebar.mobile-open {
         transform: translateX(0);
+    }
+
+    /* Remove blur filter completely in mobile view when admin panel/drawer is opened */
+    #adminMobileOverlay,
+    .admin-modal-backdrop,
+    .admin-media-dialog-backdrop {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: rgba(15, 23, 42, 0.45);
+        z-index: 99999;
+    }
+
+    body.admin-drawer-open {
+        overflow: hidden;
+    }
+
+    body.admin-drawer-open * {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
     }
 
     .admin-main-wrapper {
@@ -1409,9 +1432,29 @@ html.sidebar-collapsed .admin-main-wrapper,
     }
 
     .admin-filter-pills-group {
-        overflow-x: auto;
-        padding-bottom: 4px;
-        flex-wrap: nowrap;
+        display: flex;
+        flex-wrap: wrap !important;
+        gap: 8px;
+        overflow-x: visible;
+        padding-bottom: 0;
+    }
+
+    .admin-filter-pill {
+        flex: 0 0 auto;
+    }
+
+    .admin-merchant-tabs-nav {
+        display: flex;
+        flex-wrap: wrap !important;
+        gap: 6px;
+        overflow-x: visible;
+        padding-bottom: 0;
+    }
+
+    .admin-merchant-meta-pills {
+        display: flex;
+        flex-wrap: wrap !important;
+        gap: 6px;
     }
 }
 

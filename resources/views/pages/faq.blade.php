@@ -225,6 +225,50 @@
             <p>No matching questions found. Try searching with different keywords or browse the categories on the left.</p>
         </div>
 
+        <!-- ── Category Quick-Tags (Listed Above Sections, Cleanly Wrapping on Mobile) ── -->
+        <div class="faq-category-tags-wrap" aria-label="FAQ Category Navigation">
+            <a href="#getting-started" class="faq-category-tag active" data-category="getting-started">
+                <span class="faq-cat-tag-dot"></span>
+                <span>Getting Started</span>
+            </a>
+            <a href="#sales" class="faq-category-tag" data-category="sales">
+                <span class="faq-cat-tag-dot"></span>
+                <span>Sales</span>
+            </a>
+            <a href="#products" class="faq-category-tag" data-category="products">
+                <span class="faq-cat-tag-dot"></span>
+                <span>Products &amp; Inventory</span>
+            </a>
+            <a href="#customer" class="faq-category-tag" data-category="customer">
+                <span class="faq-cat-tag-dot"></span>
+                <span>Customer Management</span>
+            </a>
+            <a href="#delivery" class="faq-category-tag" data-category="delivery">
+                <span class="faq-cat-tag-dot"></span>
+                <span>Delivery &amp; Orders</span>
+            </a>
+            <a href="#supply" class="faq-category-tag" data-category="supply">
+                <span class="faq-cat-tag-dot"></span>
+                <span>Supply &amp; Restocking</span>
+            </a>
+            <a href="#expenses" class="faq-category-tag" data-category="expenses">
+                <span class="faq-cat-tag-dot"></span>
+                <span>Expenses</span>
+            </a>
+            <a href="#stores" class="faq-category-tag" data-category="stores">
+                <span class="faq-cat-tag-dot"></span>
+                <span>Stores &amp; Staff</span>
+            </a>
+            <a href="#general" class="faq-category-tag" data-category="general">
+                <span class="faq-cat-tag-dot"></span>
+                <span>General Settings</span>
+            </a>
+            <a href="#extras" class="faq-category-tag" data-category="extras">
+                <span class="faq-cat-tag-dot"></span>
+                <span>Extras &amp; App Info</span>
+            </a>
+        </div>
+
         <!-- FAQ Categories & Accordion Groups -->
         <!-- Category: Getting Started -->
         <section class="faq-category-section" id="getting-started">
@@ -969,6 +1013,13 @@
                     g.classList.remove('open');
                 }
             });
+            document.querySelectorAll('.faq-category-tag').forEach(t => {
+                if (t.getAttribute('data-category') === catId) {
+                    t.classList.add('active');
+                } else {
+                    t.classList.remove('active');
+                }
+            });
         }
 
         // ── 2. Helper: Set active sub-item highlight ───────────────────
@@ -1019,6 +1070,7 @@
                 sidebar.classList.add('mobile-open');
             }
             if (sidebarOverlay) sidebarOverlay.classList.add('active');
+            document.body.classList.add('faq-drawer-open');
             document.body.style.overflow = 'hidden';
         }
 
@@ -1028,8 +1080,25 @@
                 sidebar.classList.remove('mobile-open');
             }
             if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+            document.body.classList.remove('faq-drawer-open');
             document.body.style.overflow = '';
         }
+
+        // ── Category Tags Click -> Smooth Scroll ───────────────────────
+        const categoryTags = document.querySelectorAll('.faq-category-tag');
+        categoryTags.forEach(tag => {
+            tag.addEventListener('click', (e) => {
+                e.preventDefault();
+                const catId = tag.getAttribute('data-category');
+                const targetSection = document.getElementById(catId);
+                if (targetSection) {
+                    categoryTags.forEach(t => t.classList.remove('active'));
+                    tag.classList.add('active');
+                    openCategoryGroupOnly(catId);
+                    scrollToTarget(targetSection);
+                }
+            });
+        });
 
         if (sidebarToggle) {
             sidebarToggle.addEventListener('click', () => {

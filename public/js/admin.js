@@ -40,11 +40,24 @@ document.addEventListener('DOMContentLoaded', function () {
         mobileMenuBtn.addEventListener('click', function () {
             sidebar.classList.add('mobile-open');
             mobileOverlay.classList.add('active');
+            document.body.classList.add('admin-drawer-open');
         });
 
         mobileOverlay.addEventListener('click', function () {
             sidebar.classList.remove('mobile-open');
             mobileOverlay.classList.remove('active');
+            document.body.classList.remove('admin-drawer-open');
+        });
+
+        // Close mobile drawer when clicking navigation links
+        sidebar.querySelectorAll('.admin-nav-link').forEach(link => {
+            link.addEventListener('click', function () {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('mobile-open');
+                    mobileOverlay.classList.remove('active');
+                    document.body.classList.remove('admin-drawer-open');
+                }
+            });
         });
     }
 

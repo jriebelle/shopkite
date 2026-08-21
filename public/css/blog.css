@@ -959,13 +959,22 @@
     .blog-controls-section {
         flex-direction: column;
         align-items: stretch;
+        gap: 16px;
     }
 
     .blog-categories-list {
-        overflow-x: auto;
-        padding-bottom: 6px;
-        flex-wrap: nowrap;
-        -webkit-overflow-scrolling: touch;
+        display: flex;
+        flex-wrap: wrap !important;
+        gap: 8px;
+        overflow-x: visible;
+        padding-bottom: 0;
+        width: 100%;
+    }
+
+    .blog-category-pill {
+        font-size: 12.5px;
+        padding: 6px 14px;
+        flex: 0 0 auto;
     }
 
     .blog-featured-card {
