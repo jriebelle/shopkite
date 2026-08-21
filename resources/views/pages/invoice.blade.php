@@ -110,8 +110,7 @@
                             <div class="form-field">
                                 <label>Currency</label>
                                 <select id="inv-currency">
-                                    <option value="₦">₦ — Naira</option>
-                                    <option value="$">$ — USD</option>
+                                    <option value="₦" selected>₦ — Naira (NGN)</option>
                                     <option value="£">£ — GBP</option>
                                     <option value="€">€ — EUR</option>
                                     <option value="GH₵">GH₵ — Cedi</option>

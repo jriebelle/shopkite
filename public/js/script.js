@@ -229,15 +229,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 W = getMarqueeWidth();
             });
 
+            let marqueeRafId = null;
+            let isMarqueeVisible = true;
+
             function updateMarquee() {
-                if (!isWheeling) {
+                if (!isWheeling && isMarqueeVisible) {
                     pos += 0.5; // scroll speed (slowed down)
                     if (pos >= W) {
                         pos -= W;
                     }
                     gsap.set(container, { x: -pos });
                 }
-                requestAnimationFrame(updateMarquee);
+                if (isMarqueeVisible) {
+                    marqueeRafId = requestAnimationFrame(updateMarquee);
+                }
             }
 
             const navInfoBox = document.querySelector(".top-nav-info");
@@ -264,6 +269,24 @@ document.addEventListener("DOMContentLoaded", function () {
                         }, 800);
                     }
                 }, { passive: false });
+            }
+
+            if ('IntersectionObserver' in window) {
+                const navObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            if (!isMarqueeVisible) {
+                                isMarqueeVisible = true;
+                                cancelAnimationFrame(marqueeRafId);
+                                marqueeRafId = requestAnimationFrame(updateMarquee);
+                            }
+                        } else {
+                            isMarqueeVisible = false;
+                            cancelAnimationFrame(marqueeRafId);
+                        }
+                    });
+                }, { threshold: 0.05 });
+                navObserver.observe(navSubText);
             }
 
             updateMarquee();
@@ -335,7 +358,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     start: "top top",
                     endTrigger: ".section-3",
                     end: "top top",
-                    scrub: 1,
+                    scrub: 0.3,
                     invalidateOnRefresh: true
                 }
             });
@@ -606,7 +629,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Split text effect for Trial Section (trial-title)
-    const trialText = document.querySelector(".trial-title p");
+    const trialText = document.querySelector(".trial-title > p");
     if (trialText && document.querySelector(".trial-buttons-container")) {
         const words = trialText.textContent.trim().split(/\s+/);
         trialText.innerHTML = words.map(word => {
@@ -638,7 +661,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 trigger: ".section-2",
                 start: "top 50%", // triggers when section 2 is 50% in view
                 end: "bottom top", // ends when section 2 is completely out of view
-                scrub: 1,
+                scrub: 0.3,
                 invalidateOnRefresh: true
             }
         });
@@ -677,15 +700,22 @@ document.addEventListener("DOMContentLoaded", function () {
     // Fade out hero buttons when Section 1 is 5% out of view, and fade them in only when Section 1 is 100% in view (scrolled flush to top)
     const heroButtons = document.querySelector(".hero-buttons-container");
     if (heroButtons) {
+        let isHeroHidden = false;
         const handleScroll = () => {
             const threshold = window.innerHeight * 0.05; // 5% of viewport height
             if (window.scrollY >= threshold) {
-                gsap.to(heroButtons, { opacity: 0, pointerEvents: "none", duration: 0.3, overwrite: "auto" });
+                if (!isHeroHidden) {
+                    isHeroHidden = true;
+                    gsap.to(heroButtons, { opacity: 0, pointerEvents: "none", duration: 0.25, overwrite: "auto" });
+                }
             } else if (window.scrollY <= 2) {
-                gsap.to(heroButtons, { opacity: 1, pointerEvents: "auto", duration: 0.3, overwrite: "auto" });
+                if (isHeroHidden) {
+                    isHeroHidden = false;
+                    gsap.to(heroButtons, { opacity: 1, pointerEvents: "auto", duration: 0.25, overwrite: "auto" });
+                }
             }
         };
-        window.addEventListener("scroll", handleScroll);
+        window.addEventListener("scroll", handleScroll, { passive: true });
         handleScroll(); // execute once on load to establish correct state
     }
 
@@ -713,7 +743,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 end: "+=150%", // pin for 1.5 scroll viewports
                 pin: true,
                 pinSpacing: true,
-                scrub: 1, // scrub delay of 1s for a smoother response
+                scrub: 0.3,
                 invalidateOnRefresh: true
             }
         });
@@ -819,18 +849,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 pos: 0
             }));
 
-            // Listen to window wheel events for acceleration (proportional to each row's base speed)
-            window.addEventListener("wheel", (e) => {
-                const delta = Math.abs(e.deltaX || e.deltaY);
-                if (delta > 0) {
-                    rowStates.forEach(state => {
-                        const maxSpeed = state.base * 10;
-                        state.target = Math.min(maxSpeed, state.target + delta * 0.03);
-                    });
-                }
-            }, { passive: true });
+            let s8RafId = null;
+            let isS8Visible = false;
 
             function updateS8Marquee() {
+                if (!isS8Visible) return;
                 rowStates.forEach((state, i) => {
                     // Decay target back to base speed
                     state.target += (state.base - state.target) * 0.04;
@@ -845,10 +868,43 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (containers[1]) gsap.set(containers[1], { x: -W + rowStates[1].pos });
                 if (containers[2]) gsap.set(containers[2], { x: -rowStates[2].pos });
 
-                requestAnimationFrame(updateS8Marquee);
+                s8RafId = requestAnimationFrame(updateS8Marquee);
             }
 
-            updateS8Marquee();
+            const s8SectionEl = document.querySelector(".section-8");
+            if (s8SectionEl) {
+                // Listen to wheel acceleration on Section 8
+                s8SectionEl.addEventListener("wheel", (e) => {
+                    const delta = Math.abs(e.deltaX || e.deltaY);
+                    if (delta > 0) {
+                        rowStates.forEach(state => {
+                            const maxSpeed = state.base * 10;
+                            state.target = Math.min(maxSpeed, state.target + delta * 0.03);
+                        });
+                    }
+                }, { passive: true });
+
+                if ('IntersectionObserver' in window) {
+                    const s8Observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                if (!isS8Visible) {
+                                    isS8Visible = true;
+                                    cancelAnimationFrame(s8RafId);
+                                    s8RafId = requestAnimationFrame(updateS8Marquee);
+                                }
+                            } else {
+                                isS8Visible = false;
+                                cancelAnimationFrame(s8RafId);
+                            }
+                        });
+                    }, { threshold: 0.01 });
+                    s8Observer.observe(s8SectionEl);
+                } else {
+                    isS8Visible = true;
+                    updateS8Marquee();
+                }
+            }
         }
     }
 
@@ -930,11 +986,30 @@ document.addEventListener("DOMContentLoaded", function () {
         // Drag & Touch Gesture Handlers for Testimonials
         let isTestimonyDragging = false;
         let testimonyLastX = 0;
+        let testimonyRafId = null;
+        let isTestimonyVisible = false;
+
+        const onTestimonyPointerMove = (e) => {
+            if (isTestimonyDragging) {
+                onTestimonyDragMove(e.clientX);
+            }
+        };
+
+        const onTestimonyTouchMove = (e) => {
+            if (isTestimonyDragging && e.touches.length === 1) {
+                onTestimonyDragMove(e.touches[0].clientX);
+            }
+        };
 
         const onTestimonyDragStart = (clientX) => {
             isTestimonyDragging = true;
             testimonyLastX = clientX;
             testimonySection.style.cursor = "grabbing";
+            window.addEventListener("pointermove", onTestimonyPointerMove);
+            window.addEventListener("pointerup", onTestimonyDragEnd);
+            window.addEventListener("pointercancel", onTestimonyDragEnd);
+            window.addEventListener("touchmove", onTestimonyTouchMove, { passive: true });
+            window.addEventListener("touchend", onTestimonyDragEnd);
         };
 
         const onTestimonyDragMove = (clientX) => {
@@ -950,20 +1025,16 @@ document.addEventListener("DOMContentLoaded", function () {
             if (!isTestimonyDragging) return;
             isTestimonyDragging = false;
             testimonySection.style.cursor = "grab";
+            window.removeEventListener("pointermove", onTestimonyPointerMove);
+            window.removeEventListener("pointerup", onTestimonyDragEnd);
+            window.removeEventListener("pointercancel", onTestimonyDragEnd);
+            window.removeEventListener("touchmove", onTestimonyTouchMove);
+            window.removeEventListener("touchend", onTestimonyDragEnd);
         };
 
         testimonySection.addEventListener("pointerdown", (e) => {
             onTestimonyDragStart(e.clientX);
         });
-
-        window.addEventListener("pointermove", (e) => {
-            if (isTestimonyDragging) {
-                onTestimonyDragMove(e.clientX);
-            }
-        });
-
-        window.addEventListener("pointerup", onTestimonyDragEnd);
-        window.addEventListener("pointercancel", onTestimonyDragEnd);
 
         testimonySection.addEventListener("touchstart", (e) => {
             if (e.touches.length === 1) {
@@ -971,19 +1042,12 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }, { passive: true });
 
-        window.addEventListener("touchmove", (e) => {
-            if (isTestimonyDragging && e.touches.length === 1) {
-                onTestimonyDragMove(e.touches[0].clientX);
-            }
-        }, { passive: true });
-
-        window.addEventListener("touchend", onTestimonyDragEnd);
-
         testimonyTrack.querySelectorAll("img").forEach(img => {
             img.addEventListener("dragstart", (e) => e.preventDefault());
         });
 
         function updateCarousel() {
+            if (!isTestimonyVisible) return;
             if (!isTestimonyDragging) {
                 // When mousewheel activity occurs (scrollResumed === true), we auto-resume normal speed on mousewheel pause (stops)
                 const limitSpeed = (isHovered && !scrollResumed) ? 0 : baseSpeed;
@@ -1004,10 +1068,29 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             gsap.set(testimonyTrack, { x: -pos });
-            requestAnimationFrame(updateCarousel);
+            testimonyRafId = requestAnimationFrame(updateCarousel);
         }
 
-        updateCarousel();
+        if ('IntersectionObserver' in window) {
+            const testimonyObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (!isTestimonyVisible) {
+                            isTestimonyVisible = true;
+                            cancelAnimationFrame(testimonyRafId);
+                            testimonyRafId = requestAnimationFrame(updateCarousel);
+                        }
+                    } else {
+                        isTestimonyVisible = false;
+                        cancelAnimationFrame(testimonyRafId);
+                    }
+                });
+            }, { threshold: 0.01 });
+            testimonyObserver.observe(testimonySection);
+        } else {
+            isTestimonyVisible = true;
+            updateCarousel();
+        }
     }
 
     // Brands infinite scroll carousel with hover pause & scroll acceleration
@@ -1046,11 +1129,30 @@ document.addEventListener("DOMContentLoaded", function () {
         // Drag & Touch Gesture Handlers for Brands
         let isBrandsDragging = false;
         let brandsLastX = 0;
+        let brandsRafId = null;
+        let isBrandsVisible = false;
+
+        const onBrandsPointerMove = (e) => {
+            if (isBrandsDragging) {
+                onBrandsDragMove(e.clientX);
+            }
+        };
+
+        const onBrandsTouchMove = (e) => {
+            if (isBrandsDragging && e.touches.length === 1) {
+                onBrandsDragMove(e.touches[0].clientX);
+            }
+        };
 
         const onBrandsDragStart = (clientX) => {
             isBrandsDragging = true;
             brandsLastX = clientX;
             brandsSection.style.cursor = "grabbing";
+            window.addEventListener("pointermove", onBrandsPointerMove);
+            window.addEventListener("pointerup", onBrandsDragEnd);
+            window.addEventListener("pointercancel", onBrandsDragEnd);
+            window.addEventListener("touchmove", onBrandsTouchMove, { passive: true });
+            window.addEventListener("touchend", onBrandsDragEnd);
         };
 
         const onBrandsDragMove = (clientX) => {
@@ -1066,34 +1168,22 @@ document.addEventListener("DOMContentLoaded", function () {
             if (!isBrandsDragging) return;
             isBrandsDragging = false;
             brandsSection.style.cursor = "grab";
+            window.removeEventListener("pointermove", onBrandsPointerMove);
+            window.removeEventListener("pointerup", onBrandsDragEnd);
+            window.removeEventListener("pointercancel", onBrandsDragEnd);
+            window.removeEventListener("touchmove", onBrandsTouchMove);
+            window.removeEventListener("touchend", onBrandsDragEnd);
         };
 
         brandsSection.addEventListener("pointerdown", (e) => {
             onBrandsDragStart(e.clientX);
         });
 
-        window.addEventListener("pointermove", (e) => {
-            if (isBrandsDragging) {
-                onBrandsDragMove(e.clientX);
-            }
-        });
-
-        window.addEventListener("pointerup", onBrandsDragEnd);
-        window.addEventListener("pointercancel", onBrandsDragEnd);
-
         brandsSection.addEventListener("touchstart", (e) => {
             if (e.touches.length === 1) {
                 onBrandsDragStart(e.touches[0].clientX);
             }
         }, { passive: true });
-
-        window.addEventListener("touchmove", (e) => {
-            if (isBrandsDragging && e.touches.length === 1) {
-                onBrandsDragMove(e.touches[0].clientX);
-            }
-        }, { passive: true });
-
-        window.addEventListener("touchend", onBrandsDragEnd);
 
         brandsTrack.querySelectorAll("img").forEach(img => {
             img.addEventListener("dragstart", (e) => e.preventDefault());
@@ -1151,6 +1241,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function updateBrandsCarousel() {
+            if (!isBrandsVisible) return;
             if (!isBrandsDragging) {
                 const limitSpeed = (isHovered && !scrollResumed) ? 0 : baseSpeed;
                 targetSpeed += (limitSpeed - targetSpeed) * 0.04;
@@ -1168,10 +1259,29 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             gsap.set(brandsTrack, { x: -pos });
-            requestAnimationFrame(updateBrandsCarousel);
+            brandsRafId = requestAnimationFrame(updateBrandsCarousel);
         }
 
-        updateBrandsCarousel();
+        if ('IntersectionObserver' in window) {
+            const brandsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (!isBrandsVisible) {
+                            isBrandsVisible = true;
+                            cancelAnimationFrame(brandsRafId);
+                            brandsRafId = requestAnimationFrame(updateBrandsCarousel);
+                        }
+                    } else {
+                        isBrandsVisible = false;
+                        cancelAnimationFrame(brandsRafId);
+                    }
+                });
+            }, { threshold: 0.01 });
+            brandsObserver.observe(brandsSection);
+        } else {
+            isBrandsVisible = true;
+            updateBrandsCarousel();
+        }
     }
 
     // Media logos infinite scroll carousel with mouse wheel, mouse drag & touch swipe gestures
@@ -1234,10 +1344,30 @@ document.addEventListener("DOMContentLoaded", function () {
         }, { passive: true });
 
         // 2. Mouse Drag & Touch Swipe Gesture Handlers
+        let mediaRafId = null;
+        let isMediaVisible = false;
+
+        const onMediaPointerMove = (e) => {
+            if (isDragging) {
+                onDragMove(e.clientX);
+            }
+        };
+
+        const onMediaTouchMove = (e) => {
+            if (isDragging && e.touches.length === 1) {
+                onDragMove(e.touches[0].clientX);
+            }
+        };
+
         const onDragStart = (clientX) => {
             isDragging = true;
             lastX = clientX;
             mediaSection.style.cursor = "grabbing";
+            window.addEventListener("pointermove", onMediaPointerMove);
+            window.addEventListener("pointerup", onDragEnd);
+            window.addEventListener("pointercancel", onDragEnd);
+            window.addEventListener("touchmove", onMediaTouchMove, { passive: true });
+            window.addEventListener("touchend", onDragEnd);
         };
 
         const onDragMove = (clientX) => {
@@ -1252,21 +1382,17 @@ document.addEventListener("DOMContentLoaded", function () {
             if (!isDragging) return;
             isDragging = false;
             mediaSection.style.cursor = "grab";
+            window.removeEventListener("pointermove", onMediaPointerMove);
+            window.removeEventListener("pointerup", onDragEnd);
+            window.removeEventListener("pointercancel", onDragEnd);
+            window.removeEventListener("touchmove", onMediaTouchMove);
+            window.removeEventListener("touchend", onDragEnd);
         };
 
         // Pointer Events
         mediaSection.addEventListener("pointerdown", (e) => {
             onDragStart(e.clientX);
         });
-
-        window.addEventListener("pointermove", (e) => {
-            if (isDragging) {
-                onDragMove(e.clientX);
-            }
-        });
-
-        window.addEventListener("pointerup", onDragEnd);
-        window.addEventListener("pointercancel", onDragEnd);
 
         // Touch Events Fallback
         mediaSection.addEventListener("touchstart", (e) => {
@@ -1275,20 +1401,13 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }, { passive: true });
 
-        window.addEventListener("touchmove", (e) => {
-            if (isDragging && e.touches.length === 1) {
-                onDragMove(e.touches[0].clientX);
-            }
-        }, { passive: true });
-
-        window.addEventListener("touchend", onDragEnd);
-
         // Prevent native image dragging
         mediaTrack.querySelectorAll("img").forEach(img => {
             img.addEventListener("dragstart", (e) => e.preventDefault());
         });
 
         function updateMediaCarousel() {
+            if (!isMediaVisible) return;
             if (!isDragging) {
                 const limitSpeed = mediaIsHovered ? 0 : mediaBaseSpeed;
                 mediaTargetSpeed += (limitSpeed - mediaTargetSpeed) * 0.04;
@@ -1305,10 +1424,29 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             gsap.set(mediaTrack, { x: -mediaPos });
-            requestAnimationFrame(updateMediaCarousel);
+            mediaRafId = requestAnimationFrame(updateMediaCarousel);
         }
 
-        updateMediaCarousel();
+        if ('IntersectionObserver' in window) {
+            const mediaObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (!isMediaVisible) {
+                            isMediaVisible = true;
+                            cancelAnimationFrame(mediaRafId);
+                            mediaRafId = requestAnimationFrame(updateMediaCarousel);
+                        }
+                    } else {
+                        isMediaVisible = false;
+                        cancelAnimationFrame(mediaRafId);
+                    }
+                });
+            }, { threshold: 0.01 });
+            mediaObserver.observe(mediaSection);
+        } else {
+            isMediaVisible = true;
+            updateMediaCarousel();
+        }
     }
 });
 
@@ -1369,7 +1507,7 @@ window.addEventListener("load", () => {
                 trigger: ".bento-container",
                 start: "top 75%",
                 end: "top 20%",
-                scrub: 1,
+                scrub: 0.3,
                 invalidateOnRefresh: true
             }
         });
@@ -1383,7 +1521,7 @@ window.addEventListener("load", () => {
         });
     }
 
-    const trialText = document.querySelector(".trial-title p");
+    const trialText = document.querySelector(".trial-title > p");
     if (trialText && document.querySelector(".trial-buttons-container")) {
         const wordsEls = trialText.querySelectorAll(".word");
         gsap.set(wordsEls, { y: "110%" });
@@ -1393,7 +1531,7 @@ window.addEventListener("load", () => {
                 trigger: ".trial-title",
                 start: "top 50%",
                 end: "top 30%",
-                scrub: 1
+                scrub: 0.3
             }
         });
 

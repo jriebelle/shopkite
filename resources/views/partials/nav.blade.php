@@ -36,7 +36,7 @@
                 <a href="{{ route('invoice') }}" class="nav-item {{ request()->routeIs('invoice') ? 'nav-active' : '' }}" data-text="Invoice Generator"><span>Free Invoice Generator</span><span class="nav-item-pill">new</span></a>
                 <a href="{{ route('devices') }}" class="nav-item {{ request()->routeIs('devices') ? 'nav-active' : '' }}" data-text="Devices"><span>Recommended Devices</span></a>
                 <a href="{{ route('agent') }}" class="nav-item {{ request()->routeIs('agent', 'handbook') ? 'nav-active' : '' }}" data-text="Agent Signup"><span>Become an Agent</span></a>
-                <a href="#" class="nav-item" data-text="Blog"><span>Blog</span></a>
+                <a href="{{ route('blog.index') }}" class="nav-item {{ request()->routeIs('blog.*') ? 'nav-active' : '' }}" data-text="Blog"><span>Blog</span></a>
                 <a href="{{ route('privacy') }}" class="nav-item {{ request()->routeIs('privacy') ? 'nav-active' : '' }}" data-text="Privacy Policy"><span>Privacy Policy</span></a>
             </nav>
         </div>

@@ -17,6 +17,7 @@
             <a href="{{ route('home') }}"><img src="{{ asset('img/shopkite-logo.png') }}" alt="ShopKite Logo" class="footer-logo"></a>
         </div>
         <div class="footer-col links-col">
+            <a href="{{ route('pricing') }}">Pricing</a>
             <a href="{{ route('store') }}">Our Store</a>
             <a href="{{ route('stores.nigeria') }}">Online stores (ShopKite Market)</a>
             <a href="{{ route('ibr') }}">Business Report</a>
@@ -29,7 +30,7 @@
             <a href="#">Video Tutorial</a>
             <a href="#">Download for Android</a>
             <a href="#">Download for iOS</a>
-            <a href="#">Blog</a>
+            <a href="{{ route('blog.index') }}">Blog</a>
             <a href="#" onclick="openPopupSupport(); return false;">Get help from a human</a>
         </div>
     </div>

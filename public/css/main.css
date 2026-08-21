@@ -203,8 +203,7 @@ a {
 
 .top-nav .logo,
 .top-nav-info {
-  transition: opacity 0.5s ease, transform 0.5s ease;
-  transition-delay: 0.5s;
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
 .top-nav.nav-scrolled-down .logo,
@@ -1510,68 +1509,73 @@ a {
 }
 
 .trial-title {
-  height: 240px;
+  height: auto;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background: #ffffff;
+  padding: 80px 20px 0 20px;
 }
 
 .trial-title p {
   font-size: 54px;
   font-weight: 200;
   color: #4f4f4f;
+  margin: 0;
+  text-align: center;
+}
+
+.trial-title .sub-text p {
+  font-size: 16px;
+  font-weight: 300;
+  color: #64748b;
+  margin-top: 16px;
+  margin-bottom: 0;
+  text-align: center;
+  max-width: 680px;
+  padding: 0 20px;
+  line-height: 26px;
 }
 
 .trial-buttons-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 26px;
-  /* matches bento layout */
-  width: 90%;
-  max-width: 1000px;
-  margin: 0 auto 80px auto;
-}
-
-.trial-btn {
   display: flex;
   align-items: center;
-  gap: 24px;
-  background-color: #4f4f4f;
-  /* lighter brand-grey background */
-  padding: 45px 30px;
-  /* increased vertical padding to make them taller */
-  border-radius: 30px;
-  /* rounded corners */
-  text-decoration: none;
-  box-sizing: border-box;
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.25s ease, box-shadow 0.25s ease;
-  box-shadow: 0 10px 30px rgba(90, 90, 90, 0.05);
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  width: 90%;
+  max-width: 800px;
+  margin: 32px auto 100px auto;
 }
 
-.trial-btn:hover {
-  transform: translateY(-3px);
-  background-color: #ff6600;
-  /* brand orange on hover */
-  box-shadow: 0 15px 35px rgba(255, 102, 0, 0.25);
-}
-
-.trial-btn .btn-icon {
-  width: 44px;
-  height: 44px;
-  object-fit: contain;
-  flex-shrink: 0;
-}
-
-.trial-btn .btn-text p {
+.pricing-app-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 26px;
+  border-radius: 14px;
+  background: #000000;
   color: #ffffff;
-  /* white text */
+  text-decoration: none;
   font-family: "Roboto", sans-serif;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 1.45;
-  margin: 0;
-  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.15);
+}
+
+.pricing-app-btn:hover {
+  background: #ff6600;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(255, 102, 0, 0.35);
+  color: #ffffff;
+}
+
+.pricing-app-btn img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
 }
 
 .bento-container {
@@ -1997,9 +2001,20 @@ a {
     min-height: 600px;
   }
 
+  .trial-title p {
+    font-size: 36px;
+  }
+
   .trial-buttons-container {
-    grid-template-columns: 1fr;
-    gap: 16px;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 60px;
+  }
+
+  .trial-buttons-container .pricing-app-btn {
+    width: 80%;
+    max-width: 320px;
+    justify-content: center;
   }
 
   .footer-container {

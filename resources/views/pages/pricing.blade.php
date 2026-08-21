@@ -338,7 +338,7 @@
                         </tr>
                         <tr>
                             <td class="col-feature">
-                                <span class="pricing-matrix-feature-name">Customer CRM &amp; Owing Records</span>
+                                <span class="pricing-matrix-feature-name">Customer info &amp; Owing Records</span>
                                 <span class="pricing-matrix-feature-desc">Track debtor balances, store credits, and birthdays</span>
                             </td>
                             <td class="col-monthly"><span class="matrix-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span></td>

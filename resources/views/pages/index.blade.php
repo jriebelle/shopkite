@@ -368,19 +368,18 @@
 </div>
 <div class="trial-title">
     <p>What next? Start a free 7-Day trial now</p>
+    <div class="sub-text">
+        <p>Download ShopKite Merchant for your iPad, iPhone or iMac (Apple Silicon), or on any device that is powered by a supported Android OS.</p>
+    </div>
 </div>
 <div class="trial-buttons-container">
-    <a href="#" class="trial-btn apple-trial">
-        <img src="{{ asset('img/apple-icon.png') }}" alt="Apple Icon" class="btn-icon">
-        <div class="btn-text">
-            <p>Download ShopKite Merchant for your iPad, iPhone or iMac (Apple Silicon)</p>
-        </div>
+    <a href="#" class="pricing-app-btn">
+        <img src="{{ asset('img/apple-icon.png') }}" alt="Apple App Store">
+        <span>Download for iOS / Mac</span>
     </a>
-    <a href="#" class="trial-btn android-trial">
-        <img src="{{ asset('img/android-icon.png') }}" alt="Android Icon" class="btn-icon">
-        <div class="btn-text">
-            <p>Download ShopKite Merchant on any device that is powered by a supported Android OS</p>
-        </div>
+    <a href="#" class="pricing-app-btn">
+        <img src="{{ asset('img/android-icon.png') }}" alt="Google Play Store">
+        <span>Download for Android</span>
     </a>
 </div>
 @endsection
