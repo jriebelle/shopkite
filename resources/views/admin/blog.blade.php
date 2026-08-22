@@ -147,6 +147,7 @@
                 </div>
             @endif
         </div>
+        @include('partials.admin-pagination', ['total' => $total, 'perPage' => $perPage, 'currentPage' => $currentPage])
     </div>
 </div>
 

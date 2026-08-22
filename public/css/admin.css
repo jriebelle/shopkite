@@ -378,6 +378,7 @@ html.sidebar-collapsed .admin-sidebar .admin-nav-link:hover::after,
    ═══════════════════════════════════════════════════════════ */
 .admin-main-wrapper {
     flex: 1;
+    min-width: 0;
     margin-left: var(--admin-sidebar-width);
     display: flex;
     flex-direction: column;
@@ -518,6 +519,7 @@ html.sidebar-collapsed .admin-main-wrapper,
 .admin-content-canvas {
     padding: 32px;
     flex: 1;
+    min-width: 0;
     max-width: 1400px;
     width: 100%;
     margin: 0 auto;
@@ -922,6 +924,24 @@ html.sidebar-collapsed .admin-main-wrapper,
     font-size: 11.5px;
     font-weight: 600;
     white-space: nowrap;
+}
+
+.admin-status-toggle-btn {
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.18s ease;
+    user-select: none;
+    outline: none;
+    font-family: inherit;
+}
+
+.admin-status-toggle-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.admin-status-toggle-btn:active {
+    transform: translateY(0);
 }
 
 .badge-verified,
@@ -2703,6 +2723,691 @@ html.sidebar-collapsed .admin-main-wrapper,
     color: #dc2626;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   13. Enterprise & Vendor Leads Directory Styles
+   ═══════════════════════════════════════════════════════════ */
+.admin-copy-contact-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+}
 
+.admin-copy-contact-btn:hover {
+    background: rgba(255, 102, 0, 0.1);
+    color: #ff6600;
+    border-color: rgba(255, 102, 0, 0.3);
+}
 
+.admin-copy-contact-btn:active {
+    transform: scale(0.92);
+}
 
+/* ── Interactive Status Dropdown Select ── */
+.admin-status-select-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.admin-status-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 26px 4px 12px;
+    border-radius: 99px;
+    font-size: 11.5px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.18s ease;
+    border-width: 1px;
+    border-style: solid;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.admin-status-select:focus {
+    box-shadow: 0 0 0 2px rgba(255, 102, 0, 0.2);
+}
+
+.admin-status-select-arrow {
+    position: absolute;
+    right: 9px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    opacity: 0.7;
+    transition: transform 0.15s ease;
+}
+
+.admin-status-select.status-captured {
+    background: #fff7ed;
+    border-color: #fed7aa;
+    color: #ea580c;
+}
+
+.admin-status-select.status-contacted,
+.admin-status-select.status-b2b_prospect {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #2563eb;
+}
+
+.admin-status-select.status-high_volume {
+    background: #fefce8;
+    border-color: #fef08a;
+    color: #854d0e;
+}
+
+.admin-status-select.status-converted {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+    color: #059669;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   14. Group Action Bar, Row Action Buttons & Checkboxes
+   ═══════════════════════════════════════════════════════════ */
+.admin-group-actions-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 10px 18px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    box-shadow: var(--shadow-sm);
+    flex-wrap: wrap;
+    transition: all 0.2s ease;
+}
+
+.admin-group-actions-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.admin-group-actions-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-selected-count-badge {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--color-text-sub);
+    padding: 5px 12px;
+    background: #f8fafc;
+    border-radius: 99px;
+    border: 1px solid var(--color-border);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.admin-action-btn-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 99px;
+    font-family: var(--font-family);
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-main);
+    transition: all 0.18s ease;
+}
+
+.admin-action-btn-pill:hover:not(:disabled) {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+.admin-action-btn-pill:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    background: #f8fafc;
+    border-color: var(--color-border-light);
+    color: #94a3b8;
+}
+
+.admin-action-btn-pill.admin-action-btn-verify:not(:disabled) {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+    color: #059669;
+}
+
+.admin-action-btn-pill.admin-action-btn-verify:hover:not(:disabled) {
+    background: #d1fae5;
+    border-color: #6ee7b7;
+}
+
+.admin-action-btn-pill.admin-action-btn-delete:not(:disabled) {
+    background: #fff1f2;
+    border-color: #fecdd3;
+    color: #ef4444;
+}
+
+.admin-action-btn-pill.admin-action-btn-delete:hover:not(:disabled) {
+    background: #ffe4e6;
+    border-color: #fda4af;
+}
+
+.admin-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 5px;
+    background-color: #ffffff;
+    cursor: pointer;
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    transition: all 0.16s ease;
+    position: relative;
+    outline: none;
+    flex-shrink: 0;
+}
+
+.admin-checkbox:hover {
+    border-color: #ff6600;
+}
+
+.admin-checkbox:checked {
+    background-color: #ff6600;
+    border-color: #ff6600;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.5 8.2L6.5 11.2L12.5 4.8' stroke='%23ffffff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 12px 12px;
+}
+
+.admin-checkbox:indeterminate {
+    background-color: #ff6600;
+    border-color: #ff6600;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='4' y1='8' x2='12' y2='8' stroke='%23ffffff' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 12px 12px;
+}
+
+.admin-checkbox:focus-visible {
+    box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.2);
+    border-color: #ff6600;
+}
+
+.admin-row-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 99px;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-main);
+    font-family: var(--font-family);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    text-decoration: none;
+}
+
+.admin-row-action-btn:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+.admin-row-action-btn.btn-verify-action {
+    background: #fff7ed;
+    border-color: #fed7aa;
+    color: #ea580c;
+    font-weight: 500;
+}
+
+.admin-row-action-btn.btn-verify-action:hover {
+    background: #ffedd5;
+    border-color: #fdba74;
+}
+
+.admin-row-action-btn.btn-verified-status {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+    color: #059669;
+    font-weight: 500;
+}
+
+.admin-row-action-btn.btn-verified-status:hover {
+    background: #d1fae5;
+    border-color: #6ee7b7;
+}
+
+.admin-row-action-btn.btn-delete-action {
+    color: #94a3b8;
+    border-color: var(--color-border);
+    background: var(--color-surface);
+    padding: 5px 9px;
+    border-radius: 99px;
+}
+
+.admin-row-action-btn.btn-delete-action:hover {
+    background: #fff1f2;
+    border-color: #fecdd3;
+    color: #ef4444;
+}
+
+.admin-clear-selection-btn {
+    background: none;
+    border: none;
+    color: #64748b;
+    font-size: 12px;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: var(--font-family);
+}
+
+.admin-clear-selection-btn:hover {
+    color: #ff6600;
+}
+
+.admin-action-btn-pill.admin-action-btn-add {
+    background: #ff6600;
+    color: #ffffff;
+    border-color: #ff6600;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(255, 102, 0, 0.25);
+}
+
+.admin-action-btn-pill.admin-action-btn-add:hover {
+    background: #e65c00;
+    border-color: #e65c00;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(255, 102, 0, 0.35);
+}
+
+.admin-action-btn-pill.admin-action-btn-csv {
+    background: #f8fafc;
+    color: #334155;
+    border-color: #cbd5e1;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.admin-action-btn-pill.admin-action-btn-csv:hover {
+    background: #fff7ed;
+    border-color: #ff6600;
+    color: #ff6600;
+    transform: translateY(-1px);
+}
+
+/* CSV Dropzone Styles */
+.admin-csv-dropzone {
+    border: 2px dashed #cbd5e1;
+    border-radius: 14px;
+    padding: 30px 20px;
+    text-align: center;
+    background: #f8fafc;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.admin-csv-dropzone:hover,
+.admin-csv-dropzone.dragover {
+    border-color: #ff6600;
+    background: #fff7ed;
+}
+
+.admin-csv-dropzone-icon {
+    width: 44px;
+    height: 44px;
+    margin: 0 auto 12px;
+    border-radius: 50%;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ff6600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.admin-csv-template-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #ff6600;
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.admin-csv-template-link:hover {
+    text-decoration: underline;
+}
+
+.admin-csv-preview-box {
+    margin-top: 16px;
+    padding: 12px 14px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   15. Admin Pagination System
+   ═══════════════════════════════════════════════════════════ */
+.admin-pagination-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    border-bottom-left-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.admin-pagination-card.standalone,
+.admin-pagination-standalone {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    margin-top: 16px;
+}
+
+.admin-pagination-info {
+    font-size: 13px;
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.admin-pagination-info strong {
+    color: var(--color-text-main);
+    font-weight: 600;
+}
+
+.admin-pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.admin-pagination-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    font-family: var(--font-family);
+}
+
+.admin-pagination-btn:hover:not(:disabled):not(.disabled) {
+    background: #fff7ed;
+    border-color: #ff6600;
+    color: #ff6600;
+    transform: translateY(-1px);
+}
+
+.admin-pagination-btn.active {
+    background: #ff6600;
+    border-color: #ff6600;
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(255, 102, 0, 0.3);
+    cursor: default;
+}
+
+.admin-pagination-btn:disabled,
+.admin-pagination-btn.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    background: #f8fafc;
+    border-color: var(--color-border);
+    color: #94a3b8;
+    pointer-events: none;
+}
+
+.admin-pagination-page-size {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: #64748b;
+    margin-left: 12px;
+}
+
+.admin-pagination-select {
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--color-border);
+    font-size: 12.5px;
+    color: #334155;
+    background: #ffffff;
+    outline: none;
+    transition: all 0.15s ease;
+}
+
+.admin-pagination-select:focus {
+    outline: none;
+    border-color: #ff6600;
+    box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.12);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   STORE SALES ORDER DETAIL MODAL & RECEIPT BREAKDOWN
+   ════════════════════════════════════════════════════════════════ */
+.admin-modal-window.admin-modal-lg {
+    max-width: 820px;
+}
+
+.admin-order-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .admin-order-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.admin-order-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 16px 18px;
+}
+
+.admin-order-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.admin-order-card-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #475569;
+    margin: 0;
+}
+
+.admin-order-detail-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.admin-order-detail-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    font-size: 13px;
+    gap: 12px;
+}
+
+.admin-order-detail-label {
+    color: #64748b;
+    font-weight: 500;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.admin-order-detail-value {
+    color: #0f172a;
+    font-weight: 600;
+    text-align: right;
+    word-break: break-word;
+}
+
+.admin-order-items-wrapper {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.admin-order-items-header {
+    padding: 12px 18px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.admin-order-items-header h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+}
+
+.admin-order-items-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.admin-order-items-table th {
+    background: #fafafa;
+    color: #64748b;
+    font-size: 11.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 10px 16px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.admin-order-items-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #1e293b;
+}
+
+.admin-order-items-table tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-order-item-sku {
+    font-size: 11px;
+    font-family: monospace;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 2px;
+}
+
+.admin-order-totals-wrapper {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.admin-order-total-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13.5px;
+    color: #475569;
+}
+
+.admin-order-total-line.discount {
+    color: #ff6600;
+    font-weight: 600;
+}
+
+.admin-order-total-line.grand-total {
+    margin-top: 8px;
+    padding-top: 12px;
+    border-top: 1px dashed #cbd5e1;
+    font-size: 16px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.admin-order-total-line.grand-total .amount {
+    color: #ff6600;
+    font-size: 19px;
+}

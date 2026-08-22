@@ -141,6 +141,25 @@
                     </div>
                 </a>
 
+                <a href="{{ route('admin.enterprise') }}"
+                   class="admin-nav-link {{ request()->routeIs('admin.enterprise') ? 'active' : '' }}"
+                   data-title="Enterprise">
+                    <div class="admin-nav-link-content">
+                        <svg class="admin-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+                            <path d="M9 22v-4h6v4"></path>
+                            <path d="M8 6h.01"></path>
+                            <path d="M16 6h.01"></path>
+                            <path d="M8 10h.01"></path>
+                            <path d="M16 10h.01"></path>
+                            <path d="M8 14h.01"></path>
+                            <path d="M16 14h.01"></path>
+                        </svg>
+                        <span class="admin-nav-text">Enterprise</span>
+                    </div>
+                    <span class="admin-nav-badge" style="background:#fff7ed; color:#ea580c; border:1px solid #fed7aa; font-size:10px;">Leads</span>
+                </a>
+
                 <a href="{{ route('admin.transactions') }}"
                    class="admin-nav-link {{ request()->routeIs('admin.transactions') ? 'active' : '' }}"
                    data-title="Transactions">

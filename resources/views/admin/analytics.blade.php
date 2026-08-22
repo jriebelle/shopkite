@@ -284,7 +284,7 @@
 
         <div style="background: #fff7ed; border: 1px solid #fed7aa; border-radius: 14px; padding: 14px 18px; display: flex; align-items: center; gap: 12px;">
             <div style="width: 10px; height: 10px; border-radius: 50%; background: #ff6600; flex-shrink: 0;"></div>
-            <div style="font-size: 12.5px; color: #9a3412;">
+            <div style="font-size: 12.5px; color: #ff6600; font-weight: 500;">
                 <strong>Offline-first local engine operational:</strong> All terminal checkouts and stock deductions are recording without network dependencies.
             </div>
         </div>

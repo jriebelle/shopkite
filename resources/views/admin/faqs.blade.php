@@ -106,6 +106,7 @@
             </div>
         @endif
     </div>
+    @include('partials.admin-pagination', ['total' => $total, 'perPage' => $perPage, 'currentPage' => $currentPage, 'isStandalone' => true])
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -349,9 +350,7 @@
                     </div>
                 </div>
             </div>
-
         </div>
-
     </div>
 </div>
 

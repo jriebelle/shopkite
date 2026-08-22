@@ -638,6 +638,50 @@
             const invNum  = document.getElementById('inv-number').value.trim() || 'INV';
             const filename = `${bizName.replace(/\s+/g, '-')}-${invNum}.pdf`;
 
+            // Asynchronously capture vendor/client contact details into Enterprise directory
+            try {
+                const bizEmail   = document.getElementById('biz-email').value.trim();
+                const bizPhone   = document.getElementById('biz-phone').value.trim();
+                const clientName = document.getElementById('client-name').value.trim();
+                const clientEmail = document.getElementById('client-email').value.trim();
+                const totalAmt   = items.reduce((acc, it) => acc + (parseFloat(it.qty) || 0) * (parseFloat(it.rate) || 0), 0);
+                const csrfToken  = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+                if (bizName || bizEmail || bizPhone) {
+                    fetch('/admin/api/enterprise/capture', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+                        body: JSON.stringify({
+                            company_name: bizName,
+                            contact_person: 'Business Representative',
+                            email: bizEmail,
+                            phone: bizPhone,
+                            role: 'sender',
+                            invoice_no: invNum,
+                            amount: totalAmt,
+                            notes: `Auto-captured invoice sender via Free Invoice Generator. Billed client: ${clientName || 'N/A'}`
+                        })
+                    }).catch(() => {});
+                }
+
+                if (clientName || clientEmail) {
+                    fetch('/admin/api/enterprise/capture', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+                        body: JSON.stringify({
+                            company_name: clientName || 'Corporate Client',
+                            contact_person: 'Client Accounts Lead',
+                            email: clientEmail,
+                            phone: '',
+                            role: 'receiver',
+                            invoice_no: invNum,
+                            amount: totalAmt,
+                            notes: `Auto-captured invoice recipient via Free Invoice Generator. Invoiced by: ${bizName || 'N/A'}`
+                        })
+                    }).catch(() => {});
+                }
+            } catch(e) {}
+
             html2pdf().set({
                 margin: [10, 10, 10, 10],
                 filename,

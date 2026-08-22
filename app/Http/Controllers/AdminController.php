@@ -1430,6 +1430,398 @@ class AdminController extends Controller
     ];
 
     /**
+     * In-memory / curated dataset for Enterprise & Vendor Leads.
+     * Captures email addresses, phone numbers, company profiles, and invoice activity
+     * for vendors and companies sending or receiving Free Invoices.
+     */
+    protected static array $enterpriseLeads = [
+        [
+            'id' => 'ENT-1001',
+            'company_name' => 'Dangote Sugar Refinery Plc',
+            'contact_person' => 'Alhaji Mansur Garba',
+            'contact_role' => 'Procurement & Logistics Director',
+            'email' => 'procurement@dangotesugar.com.ng',
+            'phone' => '+234 803 451 9820',
+            'role' => 'sender',
+            'role_label' => 'Invoice Sender (Vendor)',
+            'industry' => 'FMCG & Food Processing',
+            'location' => 'Apapa Port Industrial Area, Lagos',
+            'city' => 'Lagos',
+            'state' => 'Lagos',
+            'total_invoices' => 24,
+            'total_volume' => 48500000,
+            'total_volume_formatted' => '₦48,500,000.00',
+            'latest_invoice_no' => 'INV-2026-9041',
+            'latest_invoice_date' => 'Aug 21, 2026',
+            'source' => 'Free Invoice Generator',
+            'status' => 'high_volume',
+            'status_label' => 'High-Volume B2B',
+            'created_at' => '2026-08-21 09:15:00',
+            'notes' => 'Generates weekly bulk delivery invoices for commercial distributors across the South-West region.'
+        ],
+        [
+            'id' => 'ENT-1002',
+            'company_name' => 'Nestle Nigeria Distribution Hub',
+            'contact_person' => 'Kemi Adebayo-Ojo',
+            'contact_role' => 'Regional Key Account Manager',
+            'email' => 'distrib.orders@ng.nestle.com',
+            'phone' => '+234 802 119 4001',
+            'role' => 'sender',
+            'role_label' => 'Invoice Sender (Vendor)',
+            'industry' => 'Food, Beverage & Nutrition',
+            'location' => 'Ilupeju Industrial Estate, Lagos',
+            'city' => 'Lagos',
+            'state' => 'Lagos',
+            'total_invoices' => 38,
+            'total_volume' => 64200000,
+            'total_volume_formatted' => '₦64,200,000.00',
+            'latest_invoice_no' => 'INV-2026-9038',
+            'latest_invoice_date' => 'Aug 21, 2026',
+            'source' => 'Free Invoice Generator',
+            'status' => 'converted',
+            'status_label' => 'Converted Merchant',
+            'created_at' => '2026-08-21 08:30:00',
+            'notes' => 'High-frequency supplier supplying Maggi, Milo, and Golden Morn to over 150 registered ShopKite retail stores.'
+        ],
+        [
+            'id' => 'ENT-1003',
+            'company_name' => 'Emzor Pharmaceuticals Industries Ltd',
+            'contact_person' => 'Dr. Chinedu Okafor',
+            'contact_role' => 'Wholesale Supply Lead',
+            'email' => 'hospital.supplies@emzorpharma.com',
+            'phone' => '+234 803 772 3144',
+            'role' => 'sender',
+            'role_label' => 'Invoice Sender (Vendor)',
+            'industry' => 'Pharmaceuticals & OTC Medicine',
+            'location' => 'Ajao Estate, Isolo, Lagos',
+            'city' => 'Lagos',
+            'state' => 'Lagos',
+            'total_invoices' => 19,
+            'total_volume' => 29650000,
+            'total_volume_formatted' => '₦29,650,000.00',
+            'latest_invoice_no' => 'INV-2026-9022',
+            'latest_invoice_date' => 'Aug 20, 2026',
+            'source' => 'Free Invoice Generator',
+            'status' => 'high_volume',
+            'status_label' => 'High-Volume B2B',
+            'created_at' => '2026-08-20 16:45:00',
+            'notes' => 'Issues direct invoices for wholesale paracetamol, multivitamins, and medical supplies to pharmacy merchants.'
+        ],
+        [
+            'id' => 'ENT-1004',
+            'company_name' => 'Fidson Healthcare Wholesale Division',
+            'contact_person' => 'Mrs. Toyin Balogun',
+            'contact_role' => 'Corporate Procurement Manager',
+            'email' => 'procurement@fidson.com',
+            'phone' => '+234 805 600 2210',
+            'role' => 'receiver',
+            'role_label' => 'Invoice Receiver (Client / Buyer)',
+            'industry' => 'Healthcare & Institutional Buyer',
+            'location' => 'Ikorodu Road, Obanikoro, Lagos',
+            'city' => 'Lagos',
+            'state' => 'Lagos',
+            'total_invoices' => 12,
+            'total_volume' => 18800000,
+            'total_volume_formatted' => '₦18,800,000.00',
+            'latest_invoice_no' => 'INV-2026-8995',
+            'latest_invoice_date' => 'Aug 20, 2026',
+            'source' => 'Free Invoice Recipient (Billed Client)',
+            'status' => 'contacted',
+            'status_label' => 'Contacted / Pitch Sent',
+            'created_at' => '2026-08-20 14:10:00',
+            'notes' => 'Received multiple invoices for raw packaging materials and warehousing transport. Scheduled for Enterprise POS demo.'
+        ],
+        [
+            'id' => 'ENT-1005',
+            'company_name' => 'Prime Logistics & Cold Chain Ltd',
+            'contact_person' => 'Ibrahim Danjuma',
+            'contact_role' => 'Operations & Billing Manager',
+            'email' => 'billing@primelogistics.ng',
+            'phone' => '+234 818 901 3340',
+            'role' => 'sender',
+            'role_label' => 'Invoice Sender (Vendor)',
+            'industry' => 'Haulage, Fleet & Cold Chain Logistics',
+            'location' => 'Oregun Industrial Area, Ikeja, Lagos',
+            'city' => 'Lagos',
+            'state' => 'Lagos',
+            'total_invoices' => 15,
+            'total_volume' => 14950000,
+            'total_volume_formatted' => '₦14,950,000.00',
+            'latest_invoice_no' => 'INV-2026-8971',
+            'latest_invoice_date' => 'Aug 19, 2026',
+            'source' => 'Free Invoice Generator',
+            'status' => 'b2b_prospect',
+            'status_label' => 'B2B Prospect',
+            'created_at' => '2026-08-19 11:20:00',
+            'notes' => 'Transports cold perishables for supermarket chains. Seeking automated recurring invoicing and driver receipting.'
+        ],
+        [
+            'id' => 'ENT-1006',
+            'company_name' => 'Seven-Up Bottling Co. Regional Partner',
+            'contact_person' => 'Godwin Nwachukwu',
+            'contact_role' => 'Depot Accounts Head',
+            'email' => 'ap-invoices@7updistrib.ng',
+            'phone' => '+234 803 992 5180',
+            'role' => 'receiver',
+            'role_label' => 'Invoice Receiver (Client / Buyer)',
+            'industry' => 'Beverages & Commercial Bottling',
+            'location' => 'Trans-Amadi Industrial Layout, Port Harcourt',
+            'city' => 'Port Harcourt',
+            'state' => 'Rivers',
+            'total_invoices' => 9,
+            'total_volume' => 15400000,
+            'total_volume_formatted' => '₦15,400,000.00',
+            'latest_invoice_no' => 'INV-2026-8950',
+            'latest_invoice_date' => 'Aug 19, 2026',
+            'source' => 'Free Invoice Recipient (Billed Client)',
+            'status' => 'captured',
+            'status_label' => 'Captured / New',
+            'created_at' => '2026-08-19 09:05:00',
+            'notes' => 'Corporate recipient of supplier invoices for PET preforms, crates, and warehouse forklift parts.'
+        ],
+        [
+            'id' => 'ENT-1007',
+            'company_name' => 'Mikano International Heavy Supplies',
+            'contact_person' => 'Fadi El-Hassan',
+            'contact_role' => 'Commercial Sales & Projects VP',
+            'email' => 'power.sales@mikanointernational.com',
+            'phone' => '+234 807 440 9811',
+            'role' => 'sender',
+            'role_label' => 'Invoice Sender (Vendor)',
+            'industry' => 'Power, Heavy Machinery & Steel',
+            'location' => 'Plot 34/35 Acme Road, Ogba, Ikeja, Lagos',
+            'city' => 'Lagos',
+            'state' => 'Lagos',
+            'total_invoices' => 8,
+            'total_volume' => 72100000,
+            'total_volume_formatted' => '₦72,100,000.00',
+            'latest_invoice_no' => 'INV-2026-8933',
+            'latest_invoice_date' => 'Aug 18, 2026',
+            'source' => 'Free Invoice Generator',
+            'status' => 'high_volume',
+            'status_label' => 'High-Volume B2B',
+            'created_at' => '2026-08-18 15:30:00',
+            'notes' => 'Issues generator installation & heavy equipment spare parts invoices to large commercial supermarkets.'
+        ],
+        [
+            'id' => 'ENT-1008',
+            'company_name' => 'Honeywell Flour Mills Bulk Depot',
+            'contact_person' => 'Rasheed Alade',
+            'contact_role' => 'Trade & Distribution Supervisor',
+            'email' => 'trade-invoices@honeywellflour.com',
+            'phone' => '+234 809 321 6655',
+            'role' => 'sender',
+            'role_label' => 'Invoice Sender (Vendor)',
+            'industry' => 'Grain Milling & Bakery Ingredients',
+            'location' => 'Tin Can Island Port Access Road, Lagos',
+            'city' => 'Lagos',
+            'state' => 'Lagos',
+            'total_invoices' => 22,
+            'total_volume' => 26750000,
+            'total_volume_formatted' => '₦26,750,000.00',
+            'latest_invoice_no' => 'INV-2026-8910',
+            'latest_invoice_date' => 'Aug 18, 2026',
+            'source' => 'Free Invoice Generator',
+            'status' => 'converted',
+            'status_label' => 'Converted Merchant',
+            'created_at' => '2026-08-18 13:15:00',
+            'notes' => 'Bulk flour, semolina, and wheat bran supplier for over 40 retail bakeries and grocery stores.'
+        ],
+        [
+            'id' => 'ENT-1009',
+            'company_name' => 'Golden Guinea Breweries Partner',
+            'contact_person' => 'Uchechi Kanu',
+            'contact_role' => 'Supply Chain Supervisor',
+            'email' => 'supplychain@goldenguinea.ng',
+            'phone' => '+234 802 887 1209',
+            'role' => 'receiver',
+            'role_label' => 'Invoice Receiver (Client / Buyer)',
+            'industry' => 'Brewing & Beverage Retail',
+            'location' => 'Aba Road Industrial Zone, Umuahia, Abia',
+            'city' => 'Umuahia',
+            'state' => 'Abia',
+            'total_invoices' => 7,
+            'total_volume' => 8300000,
+            'total_volume_formatted' => '₦8,300,000.00',
+            'latest_invoice_no' => 'INV-2026-8884',
+            'latest_invoice_date' => 'Aug 17, 2026',
+            'source' => 'Free Invoice Recipient (Billed Client)',
+            'status' => 'captured',
+            'status_label' => 'Captured / New',
+            'created_at' => '2026-08-17 10:40:00',
+            'notes' => 'Received maintenance invoices for brewing equipment. Interested in connecting POS system with supplier portal.'
+        ],
+        [
+            'id' => 'ENT-1010',
+            'company_name' => 'May & Baker Nigeria PLC',
+            'contact_person' => 'Folashade Adeleke',
+            'contact_role' => 'Institutional Sales Lead',
+            'email' => 'orders@may-baker.com',
+            'phone' => '+234 803 550 8821',
+            'role' => 'sender',
+            'role_label' => 'Invoice Sender (Vendor)',
+            'industry' => 'Pharmaceuticals & Health Products',
+            'location' => '3/5 Sapara Street, Industrial Estate, Ikeja',
+            'city' => 'Lagos',
+            'state' => 'Lagos',
+            'total_invoices' => 16,
+            'total_volume' => 24200000,
+            'total_volume_formatted' => '₦24,200,000.00',
+            'latest_invoice_no' => 'INV-2026-8860',
+            'latest_invoice_date' => 'Aug 17, 2026',
+            'source' => 'Free Invoice Generator',
+            'status' => 'b2b_prospect',
+            'status_label' => 'B2B Prospect',
+            'created_at' => '2026-08-17 08:50:00',
+            'notes' => 'Distributes M&B branded medications, vaccine packs, and infant formula across regional hubs.'
+        ],
+        [
+            'id' => 'ENT-1011',
+            'company_name' => 'Chi Limited Regional Depot',
+            'contact_person' => 'Emeka Ezeji',
+            'contact_role' => 'Commercial Billing Supervisor',
+            'email' => 'vendor-billing@chilimited.com',
+            'phone' => '+234 816 774 2005',
+            'role' => 'sender',
+            'role_label' => 'Invoice Sender (Vendor)',
+            'industry' => 'Fruit Juice, Dairy & Snacks',
+            'location' => '14 Chivita Avenue, Ajao Estate, Lagos',
+            'city' => 'Lagos',
+            'state' => 'Lagos',
+            'total_invoices' => 28,
+            'total_volume' => 38800000,
+            'total_volume_formatted' => '₦38,800,000.00',
+            'latest_invoice_no' => 'INV-2026-8845',
+            'latest_invoice_date' => 'Aug 16, 2026',
+            'source' => 'Free Invoice Generator',
+            'status' => 'high_volume',
+            'status_label' => 'High-Volume B2B',
+            'created_at' => '2026-08-16 14:00:00',
+            'notes' => 'Supplies Chivita, Hollandia Yoghurt, and SuperBite snacks to supermarkets and mini-marts nationwide.'
+        ],
+        [
+            'id' => 'ENT-1012',
+            'company_name' => 'Bua Foods Vendor Network',
+            'contact_person' => 'Mustapha Bello',
+            'contact_role' => 'Key Account Executive',
+            'email' => 'vendor-invoices@buafoods.com',
+            'phone' => '+234 803 124 9900',
+            'role' => 'sender',
+            'role_label' => 'Invoice Sender (Vendor)',
+            'industry' => 'Edible Oils, Pasta & Sugar',
+            'location' => 'Bua Towers, Adetokunbo Ademola, Victoria Island',
+            'city' => 'Lagos',
+            'state' => 'Lagos',
+            'total_invoices' => 31,
+            'total_volume' => 51900000,
+            'total_volume_formatted' => '₦51,900,000.00',
+            'latest_invoice_no' => 'INV-2026-8812',
+            'latest_invoice_date' => 'Aug 16, 2026',
+            'source' => 'Free Invoice Generator',
+            'status' => 'converted',
+            'status_label' => 'Converted Merchant',
+            'created_at' => '2026-08-16 11:20:00',
+            'notes' => 'Major supplier for Bua Pasta, Bua Rice, and refined sugar. Directly integrated with ShopKite inventory catalog.'
+        ],
+        [
+            'id' => 'ENT-1013',
+            'company_name' => 'Julius Berger Facility Maintenance Vendor',
+            'contact_person' => 'Engr. Segun Williams',
+            'contact_role' => 'Procurement & Subcontracting Lead',
+            'email' => 'contracts@jb-facilities.com',
+            'phone' => '+234 809 881 7420',
+            'role' => 'sender',
+            'role_label' => 'Invoice Sender (Vendor)',
+            'industry' => 'Civil Engineering, Hardware & Spares',
+            'location' => 'Utako District, Abuja FCT',
+            'city' => 'Abuja',
+            'state' => 'FCT',
+            'total_invoices' => 11,
+            'total_volume' => 35600000,
+            'total_volume_formatted' => '₦35,600,000.00',
+            'latest_invoice_no' => 'INV-2026-8790',
+            'latest_invoice_date' => 'Aug 15, 2026',
+            'source' => 'Free Invoice Generator',
+            'status' => 'contacted',
+            'status_label' => 'Contacted / Pitch Sent',
+            'created_at' => '2026-08-15 16:30:00',
+            'notes' => 'Issues commercial invoices for construction materials, site plumbing, and industrial electrical components.'
+        ],
+        [
+            'id' => 'ENT-1014',
+            'company_name' => 'Eko Supreme Resources Corp',
+            'contact_person' => 'Ngozi Nnamdi',
+            'contact_role' => 'Accounts Payable Manager',
+            'email' => 'accounts.payable@ekosupreme.com',
+            'phone' => '+234 803 331 8765',
+            'role' => 'receiver',
+            'role_label' => 'Invoice Receiver (Client / Buyer)',
+            'industry' => 'Household Cleaning & Detergents',
+            'location' => 'Agbara Industrial Estate, Ogun State',
+            'city' => 'Agbara',
+            'state' => 'Ogun',
+            'total_invoices' => 14,
+            'total_volume' => 16450000,
+            'total_volume_formatted' => '₦16,450,000.00',
+            'latest_invoice_no' => 'INV-2026-8762',
+            'latest_invoice_date' => 'Aug 15, 2026',
+            'source' => 'Free Invoice Recipient (Billed Client)',
+            'status' => 'b2b_prospect',
+            'status_label' => 'B2B Prospect',
+            'created_at' => '2026-08-15 13:45:00',
+            'notes' => 'Makers of So Klin and Supreme detergents. Corporate client receiving raw materials and packaging invoices.'
+        ],
+        [
+            'id' => 'ENT-1015',
+            'company_name' => 'Flour Mills of Nigeria Retail Hub',
+            'contact_person' => 'Suleiman Abubakar',
+            'contact_role' => 'National Retail Sales Manager',
+            'email' => 'invoices@fmnplc.com',
+            'phone' => '+234 802 990 4321',
+            'role' => 'sender',
+            'role_label' => 'Invoice Sender (Vendor)',
+            'industry' => 'Agro-Allied, Golden Penny & Feeds',
+            'location' => '1 Golden Penny Place, Wharf Road, Apapa, Lagos',
+            'city' => 'Lagos',
+            'state' => 'Lagos',
+            'total_invoices' => 26,
+            'total_volume' => 44500000,
+            'total_volume_formatted' => '₦44,500,000.00',
+            'latest_invoice_no' => 'INV-2026-8740',
+            'latest_invoice_date' => 'Aug 14, 2026',
+            'source' => 'Free Invoice Generator',
+            'status' => 'high_volume',
+            'status_label' => 'High-Volume B2B',
+            'created_at' => '2026-08-14 10:10:00',
+            'notes' => 'Supplies Golden Penny noodles, pasta, sugar, and livestock feeds to retail stores across Nigeria.'
+        ],
+        [
+            'id' => 'ENT-1016',
+            'company_name' => 'Sahara Energy Procurement Vendor',
+            'contact_person' => 'Tarebi Lawson',
+            'contact_role' => 'Vendor Relations Lead',
+            'email' => 'vendor-bills@sahara-energy.com',
+            'phone' => '+234 803 661 5400',
+            'role' => 'receiver',
+            'role_label' => 'Invoice Receiver (Client / Buyer)',
+            'industry' => 'Energy, Petroleum & Fleet Services',
+            'location' => '7A Oyster Close, Victoria Island, Lagos',
+            'city' => 'Lagos',
+            'state' => 'Lagos',
+            'total_invoices' => 10,
+            'total_volume' => 48700000,
+            'total_volume_formatted' => '₦48,700,000.00',
+            'latest_invoice_no' => 'INV-2026-8715',
+            'latest_invoice_date' => 'Aug 14, 2026',
+            'source' => 'Free Invoice Recipient (Billed Client)',
+            'status' => 'high_volume',
+            'status_label' => 'High-Volume B2B',
+            'created_at' => '2026-08-14 08:30:00',
+            'notes' => 'Corporate client receiving retail fleet fueling, office catering, and industrial safety equipment invoices.'
+        ]
+    ];
+
+    /**
      * In-memory / curated dataset for Products (SKUs uploaded to ShopKite).
      */
     protected static array $products = [
@@ -2010,15 +2402,68 @@ class AdminController extends Controller
         [
             'id' => 'ORD-9901',
             'order_number' => 'SK-ORD-10991',
+            'receipt_number' => 'RCP-2026-08819',
             'store_name' => 'MegaCare Pharmacy & Supermarket',
+            'store_location' => 'Ikeja Mall Branch, Lagos',
             'customer_name' => 'Tunde Bakare',
             'customer_phone' => '+234 802 444 1122',
+            'customer_email' => 'tunde.bakare@gmail.com',
+            'delivery_address' => 'Shop 14, Ikeja City Mall (In-Store Pickup)',
+            'sales_agent' => [
+                'name' => 'Emeka Okafor',
+                'role' => 'Lead Cashier',
+                'badge_id' => 'STF-014',
+                'terminal' => 'Sunmi POS Terminal #02'
+            ],
             'items_count' => 4,
             'items_summary' => 'Emzor Paracetamol, Peak Milk 400g, Vitamin C 1000mg',
+            'items' => [
+                [
+                    'name' => 'Peak Full Cream Milk Powder 400g Tin',
+                    'sku' => 'SKU-00192',
+                    'barcode' => '6151100010123',
+                    'category' => 'Dairy & Breakfast',
+                    'qty' => 2,
+                    'unit_price' => 4400,
+                    'unit_price_formatted' => '₦4,400.00',
+                    'line_total' => 8800,
+                    'line_total_formatted' => '₦8,800.00'
+                ],
+                [
+                    'name' => 'Emzor Paracetamol 500mg (10x10 Blister Pack)',
+                    'sku' => 'SKU-00193',
+                    'barcode' => '6151100020456',
+                    'category' => 'Pharmaceuticals & OTC',
+                    'qty' => 3,
+                    'unit_price' => 1500,
+                    'unit_price_formatted' => '₦1,500.00',
+                    'line_total' => 4500,
+                    'line_total_formatted' => '₦4,500.00'
+                ],
+                [
+                    'name' => 'Redoxon Double Action Vitamin C 1000mg Effervescent',
+                    'sku' => 'SKU-00204',
+                    'barcode' => '6151100099881',
+                    'category' => 'Health & Wellness',
+                    'qty' => 1,
+                    'unit_price' => 6200,
+                    'unit_price_formatted' => '₦6,200.00',
+                    'line_total' => 6200,
+                    'line_total_formatted' => '₦6,200.00'
+                ]
+            ],
+            'subtotal' => 19500,
+            'subtotal_formatted' => '₦19,500.00',
+            'discount' => 1000,
+            'discount_formatted' => '₦1,000.00',
+            'discount_label' => 'MegaCare Member Loyalty Discount (5%)',
+            'delivery_fee' => 0,
+            'delivery_fee_formatted' => '₦0.00 (Free Pickup)',
             'total_amount' => 18500,
             'total_formatted' => '₦18,500.00',
             'delivery_type' => 'Store Pickup',
             'payment_status' => 'Paid (Paystack)',
+            'payment_method' => 'Paystack Instant Card / QR',
             'status' => 'completed',
             'status_label' => 'Completed',
             'date' => 'Aug 18, 2026 01:15 PM'
@@ -2026,15 +2471,57 @@ class AdminController extends Controller
         [
             'id' => 'ORD-9902',
             'order_number' => 'SK-ORD-10992',
+            'receipt_number' => 'RCP-2026-08820',
             'store_name' => 'Glamour Luxury Boutique',
+            'store_location' => 'Admiralty Way, Lekki Phase 1, Lagos',
             'customer_name' => 'Zainab Danjuma',
             'customer_phone' => '+234 814 999 0088',
+            'customer_email' => 'zainab.danjuma@outlook.com',
+            'delivery_address' => 'Plot 18, Block B, Chevron Drive, Lekki, Lagos',
+            'sales_agent' => [
+                'name' => 'Folake Adebayo',
+                'role' => 'Store Stylist & Sales Executive',
+                'badge_id' => 'STF-009',
+                'terminal' => 'iPad POS Terminal #01'
+            ],
             'items_count' => 2,
             'items_summary' => 'Silk Evening Dress (Size M), Pearl Earring Set',
+            'items' => [
+                [
+                    'name' => 'Silk Evening Midi Dress (Size M / Champagne)',
+                    'sku' => 'SKU-00341',
+                    'barcode' => '6151100055214',
+                    'category' => 'Boutique Apparel',
+                    'qty' => 1,
+                    'unit_price' => 48000,
+                    'unit_price_formatted' => '₦48,000.00',
+                    'line_total' => 48000,
+                    'line_total_formatted' => '₦48,000.00'
+                ],
+                [
+                    'name' => 'Freshwater Pearl Earring & Necklace Set',
+                    'sku' => 'SKU-00342',
+                    'barcode' => '6151100055215',
+                    'category' => 'Jewellery & Accessories',
+                    'qty' => 1,
+                    'unit_price' => 19000,
+                    'unit_price_formatted' => '₦19,000.00',
+                    'line_total' => 19000,
+                    'line_total_formatted' => '₦19,000.00'
+                ]
+            ],
+            'subtotal' => 67000,
+            'subtotal_formatted' => '₦67,000.00',
+            'discount' => 3000,
+            'discount_formatted' => '₦3,000.00',
+            'discount_label' => 'Weekend Flash Sale Promo Voucher',
+            'delivery_fee' => 0,
+            'delivery_fee_formatted' => '₦0.00 (Complementary Dispatch)',
             'total_amount' => 64000,
             'total_formatted' => '₦64,000.00',
             'delivery_type' => 'Express Courier',
             'payment_status' => 'Paid (Card)',
+            'payment_method' => 'Debit Card (Moniepoint POS)',
             'status' => 'in_progress',
             'status_label' => 'In Progress',
             'date' => 'Aug 18, 2026 12:30 PM'
@@ -2042,15 +2529,57 @@ class AdminController extends Controller
         [
             'id' => 'ORD-9903',
             'order_number' => 'SK-ORD-10993',
+            'receipt_number' => 'RCP-2026-08821',
             'store_name' => 'Sahara Wholesale & Provisions',
+            'store_location' => 'Wuse II Commercial Hub, Abuja',
             'customer_name' => 'Alhaji Musa Kabir',
             'customer_phone' => '+234 803 777 5544',
+            'customer_email' => 'musa.kabir.provisions@yahoo.com',
+            'delivery_address' => 'Sahara Central Warehouse, Loading Bay 3, Abuja',
+            'sales_agent' => [
+                'name' => 'Amina Bello',
+                'role' => 'Wholesale Account Supervisor',
+                'badge_id' => 'STF-003',
+                'terminal' => 'Desktop B2B Sales Station'
+            ],
             'items_count' => 10,
             'items_summary' => '5x Golden Penny Soya Oil 5L, 5x Dangote Sugar 50kg',
+            'items' => [
+                [
+                    'name' => 'Golden Penny Pure Soya Oil 5L Can',
+                    'sku' => 'SKU-00194',
+                    'barcode' => '6151100030789',
+                    'category' => 'Cooking & Oil',
+                    'qty' => 5,
+                    'unit_price' => 14200,
+                    'unit_price_formatted' => '₦14,200.00',
+                    'line_total' => 71000,
+                    'line_total_formatted' => '₦71,000.00'
+                ],
+                [
+                    'name' => 'Dangote Granulated Sugar 50kg Heavy Bag',
+                    'sku' => 'SKU-00196',
+                    'barcode' => '6151100040992',
+                    'category' => 'Grains & Baking',
+                    'qty' => 5,
+                    'unit_price' => 84000,
+                    'unit_price_formatted' => '₦84,000.00',
+                    'line_total' => 420000,
+                    'line_total_formatted' => '₦420,000.00'
+                ]
+            ],
+            'subtotal' => 491000,
+            'subtotal_formatted' => '₦491,000.00',
+            'discount' => 1000,
+            'discount_formatted' => '₦1,000.00',
+            'discount_label' => 'B2B Wholesale Tier 1 Rebate',
+            'delivery_fee' => 0,
+            'delivery_fee_formatted' => '₦0.00 (Self-Collection)',
             'total_amount' => 490000,
             'total_formatted' => '₦490,000.00',
             'delivery_type' => 'Warehouse Pickup',
             'payment_status' => 'Paid (Bank Transfer)',
+            'payment_method' => 'Direct NIP Bank Transfer (Verified)',
             'status' => 'completed',
             'status_label' => 'Completed',
             'date' => 'Aug 17, 2026 04:45 PM'
@@ -2058,15 +2587,46 @@ class AdminController extends Controller
         [
             'id' => 'ORD-9904',
             'order_number' => 'SK-ORD-10994',
+            'receipt_number' => 'RCP-2026-08822',
             'store_name' => 'Prime Electronics & Gadgets',
+            'store_location' => 'Alaba International Market, Lagos',
             'customer_name' => 'Obinna Nnamdi',
             'customer_phone' => '+234 701 222 3311',
+            'customer_email' => 'obinna.techventures@gmail.com',
+            'delivery_address' => 'Suite 4B, Trade Fair Complex, Badagry Expressway, Lagos',
+            'sales_agent' => [
+                'name' => 'Chinedu Eze',
+                'role' => 'Hardware Sales Specialist',
+                'badge_id' => 'STF-021',
+                'terminal' => 'Mobile Merchant App'
+            ],
             'items_count' => 1,
             'items_summary' => 'Sunmi Bluetooth 58mm Thermal Printer',
+            'items' => [
+                [
+                    'name' => 'Sunmi High-Speed Bluetooth 58mm POS Receipt Printer',
+                    'sku' => 'SKU-00712',
+                    'barcode' => '6151100088712',
+                    'category' => 'Hardware & POS',
+                    'qty' => 1,
+                    'unit_price' => 40000,
+                    'unit_price_formatted' => '₦40,000.00',
+                    'line_total' => 40000,
+                    'line_total_formatted' => '₦40,000.00'
+                ]
+            ],
+            'subtotal' => 40000,
+            'subtotal_formatted' => '₦40,000.00',
+            'discount' => 2000,
+            'discount_formatted' => '₦2,000.00',
+            'discount_label' => 'First-Time Retailer Hardware Coupon',
+            'delivery_fee' => 0,
+            'delivery_fee_formatted' => '₦0.00',
             'total_amount' => 38000,
             'total_formatted' => '₦38,000.00',
             'delivery_type' => 'Standard Delivery',
             'payment_status' => 'Pending Confirmation',
+            'payment_method' => 'Pay on Delivery (POS Card / Cash)',
             'status' => 'in_progress',
             'status_label' => 'In Progress',
             'date' => 'Aug 17, 2026 01:10 PM'
@@ -2074,15 +2634,57 @@ class AdminController extends Controller
         [
             'id' => 'ORD-9905',
             'order_number' => 'SK-ORD-10995',
+            'receipt_number' => 'RCP-2026-08823',
             'store_name' => 'Lush Cosmetics & Skincare',
+            'store_location' => 'Bodija Market Hub, Ibadan',
             'customer_name' => 'Grace Effiong',
             'customer_phone' => '+234 808 666 4433',
+            'customer_email' => 'grace.effiong@gmail.com',
+            'delivery_address' => 'Flat 3, Alabata Road, Bodija, Ibadan, Oyo State',
+            'sales_agent' => [
+                'name' => 'Kemi Williams',
+                'role' => 'Store Attendant',
+                'badge_id' => 'STF-006',
+                'terminal' => 'Counter Tablet #01'
+            ],
             'items_count' => 3,
             'items_summary' => 'Organic Body Scrub, Shea Butter Lotion 250ml',
+            'items' => [
+                [
+                    'name' => 'Lekki Natural Shea Butter Cream 250ml Jar',
+                    'sku' => 'SKU-00195',
+                    'barcode' => '6151100091102',
+                    'category' => 'Beauty & Skincare',
+                    'qty' => 2,
+                    'unit_price' => 3500,
+                    'unit_price_formatted' => '₦3,500.00',
+                    'line_total' => 7000,
+                    'line_total_formatted' => '₦7,000.00'
+                ],
+                [
+                    'name' => 'Exfoliating Coffee & Cocoa Body Polish Scrub 300g',
+                    'sku' => 'SKU-00508',
+                    'barcode' => '6151100091103',
+                    'category' => 'Beauty & Skincare',
+                    'qty' => 1,
+                    'unit_price' => 7200,
+                    'unit_price_formatted' => '₦7,200.00',
+                    'line_total' => 7200,
+                    'line_total_formatted' => '₦7,200.00'
+                ]
+            ],
+            'subtotal' => 14200,
+            'subtotal_formatted' => '₦14,200.00',
+            'discount' => 0,
+            'discount_formatted' => '₦0.00',
+            'discount_label' => 'None Applied',
+            'delivery_fee' => 0,
+            'delivery_fee_formatted' => '₦0.00',
             'total_amount' => 14200,
             'total_formatted' => '₦14,200.00',
             'delivery_type' => 'Doorstep Delivery',
             'payment_status' => 'Payment Cancelled',
+            'payment_method' => 'Unpaid (Order Aborted by Buyer)',
             'status' => 'canceled',
             'status_label' => 'Canceled',
             'date' => 'Aug 16, 2026 06:20 PM'
@@ -2090,15 +2692,57 @@ class AdminController extends Controller
         [
             'id' => 'ORD-9906',
             'order_number' => 'SK-ORD-10996',
+            'receipt_number' => 'RCP-2026-08824',
             'store_name' => 'Heritage Wines & Spirits',
+            'store_location' => 'Victoria Island Lounge, Lagos',
             'customer_name' => 'Victor Adekunle',
             'customer_phone' => '+234 816 333 9922',
+            'customer_email' => 'victor.adekunle@corporatesolutions.ng',
+            'delivery_address' => 'Heritage Wines Counter, 12 Akin Adesola St, VI, Lagos',
+            'sales_agent' => [
+                'name' => 'Babajide Sanwo',
+                'role' => 'Sommelier & Floor Manager',
+                'badge_id' => 'STF-001',
+                'terminal' => 'Main Bar Terminal #01'
+            ],
             'items_count' => 2,
             'items_summary' => 'Johnnie Walker Black Label 1L, Moët & Chandon',
+            'items' => [
+                [
+                    'name' => 'Johnnie Walker Black Label Blended Scotch Whisky 1L',
+                    'sku' => 'SKU-00881',
+                    'barcode' => '5000267014203',
+                    'category' => 'Wines & Spirits',
+                    'qty' => 1,
+                    'unit_price' => 38000,
+                    'unit_price_formatted' => '₦38,000.00',
+                    'line_total' => 38000,
+                    'line_total_formatted' => '₦38,000.00'
+                ],
+                [
+                    'name' => 'Moët & Chandon Impérial Brut Champagne 750ml',
+                    'sku' => 'SKU-00882',
+                    'barcode' => '3185370000335',
+                    'category' => 'Wines & Spirits',
+                    'qty' => 1,
+                    'unit_price' => 52000,
+                    'unit_price_formatted' => '₦52,000.00',
+                    'line_total' => 52000,
+                    'line_total_formatted' => '₦52,000.00'
+                ]
+            ],
+            'subtotal' => 90000,
+            'subtotal_formatted' => '₦90,000.00',
+            'discount' => 4000,
+            'discount_formatted' => '₦4,000.00',
+            'discount_label' => 'VIP Corporate Patron Discount',
+            'delivery_fee' => 0,
+            'delivery_fee_formatted' => '₦0.00 (In-Store)',
             'total_amount' => 86000,
             'total_formatted' => '₦86,000.00',
             'delivery_type' => 'Store Pickup',
             'payment_status' => 'Refunded by Store',
+            'payment_method' => 'Reversed to Customer Account',
             'status' => 'refunded',
             'status_label' => 'Refunded',
             'date' => 'Aug 15, 2026 11:05 AM'
@@ -2180,11 +2824,22 @@ class AdminController extends Controller
             'verified' => count(array_filter(self::$products, fn($p) => $p['status'] === 'verified'))
         ];
 
+        $total = count($items);
+        $perPage = max(5, (int)$request->query('per_page', 10));
+        $page = max(1, (int)$request->query('page', 1));
+        $totalPages = max(1, (int)ceil($total / $perPage));
+        if ($page > $totalPages) $page = $totalPages;
+        $sliced = array_slice(array_values($items), ($page - 1) * $perPage, $perPage);
+
         return view('admin.products', [
-            'products' => collect($items),
+            'products' => collect($sliced),
             'selectedFilter' => $filter,
             'searchQuery' => $request->query('q', ''),
-            'counts' => $counts
+            'counts' => $counts,
+            'total' => $total,
+            'perPage' => $perPage,
+            'currentPage' => $page,
+            'totalPages' => $totalPages
         ]);
     }
 
@@ -2220,11 +2875,22 @@ class AdminController extends Controller
             'unverified' => count(array_filter($allBarcodes, fn($p) => $p['status'] === 'unverified'))
         ];
 
+        $total = count($barcodeItems);
+        $perPage = max(5, (int)$request->query('per_page', 10));
+        $page = max(1, (int)$request->query('page', 1));
+        $totalPages = max(1, (int)ceil($total / $perPage));
+        if ($page > $totalPages) $page = $totalPages;
+        $sliced = array_slice(array_values($barcodeItems), ($page - 1) * $perPage, $perPage);
+
         return view('admin.barcodes', [
-            'barcodes' => collect($barcodeItems),
+            'barcodes' => collect($sliced),
             'selectedFilter' => $filter,
             'searchQuery' => $request->query('q', ''),
-            'counts' => $counts
+            'counts' => $counts,
+            'total' => $total,
+            'perPage' => $perPage,
+            'currentPage' => $page,
+            'totalPages' => $totalPages
         ]);
     }
 
@@ -2255,11 +2921,22 @@ class AdminController extends Controller
             'unverified' => count(array_filter(self::$categories, fn($c) => $c['status'] === 'unverified'))
         ];
 
+        $total = count($items);
+        $perPage = max(5, (int)$request->query('per_page', 10));
+        $page = max(1, (int)$request->query('page', 1));
+        $totalPages = max(1, (int)ceil($total / $perPage));
+        if ($page > $totalPages) $page = $totalPages;
+        $sliced = array_slice(array_values($items), ($page - 1) * $perPage, $perPage);
+
         return view('admin.categories', [
-            'categories' => collect($items),
+            'categories' => collect($sliced),
             'selectedFilter' => $filter,
             'searchQuery' => $request->query('q', ''),
-            'counts' => $counts
+            'counts' => $counts,
+            'total' => $total,
+            'perPage' => $perPage,
+            'currentPage' => $page,
+            'totalPages' => $totalPages
         ]);
     }
 
@@ -2293,11 +2970,22 @@ class AdminController extends Controller
             'unverified' => count(array_filter(self::$manufacturers, fn($m) => $m['status'] === 'unverified'))
         ];
 
+        $total = count($items);
+        $perPage = max(5, (int)$request->query('per_page', 10));
+        $page = max(1, (int)$request->query('page', 1));
+        $totalPages = max(1, (int)ceil($total / $perPage));
+        if ($page > $totalPages) $page = $totalPages;
+        $sliced = array_slice(array_values($items), ($page - 1) * $perPage, $perPage);
+
         return view('admin.manufacturers', [
-            'manufacturers' => collect($items),
+            'manufacturers' => collect($sliced),
             'selectedFilter' => $filter,
             'searchQuery' => $request->query('q', ''),
-            'counts' => $counts
+            'counts' => $counts,
+            'total' => $total,
+            'perPage' => $perPage,
+            'currentPage' => $page,
+            'totalPages' => $totalPages
         ]);
     }
 
@@ -2325,11 +3013,22 @@ class AdminController extends Controller
 
         $categories = array_values(array_unique(array_column(self::$faqs, 'category')));
 
+        $total = count($items);
+        $perPage = max(5, (int)$request->query('per_page', 10));
+        $page = max(1, (int)$request->query('page', 1));
+        $totalPages = max(1, (int)ceil($total / $perPage));
+        if ($page > $totalPages) $page = $totalPages;
+        $sliced = array_slice(array_values($items), ($page - 1) * $perPage, $perPage);
+
         return view('admin.faqs', [
-            'faqs' => collect($items),
+            'faqs' => collect($sliced),
             'categories' => $categories,
             'selectedCategory' => $category,
-            'searchQuery' => $request->query('q', '')
+            'searchQuery' => $request->query('q', ''),
+            'total' => $total,
+            'perPage' => $perPage,
+            'currentPage' => $page,
+            'totalPages' => $totalPages
         ]);
     }
 
@@ -2364,11 +3063,22 @@ class AdminController extends Controller
             'store_order' => count(array_filter(self::$transactions, fn($t) => $t['service_type'] === 'store_order'))
         ];
 
+        $total = count($items);
+        $perPage = max(5, (int)$request->query('per_page', 10));
+        $page = max(1, (int)$request->query('page', 1));
+        $totalPages = max(1, (int)ceil($total / $perPage));
+        if ($page > $totalPages) $page = $totalPages;
+        $sliced = array_slice(array_values($items), ($page - 1) * $perPage, $perPage);
+
         return view('admin.transactions', [
-            'transactions' => collect($items),
+            'transactions' => collect($sliced),
             'selectedFilter' => $filter,
             'searchQuery' => $request->query('q', ''),
-            'counts' => $counts
+            'counts' => $counts,
+            'total' => $total,
+            'perPage' => $perPage,
+            'currentPage' => $page,
+            'totalPages' => $totalPages
         ]);
     }
 
@@ -2404,11 +3114,104 @@ class AdminController extends Controller
             'inactive' => count(array_filter(self::$merchants, fn($m) => $m['status'] === 'inactive'))
         ];
 
+        $total = count($items);
+        $perPage = max(5, (int)$request->query('per_page', 10));
+        $page = max(1, (int)$request->query('page', 1));
+        $totalPages = max(1, (int)ceil($total / $perPage));
+        if ($page > $totalPages) $page = $totalPages;
+        $sliced = array_slice(array_values($items), ($page - 1) * $perPage, $perPage);
+
         return view('admin.merchants', [
-            'merchants' => collect($items),
+            'merchants' => collect($sliced),
             'selectedFilter' => $filter,
             'searchQuery' => $request->query('q', ''),
-            'counts' => $counts
+            'counts' => $counts,
+            'total' => $total,
+            'perPage' => $perPage,
+            'currentPage' => $page,
+            'totalPages' => $totalPages
+        ]);
+    }
+
+    /**
+     * 9. Enterprise & Vendor Leads Management Page (`/admin/enterprise`)
+     * Captures email addresses, phone numbers, and company profiles of vendors
+     * and corporate clients who send or receive Free Invoices.
+     * Filters: All, Senders (Vendors), Receivers (Buyers), High Volume, Contacted, Converted.
+     */
+    public function enterprise(Request $request)
+    {
+        $filter = $request->query('filter', 'all');
+        $search = strtolower(trim($request->query('q', '')));
+
+        $items = self::$enterpriseLeads;
+
+        if ($filter === 'senders') {
+            $items = array_filter($items, fn($e) => $e['role'] === 'sender');
+        } elseif ($filter === 'receivers') {
+            $items = array_filter($items, fn($e) => $e['role'] === 'receiver');
+        } elseif ($filter === 'high_volume') {
+            $items = array_filter($items, fn($e) => $e['status'] === 'high_volume' || $e['total_volume'] >= 25000000);
+        } elseif ($filter === 'contacted') {
+            $items = array_filter($items, fn($e) => in_array($e['status'], ['contacted', 'b2b_prospect']));
+        } elseif ($filter === 'converted') {
+            $items = array_filter($items, fn($e) => $e['status'] === 'converted');
+        }
+
+        if (!empty($search)) {
+            $items = array_filter($items, function($e) use ($search) {
+                return str_contains(strtolower($e['company_name']), $search) ||
+                       str_contains(strtolower($e['contact_person']), $search) ||
+                       str_contains(strtolower($e['email']), $search) ||
+                       str_contains(strtolower($e['phone']), $search) ||
+                       str_contains(strtolower($e['latest_invoice_no']), $search) ||
+                       str_contains(strtolower($e['location']), $search) ||
+                       str_contains(strtolower($e['industry']), $search);
+            });
+        }
+
+        $allLeads = self::$enterpriseLeads;
+        $totalVolume = array_sum(array_column($allLeads, 'total_volume'));
+        $totalInvoices = array_sum(array_column($allLeads, 'total_invoices'));
+        $emailsCount = count(array_filter($allLeads, fn($e) => !empty($e['email'])));
+        $phonesCount = count(array_filter($allLeads, fn($e) => !empty($e['phone'])));
+        $highVolumeCount = count(array_filter($allLeads, fn($e) => $e['status'] === 'high_volume' || $e['total_volume'] >= 25000000));
+
+        $counts = [
+            'all' => count($allLeads),
+            'senders' => count(array_filter($allLeads, fn($e) => $e['role'] === 'sender')),
+            'receivers' => count(array_filter($allLeads, fn($e) => $e['role'] === 'receiver')),
+            'high_volume' => $highVolumeCount,
+            'contacted' => count(array_filter($allLeads, fn($e) => in_array($e['status'], ['contacted', 'b2b_prospect']))),
+            'converted' => count(array_filter($allLeads, fn($e) => $e['status'] === 'converted')),
+        ];
+
+        $kpis = [
+            'total_companies' => count($allLeads),
+            'total_emails' => $emailsCount,
+            'total_phones' => $phonesCount,
+            'total_invoices' => $totalInvoices,
+            'high_volume_prospects' => $highVolumeCount,
+            'total_volume_formatted' => '₦' . number_format($totalVolume / 1000000, 1) . 'M'
+        ];
+
+        $total = count($items);
+        $perPage = max(5, (int)$request->query('per_page', 10));
+        $page = max(1, (int)$request->query('page', 1));
+        $totalPages = max(1, (int)ceil($total / $perPage));
+        if ($page > $totalPages) $page = $totalPages;
+        $sliced = array_slice(array_values($items), ($page - 1) * $perPage, $perPage);
+
+        return view('admin.enterprise', [
+            'leads' => collect($sliced)->values(),
+            'selectedFilter' => $filter,
+            'searchQuery' => $request->query('q', ''),
+            'counts' => $counts,
+            'kpis' => $kpis,
+            'total' => $total,
+            'perPage' => $perPage,
+            'currentPage' => $page,
+            'totalPages' => $totalPages
         ]);
     }
 
@@ -2444,11 +3247,22 @@ class AdminController extends Controller
             'refunded' => count(array_filter(self::$storeSales, fn($s) => $s['status'] === 'refunded'))
         ];
 
+        $total = count($items);
+        $perPage = max(5, (int)$request->query('per_page', 10));
+        $page = max(1, (int)$request->query('page', 1));
+        $totalPages = max(1, (int)ceil($total / $perPage));
+        if ($page > $totalPages) $page = $totalPages;
+        $sliced = array_slice(array_values($items), ($page - 1) * $perPage, $perPage);
+
         return view('admin.store_sales', [
-            'storeSales' => collect($items),
+            'storeSales' => collect($sliced),
             'selectedFilter' => $filter,
             'searchQuery' => $request->query('q', ''),
-            'counts' => $counts
+            'counts' => $counts,
+            'total' => $total,
+            'perPage' => $perPage,
+            'currentPage' => $page,
+            'totalPages' => $totalPages
         ]);
     }
 
@@ -2478,11 +3292,22 @@ class AdminController extends Controller
 
         $categories = BlogController::getCategories();
 
+        $total = count($articles);
+        $perPage = max(5, (int)$request->query('per_page', 10));
+        $page = max(1, (int)$request->query('page', 1));
+        $totalPages = max(1, (int)ceil($total / $perPage));
+        if ($page > $totalPages) $page = $totalPages;
+        $sliced = array_slice(array_values($articles), ($page - 1) * $perPage, $perPage);
+
         return view('admin.blog', [
-            'articles' => collect($articles),
+            'articles' => collect($sliced),
             'categories' => $categories,
             'selectedCategory' => $category,
-            'searchQuery' => $request->query('q', '')
+            'searchQuery' => $request->query('q', ''),
+            'total' => $total,
+            'perPage' => $perPage,
+            'currentPage' => $page,
+            'totalPages' => $totalPages
         ]);
     }
 
@@ -2950,6 +3775,721 @@ class AdminController extends Controller
             'id' => $id,
             'status' => $newStatus,
             'message' => ucfirst($type) . ' status updated to ' . $newStatus . ' successfully.'
+        ]);
+    }
+
+    /**
+     * Capture a new Enterprise lead (from Free Invoice generator or manual entry).
+     */
+    public function captureEnterpriseLead(Request $request)
+    {
+        $companyName = $request->input('company_name');
+        $contactPerson = $request->input('contact_person');
+        $email = $request->input('email');
+        $phone = $request->input('phone');
+        $role = $request->input('role', 'sender');
+        $industry = $request->input('industry', 'General Commerce');
+        $location = $request->input('location', 'Nigeria');
+        $invoiceNo = $request->input('invoice_no', 'INV-' . rand(1000, 9999));
+        $invoiceAmount = (float) $request->input('amount', 0);
+        $notes = $request->input('notes', 'Auto-captured from ShopKite Free Invoice tool.');
+
+        if (empty($companyName) && empty($email) && empty($phone)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'At least a company name, email, or phone number is required.'
+            ], 422);
+        }
+
+        $newLead = [
+            'id' => 'ENT-' . rand(1020, 9999),
+            'company_name' => $companyName ?: 'Independent Vendor',
+            'contact_person' => $contactPerson ?: 'Business Representative',
+            'contact_role' => 'Managing Partner',
+            'email' => $email ?: 'N/A',
+            'phone' => $phone ?: 'N/A',
+            'role' => $role,
+            'role_label' => $role === 'sender' ? 'Invoice Sender (Vendor)' : 'Invoice Receiver (Client / Buyer)',
+            'industry' => $industry,
+            'location' => $location,
+            'city' => 'Lagos',
+            'state' => 'Lagos',
+            'total_invoices' => 1,
+            'total_volume' => $invoiceAmount,
+            'total_volume_formatted' => $invoiceAmount > 0 ? '₦' . number_format($invoiceAmount, 2) : '₦0.00',
+            'latest_invoice_no' => $invoiceNo,
+            'latest_invoice_date' => date('M d, Y'),
+            'source' => 'Free Invoice Generator (Live Capture)',
+            'status' => 'captured',
+            'status_label' => 'Captured / New',
+            'created_at' => date('Y-m-d H:i:s'),
+            'notes' => $notes
+        ];
+
+        return response()->json([
+            'success' => true,
+            'lead' => $newLead,
+            'message' => 'Enterprise contact for "' . ($companyName ?: $email) . '" captured successfully!'
+        ]);
+    }
+
+    /**
+     * Update Enterprise lead pipeline status.
+     */
+    public function updateEnterpriseLeadStatus(Request $request)
+    {
+        $id = $request->input('id');
+        $status = $request->input('status');
+
+        $statusLabels = [
+            'captured' => 'Captured / New',
+            'contacted' => 'Contacted / Pitch Sent',
+            'b2b_prospect' => 'B2B Prospect',
+            'high_volume' => 'High-Volume B2B',
+            'converted' => 'Converted Merchant'
+        ];
+
+        return response()->json([
+            'success' => true,
+            'id' => $id,
+            'status' => $status,
+            'status_label' => $statusLabels[$status] ?? ucfirst($status),
+            'message' => 'Lead status updated to ' . ($statusLabels[$status] ?? $status) . ' successfully.'
+        ]);
+    }
+
+    /**
+     * Delete an Enterprise lead record.
+     */
+    public function deleteEnterpriseLead(Request $request)
+    {
+        $id = $request->input('id');
+
+        return response()->json([
+            'success' => true,
+            'id' => $id,
+            'message' => 'Enterprise lead record ' . $id . ' removed successfully.'
+        ]);
+    }
+
+    /**
+     * Batch verify multiple products for the universal catalog.
+     */
+    public function verifyProductsBatch(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        if (empty($ids) || !is_array($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No products selected for verification.'
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'ids' => $ids,
+            'count' => count($ids),
+            'status' => 'verified',
+            'message' => count($ids) . (count($ids) === 1 ? ' product' : ' products') . ' verified successfully for the universal catalog.'
+        ]);
+    }
+
+    /**
+     * Batch unverify products (return to merchant-only status).
+     */
+    public function unverifyProductsBatch(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        $id = $request->input('id');
+        if (!empty($id)) {
+            $ids = [$id];
+        }
+
+        if (empty($ids) || !is_array($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No products selected to unverify.'
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'ids' => $ids,
+            'count' => count($ids),
+            'status' => 'unverified',
+            'message' => count($ids) . (count($ids) === 1 ? ' product' : ' products') . ' unverified successfully (moved to merchant-only status).'
+        ]);
+    }
+
+    /**
+     * Delete a single product or batch of products.
+     */
+    public function deleteProduct(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        $id = $request->input('id');
+
+        if (!empty($id)) {
+            $ids = [$id];
+        }
+
+        if (empty($ids) || !is_array($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No products specified for deletion.'
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'ids' => $ids,
+            'count' => count($ids),
+            'message' => count($ids) . (count($ids) === 1 ? ' product' : ' products') . ' deleted successfully.'
+        ]);
+    }
+
+    /**
+     * Update product details (Name, Category, Manufacturer, Prices, Barcode).
+     */
+    public function updateProduct(Request $request)
+    {
+        $id = $request->input('id');
+        $name = $request->input('name');
+        $category = $request->input('category');
+        $manufacturer = $request->input('manufacturer');
+        $barcode = $request->input('barcode');
+        $costPrice = $request->input('cost_price');
+        $sellingPrice = $request->input('selling_price');
+        $status = $request->input('status', 'verified');
+
+        if (empty($id) || empty($name)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product ID and Name are required.'
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'product' => [
+                'id' => $id,
+                'name' => $name,
+                'category' => $category,
+                'manufacturer' => $manufacturer,
+                'barcode' => $barcode,
+                'cost_price' => $costPrice,
+                'selling_price' => $sellingPrice,
+                'status' => $status,
+                'status_label' => ucfirst($status)
+            ],
+            'message' => 'Product ' . $name . ' updated successfully.'
+        ]);
+    }
+
+    /**
+     * Batch verify barcodes.
+     */
+    public function verifyBarcodesBatch(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        if (empty($ids) || !is_array($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No barcodes selected for verification.'
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'ids' => $ids,
+            'count' => count($ids),
+            'status' => 'verified',
+            'message' => count($ids) . (count($ids) === 1 ? ' barcode' : ' barcodes') . ' verified successfully for the master catalog.'
+        ]);
+    }
+
+    /**
+     * Batch unverify barcodes.
+     */
+    public function unverifyBarcodesBatch(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        $id = $request->input('id');
+        if (!empty($id)) {
+            $ids = [$id];
+        }
+
+        if (empty($ids) || !is_array($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No barcodes selected to unverify.'
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'ids' => $ids,
+            'count' => count($ids),
+            'status' => 'unverified',
+            'message' => count($ids) . (count($ids) === 1 ? ' barcode' : ' barcodes') . ' unverified successfully.'
+        ]);
+    }
+
+    /**
+     * Delete barcode registry items.
+     */
+    public function deleteBarcode(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        $id = $request->input('id');
+        if (!empty($id)) {
+            $ids = [$id];
+        }
+
+        if (empty($ids) || !is_array($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No barcodes specified for deletion.'
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'ids' => $ids,
+            'count' => count($ids),
+            'message' => count($ids) . (count($ids) === 1 ? ' barcode' : ' barcodes') . ' deleted from registry.'
+        ]);
+    }
+
+    /**
+     * Update barcode registry item details.
+     */
+    public function updateBarcode(Request $request)
+    {
+        $id = $request->input('id');
+        $name = $request->input('name');
+        $barcode = $request->input('barcode');
+        $manufacturer = $request->input('manufacturer');
+        $category = $request->input('category');
+        $status = $request->input('status', 'verified');
+
+        if (empty($id) || empty($name) || empty($barcode)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Barcode, Product Title, and ID are required.'
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'barcode' => [
+                'id' => $id,
+                'name' => $name,
+                'barcode' => $barcode,
+                'manufacturer' => $manufacturer,
+                'category' => $category,
+                'status' => $status,
+                'status_label' => ucfirst($status)
+            ],
+            'message' => 'Barcode ' . $barcode . ' updated successfully.'
+        ]);
+    }
+
+    /**
+     * Batch verify categories.
+     */
+    public function verifyCategoriesBatch(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        if (empty($ids) || !is_array($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No categories selected for verification.'
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'ids' => $ids,
+            'count' => count($ids),
+            'status' => 'verified',
+            'message' => count($ids) . (count($ids) === 1 ? ' category' : ' categories') . ' verified successfully.'
+        ]);
+    }
+
+    /**
+     * Batch unverify categories.
+     */
+    public function unverifyCategoriesBatch(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        $id = $request->input('id');
+        if (!empty($id)) {
+            $ids = [$id];
+        }
+
+        if (empty($ids) || !is_array($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No categories selected to unverify.'
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'ids' => $ids,
+            'count' => count($ids),
+            'status' => 'unverified',
+            'message' => count($ids) . (count($ids) === 1 ? ' category' : ' categories') . ' unverified successfully.'
+        ]);
+    }
+
+    /**
+     * Delete categories.
+     */
+    public function deleteCategory(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        $id = $request->input('id');
+        if (!empty($id)) {
+            $ids = [$id];
+        }
+
+        if (empty($ids) || !is_array($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No categories specified for deletion.'
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'ids' => $ids,
+            'count' => count($ids),
+            'message' => count($ids) . (count($ids) === 1 ? ' category' : ' categories') . ' deleted.'
+        ]);
+    }
+
+    /**
+     * Update category details.
+     */
+    public function updateCategory(Request $request)
+    {
+        $id = $request->input('id');
+        $name = $request->input('name');
+        $slug = $request->input('slug');
+        $status = $request->input('status', 'verified');
+
+        if (empty($id) || empty($name)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Category ID and Name are required.'
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'category' => [
+                'id' => $id,
+                'name' => $name,
+                'slug' => $slug ?: \Illuminate\Support\Str::slug($name),
+                'status' => $status,
+                'status_label' => ucfirst($status)
+            ],
+            'message' => 'Category ' . $name . ' updated successfully.'
+        ]);
+    }
+
+    /**
+     * Batch verify manufacturers.
+     */
+    public function verifyManufacturersBatch(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        if (empty($ids) || !is_array($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No manufacturers selected for verification.'
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'ids' => $ids,
+            'count' => count($ids),
+            'status' => 'verified',
+            'message' => count($ids) . (count($ids) === 1 ? ' manufacturer' : ' manufacturers') . ' verified successfully.'
+        ]);
+    }
+
+    /**
+     * Batch unverify manufacturers.
+     */
+    public function unverifyManufacturersBatch(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        $id = $request->input('id');
+        if (!empty($id)) {
+            $ids = [$id];
+        }
+
+        if (empty($ids) || !is_array($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No manufacturers selected to unverify.'
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'ids' => $ids,
+            'count' => count($ids),
+            'status' => 'unverified',
+            'message' => count($ids) . (count($ids) === 1 ? ' manufacturer' : ' manufacturers') . ' unverified successfully.'
+        ]);
+    }
+
+    /**
+     * Delete manufacturers.
+     */
+    public function deleteManufacturer(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        $id = $request->input('id');
+        if (!empty($id)) {
+            $ids = [$id];
+        }
+
+        if (empty($ids) || !is_array($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No manufacturers specified for deletion.'
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'ids' => $ids,
+            'count' => count($ids),
+            'message' => count($ids) . (count($ids) === 1 ? ' manufacturer' : ' manufacturers') . ' deleted.'
+        ]);
+    }
+
+    /**
+     * Update manufacturer details.
+     */
+    public function updateManufacturer(Request $request)
+    {
+        $id = $request->input('id');
+        $name = $request->input('name');
+        $country = $request->input('country');
+        $contact = $request->input('contact');
+        $status = $request->input('status', 'verified');
+
+        if (empty($id) || empty($name)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Manufacturer ID and Name are required.'
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'manufacturer' => [
+                'id' => $id,
+                'name' => $name,
+                'country' => $country,
+                'contact' => $contact,
+                'status' => $status,
+                'status_label' => ucfirst($status)
+            ],
+            'message' => 'Manufacturer ' . $name . ' updated successfully.'
+        ]);
+    }
+
+    /**
+     * Create a new Product SKU.
+     */
+    public function createProduct(Request $request)
+    {
+        $name = trim($request->input('name', ''));
+        if (empty($name)) {
+            return response()->json(['success' => false, 'message' => 'Product title is required.'], 422);
+        }
+
+        $id = 'SKU-' . rand(10000, 99999);
+        $barcode = trim($request->input('barcode', ''));
+        $category = trim($request->input('category', 'General Grocery'));
+        $manufacturer = trim($request->input('manufacturer', 'Official Brand'));
+        $costPrice = (float) $request->input('cost_price', 0);
+        $sellingPrice = (float) $request->input('selling_price', 0);
+        $status = $request->input('status', 'verified');
+
+        $newProduct = [
+            'id' => $id,
+            'name' => $name,
+            'category' => $category,
+            'manufacturer' => $manufacturer,
+            'barcode' => $barcode ?: (string) rand(6150000000000, 6159999999999),
+            'has_barcode' => !empty($barcode) || true,
+            'cost_price' => $costPrice,
+            'selling_price' => $sellingPrice,
+            'status' => $status,
+            'status_label' => ucfirst($status)
+        ];
+
+        return response()->json([
+            'success' => true,
+            'product' => $newProduct,
+            'message' => 'Product "' . $name . '" created successfully with ID ' . $id . '.'
+        ]);
+    }
+
+    /**
+     * Import Product SKUs via CSV.
+     */
+    public function importProductsCsv(Request $request)
+    {
+        $importedCount = rand(8, 25);
+        return response()->json([
+            'success' => true,
+            'count' => $importedCount,
+            'message' => 'Successfully imported ' . $importedCount . ' products into the master catalog.'
+        ]);
+    }
+
+    /**
+     * Create a new Barcode Registry item.
+     */
+    public function createBarcode(Request $request)
+    {
+        $barcode = trim($request->input('barcode', ''));
+        $name = trim($request->input('name', ''));
+        if (empty($barcode) || empty($name)) {
+            return response()->json(['success' => false, 'message' => 'Barcode number and Product name are required.'], 422);
+        }
+
+        $id = 'SKU-' . rand(10000, 99999);
+        $category = trim($request->input('category', 'Packaged Goods'));
+        $manufacturer = trim($request->input('manufacturer', 'Official Producer'));
+        $status = $request->input('status', 'verified');
+
+        $newBarcode = [
+            'id' => $id,
+            'barcode' => $barcode,
+            'name' => $name,
+            'category' => $category,
+            'manufacturer' => $manufacturer,
+            'status' => $status,
+            'status_label' => ucfirst($status)
+        ];
+
+        return response()->json([
+            'success' => true,
+            'barcode' => $newBarcode,
+            'message' => 'Barcode ' . $barcode . ' for "' . $name . '" added to master registry.'
+        ]);
+    }
+
+    /**
+     * Import Barcode Registry items via CSV.
+     */
+    public function importBarcodesCsv(Request $request)
+    {
+        $importedCount = rand(12, 35);
+        return response()->json([
+            'success' => true,
+            'count' => $importedCount,
+            'message' => 'Successfully registered ' . $importedCount . ' barcodes in the universal scanner database.'
+        ]);
+    }
+
+    /**
+     * Create a new Category.
+     */
+    public function createCategory(Request $request)
+    {
+        $name = trim($request->input('name', ''));
+        if (empty($name)) {
+            return response()->json(['success' => false, 'message' => 'Category name is required.'], 422);
+        }
+
+        $id = rand(100, 999);
+        $slug = trim($request->input('slug', '')) ?: \Illuminate\Support\Str::slug($name);
+        $status = $request->input('status', 'verified');
+
+        $newCategory = [
+            'id' => $id,
+            'name' => $name,
+            'slug' => $slug,
+            'sku_count' => rand(150, 2400),
+            'merchants_count' => rand(20, 150),
+            'status' => $status,
+            'status_label' => ucfirst($status)
+        ];
+
+        return response()->json([
+            'success' => true,
+            'category' => $newCategory,
+            'message' => 'Category "' . $name . '" created successfully.'
+        ]);
+    }
+
+    /**
+     * Import Categories via CSV.
+     */
+    public function importCategoriesCsv(Request $request)
+    {
+        $importedCount = rand(4, 12);
+        return response()->json([
+            'success' => true,
+            'count' => $importedCount,
+            'message' => 'Successfully imported ' . $importedCount . ' retail categories.'
+        ]);
+    }
+
+    /**
+     * Create a new Manufacturer.
+     */
+    public function createManufacturer(Request $request)
+    {
+        $name = trim($request->input('name', ''));
+        if (empty($name)) {
+            return response()->json(['success' => false, 'message' => 'Manufacturer name is required.'], 422);
+        }
+
+        $id = rand(10, 99);
+        $country = trim($request->input('country', 'Nigeria'));
+        $contact = trim($request->input('contact', 'contact@' . \Illuminate\Support\Str::slug($name) . '.com'));
+        $status = $request->input('status', 'verified');
+
+        $newManufacturer = [
+            'id' => $id,
+            'name' => $name,
+            'country' => $country,
+            'total_products' => rand(10, 180),
+            'contact' => $contact,
+            'status' => $status,
+            'status_label' => ucfirst($status)
+        ];
+
+        return response()->json([
+            'success' => true,
+            'manufacturer' => $newManufacturer,
+            'message' => 'Manufacturer "' . $name . '" added to brand registry.'
+        ]);
+    }
+
+    /**
+     * Import Manufacturers via CSV.
+     */
+    public function importManufacturersCsv(Request $request)
+    {
+        $importedCount = rand(5, 15);
+        return response()->json([
+            'success' => true,
+            'count' => $importedCount,
+            'message' => 'Successfully imported ' . $importedCount . ' brand manufacturers.'
         ]);
     }
 }
