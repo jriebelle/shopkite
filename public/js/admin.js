@@ -133,7 +133,37 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     });
+
+    // 5. Global handler for admin pagination rows-per-page dropdowns
+    document.addEventListener('change', function (e) {
+        if (e.target && e.target.classList.contains('admin-pagination-select')) {
+            changeAdminPaginationRows(e.target.value);
+        }
+    });
 });
+
+// Global pagination row-size changer
+function changeAdminPaginationRows(val) {
+    try {
+        const url = new URL(window.location.href);
+        url.searchParams.set('per_page', val);
+        url.searchParams.set('page', '1');
+        window.location.href = url.toString();
+    } catch(e) {
+        let href = window.location.href;
+        if (href.indexOf('per_page=') > -1) {
+            href = href.replace(/per_page=\d+/, 'per_page=' + encodeURIComponent(val));
+        } else {
+            href += (href.indexOf('?') > -1 ? '&' : '?') + 'per_page=' + encodeURIComponent(val);
+        }
+        if (href.indexOf('page=') > -1) {
+            href = href.replace(/page=\d+/, 'page=1');
+        } else {
+            href += '&page=1';
+        }
+        window.location.href = href;
+    }
+}
 
 // Toast notification helper
 function showAdminToast(message, type = 'success') {

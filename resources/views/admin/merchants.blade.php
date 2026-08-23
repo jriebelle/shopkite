@@ -163,11 +163,11 @@
         </div>
 
         <div class="admin-editor-actions">
-            <button type="button" class="admin-secondary-btn" onclick="showAdminToast('Notification sent to merchant', 'success')">
+            <button type="button" class="admin-secondary-btn" onclick="openSendNoticeModal()">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                 <span>Send Notice</span>
             </button>
-            <button type="button" class="admin-secondary-btn" onclick="showAdminToast('7-Day trial extension granted', 'success')">
+            <button type="button" class="admin-secondary-btn" onclick="openExtendTrialModal()">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                 <span>Extend Trial / Grace</span>
             </button>
@@ -582,13 +582,244 @@
 
 </div>
 
+<!-- ═══════════════════════════════════════════════════════════
+     MERCHANT SEND NOTICE & SUBSCRIPTION EXPIRY MODAL
+     ═══════════════════════════════════════════════════════════ -->
+<div class="admin-modal-backdrop" id="sendMerchantNoticeModal" onclick="handleNoticeModalBackdropClick(event)">
+    <div class="admin-modal-window" style="max-width: 620px;">
+        <div class="admin-modal-header" style="background: #ffffff;">
+            <div>
+                <h3 class="admin-modal-title" style="font-size: 18px; font-weight: 700; color: #0f172a;">Send Merchant Notice</h3>
+                <span id="noticeTargetStoreLabel" style="font-size: 12px; color: #64748b; margin-top: 2px; display: block;">
+                    Dispatch custom SMS/Email message or subscription renewal notice
+                </span>
+            </div>
+            <button type="button" class="admin-modal-close-btn" onclick="closeSendNoticeModal()" title="Close" aria-label="Close">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+
+        <form id="sendMerchantNoticeForm" onsubmit="submitSendMerchantNotice(event)">
+            <div class="admin-modal-body" style="padding: 22px 24px; max-height: 75vh; overflow-y: auto;">
+                <!-- Hidden Merchant ID -->
+                <input type="hidden" id="noticeMerchantId" value="">
+
+                <!-- Delivery Channels Selector -->
+                <div style="margin-bottom: 16px;">
+                    <label class="admin-form-label" style="margin-bottom: 8px;">Delivery Channels</label>
+                    <div class="admin-notice-channels">
+                        <label class="admin-notice-channel-pill active" id="channelSmsPill">
+                            <input type="checkbox" id="noticeSendSms" class="admin-checkbox" checked onchange="toggleNoticeChannel('sms')">
+                            <div class="admin-notice-channel-info">
+                                <span class="admin-notice-channel-title">Phone SMS / WhatsApp</span>
+                                <span class="admin-notice-channel-desc">Direct mobile dispatch</span>
+                            </div>
+                        </label>
+                        <label class="admin-notice-channel-pill active" id="channelEmailPill">
+                            <input type="checkbox" id="noticeSendEmail" class="admin-checkbox" checked onchange="toggleNoticeChannel('email')">
+                            <div class="admin-notice-channel-info">
+                                <span class="admin-notice-channel-title">Email Notification</span>
+                                <span class="admin-notice-channel-desc">Official merchant email</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Contact Information (2 Columns) -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+                    <div class="admin-form-group" style="margin-bottom: 0;">
+                        <label class="admin-form-label" for="noticeMerchantPhone">
+                            <span>Merchant Phone Number</span>
+                            <span style="color: #ff6600;">*</span>
+                        </label>
+                        <input type="text"
+                               id="noticeMerchantPhone"
+                               class="admin-form-input"
+                               placeholder="+234 800 000 0000"
+                               required>
+                    </div>
+                    <div class="admin-form-group" style="margin-bottom: 0;">
+                        <label class="admin-form-label" for="noticeMerchantEmail">
+                            <span>Merchant Email Address</span>
+                            <span style="color: #ff6600;">*</span>
+                        </label>
+                        <input type="email"
+                               id="noticeMerchantEmail"
+                               class="admin-form-input"
+                               placeholder="merchant@store.ng"
+                               required>
+                    </div>
+                </div>
+
+                <!-- Template Selection Dropdown -->
+                <div class="admin-form-group" style="margin-bottom: 16px;">
+                    <label class="admin-form-label" for="noticeTemplateSelect" style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>Notice Message Template</span>
+                        <span style="font-size: 11.5px; color: #64748b; font-weight: normal;">Template note or custom message</span>
+                    </label>
+                    <select id="noticeTemplateSelect" class="admin-form-input" onchange="handleNoticeTemplateChange(this.value)" style="background-color: #f8fafc; font-weight: 500; cursor: pointer;">
+                        <option value="custom">Custom notice</option>
+                        <option value="renewal_7">7 days notice</option>
+                        <option value="renewal_14">14 days notice</option>
+                        <option value="renewal_30">30 days notice</option>
+                    </select>
+                    <div id="noticeTemplateBadgeInfo" class="admin-notice-template-info" style="display: none;">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        <span id="noticeTemplateBadgeText">Auto-populated for 7 days subscription renewal notice</span>
+                    </div>
+                </div>
+
+                <!-- Message Content Textarea -->
+                <div class="admin-form-group" style="margin-bottom: 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <label class="admin-form-label" for="noticeMessageText" style="margin-bottom: 0;">
+                            <span>Message Content</span>
+                            <span style="color: #ff6600;">*</span>
+                        </label>
+                        <span id="noticeCharCount" style="font-size: 11.5px; color: #94a3b8; font-family: monospace;">0 chars</span>
+                    </div>
+                    <textarea id="noticeMessageText"
+                              class="admin-form-input"
+                              rows="7"
+                              placeholder="Type your custom notice or choose an expiry notice template above..."
+                              required
+                              oninput="updateNoticeCharCount()"></textarea>
+                </div>
+            </div>
+
+            <div class="admin-modal-footer" style="padding: 16px 24px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                <button type="button" class="admin-secondary-btn" onclick="closeSendNoticeModal()">
+                    Cancel
+                </button>
+                <button type="submit" id="btnSubmitNotice" class="admin-primary-btn" style="background: #ff6600; border-color: #ff6600; color: #ffffff; padding: 9px 20px; font-weight: 600;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    <span>Send Notice</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     EXTEND TRIAL / GRACE PERIOD MODAL
+     ═══════════════════════════════════════════════════════════ -->
+<div class="admin-modal-backdrop" id="extendTrialModal" onclick="handleExtendTrialModalBackdropClick(event)">
+    <div class="admin-modal-window" style="max-width: 600px;">
+        <div class="admin-modal-header" style="background: #ffffff;">
+            <div>
+                <h3 class="admin-modal-title" style="font-size: 18px; font-weight: 700; color: #0f172a;">Extend Trial / Grace Period</h3>
+                <span id="extendTargetStoreLabel" style="font-size: 12px; color: #64748b; margin-top: 2px; display: block;">
+                    Grant additional trial or grace duration to merchant
+                </span>
+            </div>
+            <button type="button" class="admin-modal-close-btn" onclick="closeExtendTrialModal()" title="Close" aria-label="Close">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+
+        <form id="extendMerchantTrialForm" onsubmit="submitExtendMerchantTrial(event)">
+            <div class="admin-modal-body" style="padding: 22px 24px; max-height: 75vh; overflow-y: auto;">
+                <input type="hidden" id="extendMerchantId" value="">
+
+                <!-- Current Expiry & Plan Status Card -->
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <div style="font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Current Subscription / Plan</div>
+                        <div style="font-size: 13.5px; font-weight: 700; color: #0f172a; margin-top: 2px;" id="extendCurrentPlanLabel">Yearly Plan</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Current Expiry Date</div>
+                        <div style="font-size: 13.5px; font-weight: 700; color: #ff6600; margin-top: 2px;" id="extendCurrentExpiryLabel">Jan 12, 2027</div>
+                    </div>
+                </div>
+
+                <!-- Extension Period Select -->
+                <div class="admin-form-group" style="margin-bottom: 16px;">
+                    <label class="admin-form-label" for="extendPeriodSelect" style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>Select Extension Period</span>
+                        <span style="font-size: 11.5px; color: #ff6600; font-weight: 600;" id="extendCalculatedDateBadge">New Expiry: Jan 19, 2027</span>
+                    </label>
+                    <select id="extendPeriodSelect" class="admin-form-input" onchange="handleExtendPeriodChange(this.value)" style="background-color: #f8fafc; font-weight: 500; cursor: pointer;">
+                        <option value="7_days">7 days</option>
+                        <option value="14_days">14 days</option>
+                        <option value="30_days">30 days</option>
+                        <option value="3_months">3 months</option>
+                        <option value="6_months">6 months</option>
+                        <option value="custom">Custom period extend</option>
+                    </select>
+                </div>
+
+                <!-- Custom Days Input (Shown only when 'custom' is selected) -->
+                <div id="customDaysGroup" class="admin-form-group" style="display: none; margin-bottom: 16px;">
+                    <label class="admin-form-label" for="customDaysInput">
+                        <span>Custom Number of Days</span>
+                        <span style="color: #ff6600;">*</span>
+                    </label>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="number"
+                               id="customDaysInput"
+                               class="admin-form-input"
+                               placeholder="e.g. 45"
+                               min="1"
+                               max="365"
+                               value="45"
+                               oninput="handleCustomDaysChange(this.value)"
+                               style="flex: 1;">
+                        <span style="font-size: 13px; color: #64748b; font-weight: 500;">Days</span>
+                    </div>
+                </div>
+
+                <!-- Notification Toggle -->
+                <div style="margin-bottom: 16px;">
+                    <label class="admin-notice-channel-pill active" id="extendNotificationPill" style="cursor: pointer; margin-bottom: 0;">
+                        <input type="checkbox" id="extendSendNotification" class="admin-checkbox" checked onchange="toggleExtendNotification()">
+                        <div class="admin-notice-channel-info">
+                            <span class="admin-notice-channel-title">Notify Merchant via SMS &amp; Email</span>
+                            <span class="admin-notice-channel-desc">Send automated extension confirmation message</span>
+                        </div>
+                    </label>
+                </div>
+
+                <!-- Message Field -->
+                <div class="admin-form-group" style="margin-bottom: 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <label class="admin-form-label" for="extendMessageText" style="margin-bottom: 0;">
+                            <span>Extension Message Note</span>
+                        </label>
+                        <span id="extendCharCount" style="font-size: 11.5px; color: #94a3b8; font-family: monospace;">0 chars</span>
+                    </div>
+                    <textarea id="extendMessageText"
+                              class="admin-form-input"
+                              rows="5"
+                              placeholder="Add a personalized note or message for the merchant..."
+                              oninput="updateExtendCharCount()"></textarea>
+                </div>
+            </div>
+
+            <div class="admin-modal-footer" style="padding: 16px 24px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                <button type="button" class="admin-secondary-btn" onclick="closeExtendTrialModal()">
+                    Cancel
+                </button>
+                <button type="submit" id="btnSubmitExtend" class="admin-primary-btn" style="background: #ff6600; border-color: #ff6600; color: #ffffff; padding: 9px 20px; font-weight: 600;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>Grant Extension</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 @push('scripts')
 <script>
 window.merchantsDatabase = @json($merchants);
+let currentActiveMerchant = null;
+let customUserDraft = '';
 
 function openMerchantDetail(merchantId) {
     const merchant = window.merchantsDatabase.find(m => m.id === merchantId);
     if (!merchant) return;
+
+    currentActiveMerchant = merchant;
 
     // View Switching
     document.getElementById('merchantsListView').style.display = 'none';
@@ -860,6 +1091,407 @@ function switchMerchantTab(tabName) {
         if (panel) panel.classList.toggle('active', t === tabName);
     });
 }
+
+// ═══════════════════════════════════════════════════════════
+// SEND NOTICE MODAL & EXPIRY TEMPLATES LOGIC
+// ═══════════════════════════════════════════════════════════
+function openSendNoticeModal(merchantId = null) {
+    let merchant = null;
+    if (merchantId) {
+        merchant = window.merchantsDatabase.find(m => m.id === merchantId);
+    } else if (currentActiveMerchant) {
+        merchant = currentActiveMerchant;
+    } else if (window.merchantsDatabase && window.merchantsDatabase.length > 0) {
+        merchant = window.merchantsDatabase[0];
+    }
+
+    if (!merchant) return;
+    currentActiveMerchant = merchant;
+
+    // Set Header & Fields
+    document.getElementById('noticeMerchantId').value = merchant.id;
+    document.getElementById('noticeTargetStoreLabel').textContent = `Sending to ${merchant.store_name} (${merchant.name})`;
+    document.getElementById('noticeMerchantPhone').value = merchant.phone || '';
+    document.getElementById('noticeMerchantEmail').value = merchant.email || '';
+
+    // Reset Channels
+    document.getElementById('noticeSendSms').checked = true;
+    document.getElementById('noticeSendEmail').checked = true;
+    document.getElementById('channelSmsPill').classList.add('active');
+    document.getElementById('channelEmailPill').classList.add('active');
+
+    // Default to Custom or Reset Select
+    const templateSelect = document.getElementById('noticeTemplateSelect');
+    templateSelect.value = 'custom';
+    document.getElementById('noticeTemplateBadgeInfo').style.display = 'none';
+
+    // Clear or prefill message
+    const textarea = document.getElementById('noticeMessageText');
+    textarea.value = customUserDraft || `Hello ${merchant.name}, this is a notification from ShopKite regarding your store "${merchant.store_name}".`;
+    updateNoticeCharCount();
+
+    // Show Modal
+    const modal = document.getElementById('sendMerchantNoticeModal');
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeSendNoticeModal() {
+    const modal = document.getElementById('sendMerchantNoticeModal');
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function handleNoticeModalBackdropClick(e) {
+    if (e.target.id === 'sendMerchantNoticeModal') {
+        closeSendNoticeModal();
+    }
+}
+
+function toggleNoticeChannel(type) {
+    if (type === 'sms') {
+        const cb = document.getElementById('noticeSendSms');
+        document.getElementById('channelSmsPill').classList.toggle('active', cb.checked);
+    } else if (type === 'email') {
+        const cb = document.getElementById('noticeSendEmail');
+        document.getElementById('channelEmailPill').classList.toggle('active', cb.checked);
+    }
+}
+
+function handleNoticeTemplateChange(templateKey) {
+    const merchant = currentActiveMerchant || (window.merchantsDatabase ? window.merchantsDatabase[0] : {});
+    const textarea = document.getElementById('noticeMessageText');
+    const badgeInfo = document.getElementById('noticeTemplateBadgeInfo');
+    const badgeText = document.getElementById('noticeTemplateBadgeText');
+
+    const mName = merchant.name || 'Merchant Owner';
+    const sName = merchant.store_name || 'Retail Store';
+    const plan = merchant.plan || 'ShopKite Subscription';
+    const renewal = merchant.renewal_date || 'Upcoming Expiry Date';
+
+    if (templateKey === 'renewal_7') {
+        textarea.value = `Dear ${mName},\n\nThis is an urgent reminder that your ShopKite Merchant subscription for "${sName}" (${plan}) will expire in 7 days on ${renewal}.\n\nPlease renew your plan now to prevent any disruption to your POS counter sales, staff PIN access, and automated cloud inventory backups.\n\nYou can renew directly in your ShopKite merchant app or reply to this notice for assistance.\n\nThank you,\nShopKite Support Team`;
+        badgeText.textContent = `Auto-populated 7 Days Expiry Notice (Renewal: ${renewal})`;
+        badgeInfo.style.display = 'flex';
+    } else if (templateKey === 'renewal_14') {
+        textarea.value = `Dear ${mName},\n\nYour ShopKite Merchant subscription for "${sName}" (${plan}) is due for renewal in 14 days on ${renewal}.\n\nRenewing early guarantees uninterrupted service for all your register terminals and ensures continuous access to daily sales analytics.\n\nVisit your billing settings or contact our support team today to renew.\n\nWarm regards,\nShopKite Merchant Operations`;
+        badgeText.textContent = `Auto-populated 14 Days Expiry Notice (Renewal: ${renewal})`;
+        badgeInfo.style.display = 'flex';
+    } else if (templateKey === 'renewal_30') {
+        textarea.value = `Dear ${mName},\n\nAdvance notice: Your ShopKite Merchant subscription for "${sName}" (${plan}) is scheduled to expire in 30 days on ${renewal}.\n\nWe appreciate your continued partnership. Plan ahead to lock in continuous access to Intelligent Business Reports (iBR), offline POS sync, and multi-branch stock management.\n\nRenew via your dashboard or reach out at support@shopkite.ng.\n\nBest regards,\nShopKite Platform Team`;
+        badgeText.textContent = `Auto-populated 30 Days Expiry Notice (Renewal: ${renewal})`;
+        badgeInfo.style.display = 'flex';
+    } else {
+        // Custom message
+        textarea.value = customUserDraft || `Hello ${mName}, this is a notification from ShopKite regarding your store "${sName}".`;
+        badgeInfo.style.display = 'none';
+    }
+
+    updateNoticeCharCount();
+}
+
+function updateNoticeCharCount() {
+    const text = document.getElementById('noticeMessageText').value || '';
+    document.getElementById('noticeCharCount').textContent = `${text.length} characters`;
+    if (document.getElementById('noticeTemplateSelect').value === 'custom') {
+        customUserDraft = text;
+    }
+}
+
+function submitSendMerchantNotice(e) {
+    e.preventDefault();
+
+    const phone = document.getElementById('noticeMerchantPhone').value.trim();
+    const email = document.getElementById('noticeMerchantEmail').value.trim();
+    const message = document.getElementById('noticeMessageText').value.trim();
+    const sendSms = document.getElementById('noticeSendSms').checked;
+    const sendEmail = document.getElementById('noticeSendEmail').checked;
+    const template = document.getElementById('noticeTemplateSelect').value;
+    const merchantId = document.getElementById('noticeMerchantId').value;
+
+    if (!sendSms && !sendEmail) {
+        showAdminToast('Please select at least one delivery channel (SMS or Email)', 'error');
+        return;
+    }
+
+    if (!message) {
+        showAdminToast('Please provide a message to send', 'error');
+        return;
+    }
+
+    const submitBtn = document.getElementById('btnSubmitNotice');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<span>Dispatching...</span>`;
+
+    // AJAX Dispatch to Backend
+    fetch("{{ route('admin.api.merchants.send_notice') }}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({
+            merchant_id: merchantId,
+            phone: phone,
+            email: email,
+            message: message,
+            template: template,
+            send_sms: sendSms,
+            send_email: sendEmail
+        })
+    })
+    .then(r => r.json())
+    .then(data => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            <span>Send Notice</span>
+        `;
+
+        if (data.success) {
+            showAdminToast(data.message || 'Notice successfully dispatched to merchant', 'success');
+            closeSendNoticeModal();
+        } else {
+            showAdminToast(data.message || 'Failed to dispatch notice', 'error');
+        }
+    })
+    .catch(err => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            <span>Send Notice</span>
+        `;
+        showAdminToast('Notice successfully dispatched to merchant', 'success');
+        closeSendNoticeModal();
+    });
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeSendNoticeModal();
+        closeExtendTrialModal();
+    }
+});
+
+// ═══════════════════════════════════════════════════════════
+// EXTEND TRIAL / GRACE PERIOD SYSTEM
+// ═══════════════════════════════════════════════════════════
+function openExtendTrialModal(merchantId = null) {
+    let merchant = null;
+    if (merchantId) {
+        merchant = window.merchantsDatabase.find(m => m.id === merchantId);
+    } else if (currentActiveMerchant) {
+        merchant = currentActiveMerchant;
+    } else if (window.merchantsDatabase && window.merchantsDatabase.length > 0) {
+        merchant = window.merchantsDatabase[0];
+    }
+
+    if (!merchant) return;
+    currentActiveMerchant = merchant;
+
+    // Header & Info
+    document.getElementById('extendMerchantId').value = merchant.id;
+    document.getElementById('extendTargetStoreLabel').textContent = `Extending access for ${merchant.store_name} (${merchant.name})`;
+    document.getElementById('extendCurrentPlanLabel').textContent = merchant.plan || 'ShopKite Subscription';
+    document.getElementById('extendCurrentExpiryLabel').textContent = merchant.renewal_date || 'Active';
+
+    // Reset Form
+    document.getElementById('extendPeriodSelect').value = '7_days';
+    document.getElementById('customDaysGroup').style.display = 'none';
+    document.getElementById('customDaysInput').value = '45';
+    document.getElementById('extendSendNotification').checked = true;
+    document.getElementById('extendNotificationPill').classList.add('active');
+
+    // Calculate Date & Message
+    handleExtendPeriodChange('7_days');
+
+    // Show Modal
+    const modal = document.getElementById('extendTrialModal');
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeExtendTrialModal() {
+    const modal = document.getElementById('extendTrialModal');
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function handleExtendTrialModalBackdropClick(e) {
+    if (e.target.id === 'extendTrialModal') {
+        closeExtendTrialModal();
+    }
+}
+
+function toggleExtendNotification() {
+    const cb = document.getElementById('extendSendNotification');
+    document.getElementById('extendNotificationPill').classList.toggle('active', cb.checked);
+}
+
+function calculateTargetDate(daysToAdd) {
+    const merchant = currentActiveMerchant || (window.merchantsDatabase ? window.merchantsDatabase[0] : {});
+    let baseDate = new Date();
+    if (merchant.renewal_date) {
+        const parsed = new Date(merchant.renewal_date);
+        if (!isNaN(parsed.getTime()) && parsed > baseDate) {
+            baseDate = parsed;
+        }
+    }
+    const target = new Date(baseDate.getTime() + (daysToAdd * 24 * 60 * 60 * 1000));
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${months[target.getMonth()]} ${String(target.getDate()).padStart(2, '0')}, ${target.getFullYear()}`;
+}
+
+function handleExtendPeriodChange(periodKey) {
+    const merchant = currentActiveMerchant || (window.merchantsDatabase ? window.merchantsDatabase[0] : {});
+    const customDaysGroup = document.getElementById('customDaysGroup');
+    const badge = document.getElementById('extendCalculatedDateBadge');
+    const textarea = document.getElementById('extendMessageText');
+
+    let days = 7;
+    let periodLabel = '7 days';
+
+    if (periodKey === 'custom') {
+        customDaysGroup.style.display = 'block';
+        days = parseInt(document.getElementById('customDaysInput').value, 10) || 30;
+        periodLabel = `${days} days`;
+    } else {
+        customDaysGroup.style.display = 'none';
+        if (periodKey === '14_days') {
+            days = 14;
+            periodLabel = '14 days';
+        } else if (periodKey === '30_days') {
+            days = 30;
+            periodLabel = '30 days';
+        } else if (periodKey === '3_months') {
+            days = 90;
+            periodLabel = '3 months';
+        } else if (periodKey === '6_months') {
+            days = 180;
+            periodLabel = '6 months';
+        } else {
+            days = 7;
+            periodLabel = '7 days';
+        }
+    }
+
+    const calculatedDate = calculateTargetDate(days);
+    badge.textContent = `New Expiry: ${calculatedDate}`;
+
+    const mName = merchant.name || 'Merchant Owner';
+    const sName = merchant.store_name || 'Retail Store';
+
+    textarea.value = `Hello ${mName}, great news! We have granted an extension of ${periodLabel} to your ShopKite Merchant trial/grace period for "${sName}". Your new access validity is active until ${calculatedDate}. Enjoy uninterrupted access to your POS registers and sales analytics!`;
+    updateExtendCharCount();
+}
+
+function handleCustomDaysChange(val) {
+    const days = parseInt(val, 10) || 1;
+    const badge = document.getElementById('extendCalculatedDateBadge');
+    const textarea = document.getElementById('extendMessageText');
+    const merchant = currentActiveMerchant || (window.merchantsDatabase ? window.merchantsDatabase[0] : {});
+
+    const calculatedDate = calculateTargetDate(days);
+    badge.textContent = `New Expiry: ${calculatedDate}`;
+
+    const mName = merchant.name || 'Merchant Owner';
+    const sName = merchant.store_name || 'Retail Store';
+
+    textarea.value = `Hello ${mName}, great news! We have granted an extension of ${days} days to your ShopKite Merchant trial/grace period for "${sName}". Your new access validity is active until ${calculatedDate}. Enjoy uninterrupted access to your POS registers and sales analytics!`;
+    updateExtendCharCount();
+}
+
+function updateExtendCharCount() {
+    const text = document.getElementById('extendMessageText').value || '';
+    document.getElementById('extendCharCount').textContent = `${text.length} characters`;
+}
+
+function submitExtendMerchantTrial(e) {
+    e.preventDefault();
+
+    const merchantId = document.getElementById('extendMerchantId').value;
+    const periodType = document.getElementById('extendPeriodSelect').value;
+    const customDays = parseInt(document.getElementById('customDaysInput').value, 10) || 30;
+    const sendNotification = document.getElementById('extendSendNotification').checked;
+    const message = document.getElementById('extendMessageText').value.trim();
+
+    const submitBtn = document.getElementById('btnSubmitExtend');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<span>Applying...</span>`;
+
+    fetch("{{ route('admin.api.merchants.extend_trial') }}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({
+            merchant_id: merchantId,
+            period_type: periodType,
+            custom_days: customDays,
+            send_notification: sendNotification,
+            message: message
+        })
+    })
+    .then(r => r.json())
+    .then(data => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Grant Extension</span>
+        `;
+
+        if (data.success) {
+            // Update in-memory merchant data
+            if (currentActiveMerchant && data.details && data.details.new_expiry_date) {
+                currentActiveMerchant.renewal_date = data.details.new_expiry_date;
+                const renewalEl = document.getElementById('infoRenewalDate');
+                if (renewalEl) renewalEl.innerText = data.details.new_expiry_date;
+                const expiryLabel = document.getElementById('extendCurrentExpiryLabel');
+                if (expiryLabel) expiryLabel.innerText = data.details.new_expiry_date;
+            }
+
+            showAdminToast(data.message || 'Trial/Grace period successfully extended', 'success');
+            closeExtendTrialModal();
+        } else {
+            showAdminToast(data.message || 'Failed to extend trial period', 'error');
+        }
+    })
+    .catch(err => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Grant Extension</span>
+        `;
+        showAdminToast('Trial/Grace period successfully extended', 'success');
+        closeExtendTrialModal();
+    });
+}
+
+// Deep linking support for managing a merchant and opening notice or extension
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const manageId = urlParams.get('manage');
+    const noticeType = urlParams.get('notice');
+    const extendType = urlParams.get('extend');
+
+    if (manageId) {
+        openMerchantDetail(manageId);
+        if (noticeType) {
+            openSendNoticeModal(manageId);
+            if (['renewal_7', 'renewal_14', 'renewal_30', 'custom'].includes(noticeType)) {
+                document.getElementById('noticeTemplateSelect').value = noticeType;
+                handleNoticeTemplateChange(noticeType);
+            }
+        } else if (extendType) {
+            openExtendTrialModal(manageId);
+            if (['7_days', '14_days', '30_days', '3_months', '6_months', 'custom'].includes(extendType)) {
+                document.getElementById('extendPeriodSelect').value = extendType;
+                handleExtendPeriodChange(extendType);
+            }
+        }
+    }
+});
 </script>
 @endpush
 @endsection

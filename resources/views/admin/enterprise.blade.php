@@ -15,37 +15,37 @@
 <!-- ── Toolbar: Filter Pills & Search Form ───────────────── -->
 <div class="admin-toolbar-card">
     <div class="admin-filter-pills-group" id="enterpriseFilterPills">
-        <a href="{{ route('admin.enterprise', ['filter' => 'all', 'q' => $searchQuery]) }}"
+        <a href="{{ route('admin.enterprise', array_filter(['filter' => 'all', 'q' => $searchQuery, 'per_page' => $perPage != 10 ? $perPage : null])) }}"
            class="admin-filter-pill {{ $selectedFilter === 'all' ? 'active' : '' }}"
            data-tag="all">
             <span>All</span>
             <span class="admin-pill-count" id="count-all">{{ $counts['all'] }}</span>
         </a>
-        <a href="{{ route('admin.enterprise', ['filter' => 'senders', 'q' => $searchQuery]) }}"
+        <a href="{{ route('admin.enterprise', array_filter(['filter' => 'senders', 'q' => $searchQuery, 'per_page' => $perPage != 10 ? $perPage : null])) }}"
            class="admin-filter-pill {{ $selectedFilter === 'senders' ? 'active' : '' }}"
            data-tag="senders">
             <span>Senders (Vendors)</span>
             <span class="admin-pill-count" id="count-senders">{{ $counts['senders'] }}</span>
         </a>
-        <a href="{{ route('admin.enterprise', ['filter' => 'receivers', 'q' => $searchQuery]) }}"
+        <a href="{{ route('admin.enterprise', array_filter(['filter' => 'receivers', 'q' => $searchQuery, 'per_page' => $perPage != 10 ? $perPage : null])) }}"
            class="admin-filter-pill {{ $selectedFilter === 'receivers' ? 'active' : '' }}"
            data-tag="receivers">
             <span>Receivers (Companies)</span>
             <span class="admin-pill-count" id="count-receivers">{{ $counts['receivers'] }}</span>
         </a>
-        <a href="{{ route('admin.enterprise', ['filter' => 'high_volume', 'q' => $searchQuery]) }}"
+        <a href="{{ route('admin.enterprise', array_filter(['filter' => 'high_volume', 'q' => $searchQuery, 'per_page' => $perPage != 10 ? $perPage : null])) }}"
            class="admin-filter-pill {{ $selectedFilter === 'high_volume' ? 'active' : '' }}"
            data-tag="high_volume">
             <span>High Volume</span>
             <span class="admin-pill-count" id="count-high_volume">{{ $counts['high_volume'] }}</span>
         </a>
-        <a href="{{ route('admin.enterprise', ['filter' => 'contacted', 'q' => $searchQuery]) }}"
+        <a href="{{ route('admin.enterprise', array_filter(['filter' => 'contacted', 'q' => $searchQuery, 'per_page' => $perPage != 10 ? $perPage : null])) }}"
            class="admin-filter-pill {{ $selectedFilter === 'contacted' ? 'active' : '' }}"
            data-tag="contacted">
             <span>Contacted</span>
             <span class="admin-pill-count" id="count-contacted">{{ $counts['contacted'] }}</span>
         </a>
-        <a href="{{ route('admin.enterprise', ['filter' => 'converted', 'q' => $searchQuery]) }}"
+        <a href="{{ route('admin.enterprise', array_filter(['filter' => 'converted', 'q' => $searchQuery, 'per_page' => $perPage != 10 ? $perPage : null])) }}"
            class="admin-filter-pill {{ $selectedFilter === 'converted' ? 'active' : '' }}"
            data-tag="converted">
             <span>Converted</span>
@@ -55,6 +55,9 @@
 
     <form action="{{ route('admin.enterprise') }}" method="GET" class="admin-search-form">
         <input type="hidden" name="filter" value="{{ $selectedFilter }}">
+        @if($perPage != 10)
+            <input type="hidden" name="per_page" value="{{ $perPage }}">
+        @endif
         <svg class="admin-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         <input type="text"
                name="q"
@@ -62,7 +65,7 @@
                placeholder="Search company, email, phone..."
                value="{{ $searchQuery }}">
         @if(!empty($searchQuery))
-            <a href="{{ route('admin.enterprise', ['filter' => $selectedFilter]) }}" class="admin-search-clear" title="Clear search" aria-label="Clear search">
+            <a href="{{ route('admin.enterprise', array_filter(['filter' => $selectedFilter, 'per_page' => $perPage != 10 ? $perPage : null])) }}" class="admin-search-clear" title="Clear search" aria-label="Clear search">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>

@@ -75,7 +75,9 @@
         <!-- Page Size Indicator -->
         <div class="admin-pagination-page-size">
             <span>Rows:</span>
-            <select class="admin-pagination-select" onchange="const u = new URL(window.location); u.searchParams.set('per_page', this.value); u.searchParams.set('page', 1); window.location.href = u.toString();">
+            <select class="admin-pagination-select"
+                    onchange="changeAdminPaginationRows(this.value)"
+                    aria-label="Rows per page">
                 <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 / page</option>
                 <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25 / page</option>
                 <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 / page</option>
@@ -83,3 +85,29 @@
         </div>
     </div>
 </div>
+
+<script>
+if (typeof window.changeAdminPaginationRows !== 'function') {
+    window.changeAdminPaginationRows = function(val) {
+        try {
+            const url = new URL(window.location.href);
+            url.searchParams.set('per_page', val);
+            url.searchParams.set('page', '1');
+            window.location.href = url.toString();
+        } catch(e) {
+            let href = window.location.href;
+            if (href.indexOf('per_page=') > -1) {
+                href = href.replace(/per_page=\d+/, 'per_page=' + encodeURIComponent(val));
+            } else {
+                href += (href.indexOf('?') > -1 ? '&' : '?') + 'per_page=' + encodeURIComponent(val);
+            }
+            if (href.indexOf('page=') > -1) {
+                href = href.replace(/page=\d+/, 'page=1');
+            } else {
+                href += '&page=1';
+            }
+            window.location.href = href;
+        }
+    };
+}
+</script>
