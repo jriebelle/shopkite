@@ -76,19 +76,31 @@
                             <th>Store &amp; Merchant</th>
                             <th>Business Type &amp; Location</th>
                             <th>Subscription Plan</th>
-                            <th>Connected Devices</th>
+                            <th>Devices</th>
                             <th>SKUs Added</th>
                             <th>iBR Reports</th>
                             <th>Status</th>
-                            <th style="text-align: right;">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($merchants as $mch)
                             <tr>
                                 <td>
-                                    <div><strong>{{ $mch['store_name'] }}</strong></div>
-                                    <span style="font-size: 12px; color: #64748b;">{{ $mch['name'] }} &bull; {{ $mch['phone'] }}</span>
+                                    <div>
+                                        <a href="javascript:void(0)"
+                                           onclick="openMerchantDetail('{{ $mch['id'] }}')"
+                                           class="admin-merchant-title-link"
+                                           title="Click to view full merchant details">
+                                            {{ $mch['store_name'] }}
+                                        </a>
+                                    </div>
+                                    <span style="font-size: 12px; color: #64748b;">
+                                        <a href="javascript:void(0)"
+                                           onclick="openMerchantDetail('{{ $mch['id'] }}')"
+                                           class="admin-merchant-sub-link">
+                                            {{ $mch['name'] }}
+                                        </a> &bull; {{ $mch['phone'] }}
+                                    </span>
                                 </td>
                                 <td>
                                     <div><span style="font-size: 13px; font-weight: 500; color: #1e293b;">{{ $mch['business_type'] }}</span></div>
@@ -120,15 +132,6 @@
                                     <span class="admin-status-badge badge-{{ $mch['status'] }}">
                                         {{ $mch['status_label'] }}
                                     </span>
-                                </td>
-                                <td style="text-align: right;">
-                                    <button type="button"
-                                            class="admin-primary-btn"
-                                            style="padding: 6px 14px; font-size: 12px;"
-                                            onclick="openMerchantDetail('{{ $mch['id'] }}')">
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                        <span>Manage</span>
-                                    </button>
                                 </td>
                             </tr>
                         @endforeach
@@ -520,7 +523,7 @@
                     <h3 style="margin: 0; font-size: 16px; font-weight: 600; color: #0f172a;">Subscription Invoices &amp; Payment History</h3>
                     <p style="margin: 4px 0 0 0; font-size: 12.5px; color: #64748b;">Complete billing records, auto-renewal invoices, and license validity periods.</p>
                 </div>
-                <button type="button" class="admin-primary-btn" style="font-size: 12px;" onclick="showAdminToast('Generated payment link sent to merchant', 'success')">
+                <button type="button" class="admin-primary-btn" style="font-size: 12px; background: #ff6600; border-color: #ff6600; color: #ffffff;" onclick="openMerchantInvoiceModal()">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
                     <span>Create Invoice</span>
                 </button>
@@ -536,6 +539,7 @@
                             <th>Payment Channel</th>
                             <th>Validity Period</th>
                             <th>Status</th>
+                            <th style="text-align: right;">Action</th>
                         </tr>
                     </thead>
                     <tbody id="subscriptionInvoicesTableBody">
@@ -809,6 +813,235 @@
     </div>
 </div>
 
+<!-- ═══════════════════════════════════════════════════════════
+     MERCHANT SUBSCRIPTION INVOICE POPUP MODAL
+     ═══════════════════════════════════════════════════════════ -->
+<div class="admin-modal-backdrop" id="merchantInvoiceModal" onclick="handleInvoiceModalBackdropClick(event)">
+    <div class="admin-modal-window admin-modal-lg" style="max-width: 980px;">
+        <div class="admin-modal-header" style="background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 18px 24px;">
+            <div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <h3 class="admin-modal-title" style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0;">Subscription Invoice</h3>
+                    <span class="admin-pill-count" id="invoiceModalStatusBadge" style="background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa; font-weight: 700; font-size: 11px;">PROFORMA</span>
+                </div>
+                <span id="invoiceModalSubtitle" style="font-size: 12px; color: #64748b; margin-top: 3px; display: block;">
+                    Official subscription billing invoice for <strong id="invoiceModalStoreNameHeader" style="color: #1e293b;">Store</strong>
+                </span>
+            </div>
+            <button type="button" class="admin-modal-close-btn" onclick="closeMerchantInvoiceModal()" title="Close" aria-label="Close">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+
+        <div class="admin-modal-body" style="padding: 24px; max-height: 75vh; overflow-y: auto;">
+            <div class="admin-receipt-modal-grid">
+                <!-- ── Left Column: Live Invoice Slip Preview ──────── -->
+                <div class="admin-receipt-slip" id="merchantInvoiceSlipPrintArea" style="background: #ffffff; border: 1.5px dashed #cbd5e1; border-radius: 12px; padding: 24px;">
+                    <!-- Invoice Header -->
+                    <div class="admin-receipt-header" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 14px; border-bottom: 1px solid #f1f5f9; margin-bottom: 16px;">
+                        <div>
+                            <img src="{{ asset('img/shopkite-logo.png') }}" alt="ShopKite" style="height: 28px; width: auto; display: block; object-fit: contain;">
+                            <div style="font-size: 11px; color: #64748b; margin-top: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+                                Subscription Invoice
+                            </div>
+                        </div>
+                        <div class="admin-receipt-meta-box" style="text-align: right;">
+                            <span class="admin-receipt-ref" id="invSlipNumber">INV-MCH-1001-2026</span>
+                            <span class="admin-receipt-date" id="invSlipIssuedDate">Issued: Aug 25, 2026</span>
+                            <span class="admin-receipt-date" id="invSlipDueDate" style="color: #ea580c; font-weight: 600;">Due: Sep 01, 2026</span>
+                        </div>
+                    </div>
+
+                    <!-- Billed To Merchant -->
+                    <div class="admin-receipt-section" style="margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;">
+                        <div class="admin-receipt-section-title" style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #94a3b8; margin-bottom: 6px;">
+                            Billed Merchant &amp; Business
+                        </div>
+                        <div style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 2px;" id="invSlipStoreName">
+                            MegaCare Pharmacy &amp; Supermarket
+                        </div>
+                        <div style="font-size: 12px; color: #475569;" id="invSlipLocation">
+                            Ikeja City Mall, Lagos &bull; Retail Pharmacy
+                        </div>
+                        <div style="font-size: 12px; color: #64748b; margin-top: 4px; display: flex; flex-wrap: wrap; gap: 12px;">
+                            <span>Contact: <strong id="invSlipContactName" style="color: #1e293b;">Emeka Nwosu</strong></span>
+                            <span>Phone: <strong id="invSlipPhone" style="color: #1e293b;">+234 802 123 4567</strong></span>
+                            <span>Email: <strong id="invSlipEmail" style="color: #1e293b;">emeka@megacare.ng</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- Itemized Invoice Services Table -->
+                    <div style="border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; margin-bottom: 16px;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 12.5px;">
+                            <thead>
+                                <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; color: #64748b; font-size: 11px; text-transform: uppercase;">
+                                    <th style="padding: 8px 12px; text-align: left;">Subscription Item &amp; Description</th>
+                                    <th style="padding: 8px 12px; text-align: center;">Cycle</th>
+                                    <th style="padding: 8px 12px; text-align: right;">Amount (₦)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 10px 12px; border-bottom: 1px solid #f1f5f9; color: #1e293b;">
+                                        <div style="font-weight: 700; color: #0f172a;" id="invSlipItemTitle">ShopKite Standard POS Plan</div>
+                                        <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;" id="invSlipItemDesc">
+                                            Cloud POS register license, multi-device inventory sync &amp; daily sales reporting
+                                        </div>
+                                    </td>
+                                    <td style="padding: 10px 12px; border-bottom: 1px solid #f1f5f9; text-align: center; color: #475569;" id="invSlipItemCycle">
+                                        12 Months (Annual)
+                                    </td>
+                                    <td style="padding: 10px 12px; border-bottom: 1px solid #f1f5f9; text-align: right; font-weight: 700; color: #0f172a;" id="invSlipItemRate">
+                                        ₦60,000.00
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Itemized Totals Box -->
+                    <div class="admin-receipt-total-card" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; margin-bottom: 16px;">
+                        <div class="admin-receipt-row" style="display: flex; justify-content: space-between; padding: 4px 0; font-size: 12.5px;">
+                            <span class="admin-receipt-row-label" style="color: #64748b;">Subtotal:</span>
+                            <span class="admin-receipt-row-value" id="invSlipSubtotal" style="font-weight: 600; color: #1e293b;">₦60,000.00</span>
+                        </div>
+                        <div class="admin-receipt-row" id="invSlipDiscountRow" style="display: flex; justify-content: space-between; padding: 4px 0; font-size: 12.5px;">
+                            <span class="admin-receipt-row-label" style="color: #16a34a; font-weight: 600;">Annual Discount (25% Savings):</span>
+                            <span class="admin-receipt-row-value" id="invSlipDiscount" style="color: #16a34a; font-weight: 700;">-₦15,000.00</span>
+                        </div>
+                        <div class="admin-receipt-row" style="display: flex; justify-content: space-between; padding: 4px 0; font-size: 12.5px;">
+                            <span class="admin-receipt-row-label" style="color: #64748b;">VAT / Service Fee:</span>
+                            <span class="admin-receipt-row-value" style="color: #16a34a; font-size: 11.5px; font-weight: 600;">₦0.00 (Covered)</span>
+                        </div>
+                        <div class="admin-receipt-grand-total" style="display: flex; justify-content: space-between; border-top: 2px solid #e2e8f0; margin-top: 8px; padding-top: 10px;">
+                            <span class="admin-receipt-grand-total-label" style="font-size: 14px; font-weight: 800; color: #0f172a;">Total Payable:</span>
+                            <span class="admin-receipt-grand-total-val" id="invSlipGrandTotal" style="color: #ff6600; font-size: 19px; font-weight: 800;">₦45,000.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Payment Instructions / Bank Details -->
+                    <div class="admin-invoice-bank-card">
+                        <div class="admin-invoice-bank-title">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                            <span>Bank Transfer &amp; Settlement Account</span>
+                        </div>
+                        <div class="admin-invoice-bank-details">
+                            <div><strong>Bank:</strong> Zenith Bank Plc</div>
+                            <div><strong>Account Name:</strong> ShopKite Technologies Limited</div>
+                            <div><strong>Account Number:</strong> <span style="font-family: monospace; font-size: 13px; font-weight: 700; color: #0f172a;">1018392019</span></div>
+                            <div style="font-size: 11px; color: #64748b; margin-top: 2px;">Use Reference: <strong id="invSlipPaymentRef" style="color: #ff6600;">INV-MCH-1001</strong> as payment narration</div>
+                        </div>
+                    </div>
+
+                    <!-- Security Stamp -->
+                    <div class="admin-receipt-security-stamp" style="display: flex; align-items: center; justify-content: center; gap: 8px; background: #f0fdf4; border: 1px solid #86efac; color: #16a34a; padding: 10px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; margin-top: 16px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        <span>Official Subscription Invoice • ShopKite Merchant Platform</span>
+                    </div>
+                </div>
+
+                <!-- ── Right Column: Interactive Controls & Dispatch ── -->
+                <div class="admin-receipt-dispatch-card">
+                    <!-- 1. Subscription Duration Toggle -->
+                    <div>
+                        <label class="admin-form-label" style="margin-bottom: 6px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #475569;">
+                            Subscription Cycle
+                        </label>
+                        <div class="admin-invoice-cycle-selector">
+                            <button type="button" class="admin-invoice-cycle-btn active" id="btnCycleAnnual" onclick="updateInvoiceCycle('annual')">
+                                <span class="admin-invoice-cycle-title">Annual Plan</span>
+                                <span class="admin-invoice-cycle-save">Save 25%</span>
+                            </button>
+                            <button type="button" class="admin-invoice-cycle-btn" id="btnCycleMonthly" onclick="updateInvoiceCycle('monthly')">
+                                <span class="admin-invoice-cycle-title">Monthly Plan</span>
+                                <span style="font-size: 10.5px; color: #64748b; margin-top: 3px;">1 Month Cycle</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 2. Subscription Plan Tier & Amount -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div class="admin-form-group" style="margin-bottom: 0;">
+                            <label class="admin-form-label" style="font-size: 11.5px;">Plan Tier</label>
+                            <select id="invoicePlanSelect" class="admin-form-select" onchange="updateInvoicePlan(this.value)">
+                                <option value="starter">Starter POS (1 Register)</option>
+                                <option value="standard" selected>Standard POS (Up to 3 Registers)</option>
+                                <option value="enterprise">Enterprise Multi-Store (Unlimited)</option>
+                            </select>
+                        </div>
+                        <div class="admin-form-group" style="margin-bottom: 0;">
+                            <label class="admin-form-label" style="font-size: 11.5px;">Payable Amount (₦)</label>
+                            <input type="text" id="invoiceAmountInput" class="admin-form-input" value="45,000" oninput="handleInvoiceCustomAmount(this.value)">
+                        </div>
+                    </div>
+
+                    <!-- 3. Dispatch Delivery Channels -->
+                    <div>
+                        <label class="admin-form-label" style="margin-bottom: 6px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #475569;">
+                            Dispatch Channels
+                        </label>
+                        <div class="admin-notice-channels" style="grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <label class="admin-notice-channel-pill active" id="invChannelEmailPill">
+                                <input type="checkbox" id="invSendEmailCheckbox" class="admin-checkbox" checked onchange="toggleInvoiceChannel('email')">
+                                <div class="admin-notice-channel-info">
+                                    <span class="admin-notice-channel-title">Email Invoice</span>
+                                    <span class="admin-notice-channel-desc">PDF &amp; breakdown</span>
+                                </div>
+                            </label>
+                            <label class="admin-notice-channel-pill active" id="invChannelWhatsappPill">
+                                <input type="checkbox" id="invSendWhatsappCheckbox" class="admin-checkbox" checked onchange="toggleInvoiceChannel('whatsapp')">
+                                <div class="admin-notice-channel-info">
+                                    <span class="admin-notice-channel-title">WhatsApp</span>
+                                    <span class="admin-notice-channel-desc">Direct mobile dispatch</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 4. Contact Inputs -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div class="admin-form-group" style="margin-bottom: 0;">
+                            <label class="admin-form-label" style="font-size: 11.5px;">Merchant Email</label>
+                            <input type="email" id="invoiceRecipientEmail" class="admin-form-input" value="" placeholder="email@merchant.ng" oninput="updateInvoiceMessageTemplate()">
+                        </div>
+                        <div class="admin-form-group" style="margin-bottom: 0;">
+                            <label class="admin-form-label" style="font-size: 11.5px;">WhatsApp Number</label>
+                            <input type="text" id="invoiceRecipientPhone" class="admin-form-input" value="" placeholder="+234..." oninput="updateInvoiceMessageTemplate()">
+                        </div>
+                    </div>
+
+                    <!-- 5. Invoice Message / Cover Note Template -->
+                    <div class="admin-form-group" style="margin-bottom: 0;">
+                        <label class="admin-form-label" style="font-size: 11.5px; display: flex; justify-content: space-between;">
+                            <span>Invoice Cover Note</span>
+                            <span style="font-size: 11px; color: #64748b;">Editable message</span>
+                        </label>
+                        <textarea id="invoiceCustomMessage" class="admin-form-textarea" rows="4" style="font-size: 12px; line-height: 1.45;"></textarea>
+                    </div>
+
+                    <!-- 6. Action Buttons -->
+                    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px;">
+                        <div style="display: flex; gap: 8px;">
+                            <button type="button" class="admin-primary-btn" style="flex: 1; padding: 10px 14px; font-size: 13px; justify-content: center; background: #ff6600; border-color: #ff6600; color: #ffffff;" onclick="submitSendMerchantInvoice(event)">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                                <span>Send Invoice</span>
+                            </button>
+                            <button type="button" class="admin-secondary-btn" style="padding: 10px 14px; font-size: 13px; justify-content: center;" onclick="printMerchantInvoiceSlip()">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                                <span>Print</span>
+                            </button>
+                        </div>
+                        <button type="button" class="admin-receipt-whatsapp-btn" onclick="openWhatsAppInvoice()">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"/></svg>
+                            <span>Open WhatsApp &bull; Send Direct to Merchant</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
 <script>
 window.merchantsDatabase = @json($merchants);
@@ -1036,16 +1269,30 @@ function openMerchantDetail(merchantId) {
     invoices.forEach(inv => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td><strong>${inv.invoice_no}</strong></td>
+            <td>
+                <a href="javascript:void(0)" onclick="openMerchantInvoiceModal('${merchant.id}', '${inv.invoice_no}')" class="admin-merchant-title-link" title="Click to view & dispatch invoice">
+                    <strong>${inv.invoice_no}</strong>
+                </a>
+            </td>
             <td style="font-size: 12.5px; color: #475569;">${inv.date}</td>
             <td><strong style="font-size: 13px; color: #1e293b;">${inv.plan}</strong></td>
             <td><strong style="color: #0f172a;">${inv.amount}</strong></td>
             <td style="font-size: 12.5px; color: #64748b;">${inv.payment_method}</td>
             <td style="font-size: 12px; color: #94a3b8;">${inv.period}</td>
             <td>
-                <span class="admin-merchant-meta-pill" style="${inv.status.includes('Paid') || inv.status.includes('Completed') ? 'background: #f0fdf4; border-color: #bbf7d0; color: #16a34a;' : 'background: #f8fafc; color: #64748b;'}">
+                <span class="admin-merchant-meta-pill" style="${inv.status.includes('Paid') || inv.status.includes('Completed') || inv.status.includes('Active') ? 'background: #f0fdf4; border-color: #bbf7d0; color: #16a34a;' : 'background: #f8fafc; color: #64748b;'}">
                     ${inv.status}
                 </span>
+            </td>
+            <td style="text-align: right;">
+                <button type="button"
+                        class="admin-primary-btn"
+                        style="padding: 5px 12px; font-size: 11.5px; background: #ff6600; border-color: #ff6600; color: #ffffff;"
+                        onclick="openMerchantInvoiceModal('${merchant.id}', '${inv.invoice_no}')"
+                        title="Open Subscription Invoice">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span>Invoice</span>
+                </button>
             </td>
         `;
         invoicesTbody.appendChild(tr);
@@ -1468,12 +1715,361 @@ function submitExtendMerchantTrial(e) {
     });
 }
 
+/* ═══════════════════════════════════════════════════════════
+   MERCHANT SUBSCRIPTION INVOICE CONTROLLER LOGIC
+   ═══════════════════════════════════════════════════════════ */
+const INVOICE_PLANS = {
+    starter: {
+        name: 'Starter POS Plan (1 Register)',
+        monthly: 2500,
+        annual: 25000,
+        monthlyGross: 30000,
+        desc: 'Single register cloud POS license with essential inventory tracking & sales receipts'
+    },
+    standard: {
+        name: 'Standard POS Plan (Up to 3 Registers)',
+        monthly: 5000,
+        annual: 45000,
+        monthlyGross: 60000,
+        desc: 'Multi-device cloud POS with staff shift tracking, offline sync & daily sales analytics'
+    },
+    enterprise: {
+        name: 'Enterprise Multi-Store Plan (Unlimited)',
+        monthly: 10000,
+        annual: 95000,
+        monthlyGross: 120000,
+        desc: 'Enterprise multi-branch inventory sync, warehouse transfer routes & custom ERP reporting'
+    }
+};
+
+let currentInvoiceState = {
+    merchant: null,
+    cycle: 'annual',
+    planKey: 'standard',
+    customAmount: null,
+    invoiceNo: null,
+    sendEmail: true,
+    sendWhatsapp: true
+};
+
+function formatNaira(num) {
+    return '₦' + Number(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function openMerchantInvoiceModal(merchantId = null, invoiceNo = null) {
+    let merchant = null;
+    if (merchantId) {
+        merchant = window.merchantsDatabase.find(m => m.id === merchantId);
+    } else if (currentActiveMerchant) {
+        merchant = currentActiveMerchant;
+    } else if (window.merchantsDatabase && window.merchantsDatabase.length > 0) {
+        merchant = window.merchantsDatabase[0];
+    }
+
+    if (!merchant) return;
+
+    currentInvoiceState.merchant = merchant;
+    currentInvoiceState.cycle = 'annual'; // Default to annual with 25% savings
+    
+    // Determine plan tier
+    const planLower = (merchant.plan || '').toLowerCase();
+    if (planLower.includes('starter')) {
+        currentInvoiceState.planKey = 'starter';
+    } else if (planLower.includes('enterprise')) {
+        currentInvoiceState.planKey = 'enterprise';
+    } else {
+        currentInvoiceState.planKey = 'standard';
+    }
+
+    currentInvoiceState.customAmount = null;
+    currentInvoiceState.invoiceNo = invoiceNo || `INV-${merchant.id}-${new Date().getFullYear()}`;
+    currentInvoiceState.sendEmail = true;
+    currentInvoiceState.sendWhatsapp = true;
+
+    // Populate Merchant Static Slip Fields
+    document.getElementById('invoiceModalStoreNameHeader').innerText = merchant.store_name;
+    document.getElementById('invSlipNumber').innerText = currentInvoiceState.invoiceNo;
+    document.getElementById('invSlipStoreName').innerText = merchant.store_name;
+    document.getElementById('invSlipLocation').innerText = `${merchant.city}, ${merchant.state} • ${merchant.business_type}`;
+    document.getElementById('invSlipContactName').innerText = merchant.name;
+    document.getElementById('invSlipPhone').innerText = merchant.phone;
+    document.getElementById('invSlipEmail').innerText = merchant.email || 'billing@' + merchant.store_name.toLowerCase().replace(/[^a-z0-9]/g, '') + '.ng';
+    document.getElementById('invSlipPaymentRef').innerText = currentInvoiceState.invoiceNo;
+
+    // Format Dates
+    const today = new Date();
+    const dueDate = new Date(today);
+    dueDate.setDate(dueDate.getDate() + 7);
+
+    const dateOptions = { month: 'short', day: 'numeric', year: 'numeric' };
+    document.getElementById('invSlipIssuedDate').innerText = 'Issued: ' + today.toLocaleDateString('en-US', dateOptions);
+    document.getElementById('invSlipDueDate').innerText = 'Due: ' + dueDate.toLocaleDateString('en-US', dateOptions);
+
+    // Populate Right Form Fields
+    document.getElementById('invoicePlanSelect').value = currentInvoiceState.planKey;
+    document.getElementById('invoiceRecipientEmail').value = merchant.email || 'billing@' + merchant.store_name.toLowerCase().replace(/[^a-z0-9]/g, '') + '.ng';
+    document.getElementById('invoiceRecipientPhone').value = merchant.phone;
+
+    // Reset Channels
+    document.getElementById('invSendEmailCheckbox').checked = true;
+    document.getElementById('invSendWhatsappCheckbox').checked = true;
+    document.getElementById('invChannelEmailPill').classList.add('active');
+    document.getElementById('invChannelWhatsappPill').classList.add('active');
+
+    // Recalculate Live Preview & Template
+    updateInvoiceCycle(currentInvoiceState.cycle);
+
+    // Open Modal
+    const modal = document.getElementById('merchantInvoiceModal');
+    if (modal) {
+        modal.classList.add('active');
+    }
+}
+
+function closeMerchantInvoiceModal() {
+    const modal = document.getElementById('merchantInvoiceModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+
+function handleInvoiceModalBackdropClick(e) {
+    if (e.target.id === 'merchantInvoiceModal') {
+        closeMerchantInvoiceModal();
+    }
+}
+
+function updateInvoiceCycle(cycle) {
+    currentInvoiceState.cycle = cycle;
+    
+    // Update cycle buttons active states
+    const btnAnnual = document.getElementById('btnCycleAnnual');
+    const btnMonthly = document.getElementById('btnCycleMonthly');
+    if (cycle === 'annual') {
+        btnAnnual.classList.add('active');
+        btnMonthly.classList.remove('active');
+    } else {
+        btnAnnual.classList.remove('active');
+        btnMonthly.classList.add('active');
+    }
+
+    recalculateInvoice();
+}
+
+function updateInvoicePlan(planKey) {
+    currentInvoiceState.planKey = planKey;
+    currentInvoiceState.customAmount = null;
+    recalculateInvoice();
+}
+
+function handleInvoiceCustomAmount(val) {
+    const cleaned = val.replace(/[^0-9.]/g, '');
+    const num = parseFloat(cleaned);
+    if (!isNaN(num) && num > 0) {
+        currentInvoiceState.customAmount = num;
+    } else {
+        currentInvoiceState.customAmount = null;
+    }
+    recalculateInvoice(false);
+}
+
+function recalculateInvoice(updateInputBox = true) {
+    const plan = INVOICE_PLANS[currentInvoiceState.planKey] || INVOICE_PLANS.standard;
+    const isAnnual = currentInvoiceState.cycle === 'annual';
+
+    let subtotal = 0;
+    let discount = 0;
+    let grandTotal = 0;
+
+    if (isAnnual) {
+        subtotal = plan.monthlyGross;
+        discount = plan.monthlyGross - plan.annual;
+        grandTotal = plan.annual;
+    } else {
+        subtotal = plan.monthly;
+        discount = 0;
+        grandTotal = plan.monthly;
+    }
+
+    if (currentInvoiceState.customAmount !== null) {
+        grandTotal = currentInvoiceState.customAmount;
+    }
+
+    if (updateInputBox) {
+        document.getElementById('invoiceAmountInput').value = Math.round(grandTotal).toLocaleString('en-US');
+    }
+
+    // Update Live Slip
+    document.getElementById('invSlipItemTitle').innerText = 'ShopKite ' + plan.name;
+    document.getElementById('invSlipItemDesc').innerText = plan.desc;
+    document.getElementById('invSlipItemCycle').innerText = isAnnual ? '12 Months (Annual)' : '1 Month Cycle';
+    document.getElementById('invSlipItemRate').innerText = formatNaira(subtotal);
+
+    document.getElementById('invSlipSubtotal').innerText = formatNaira(subtotal);
+    
+    const discountRow = document.getElementById('invSlipDiscountRow');
+    if (isAnnual && discount > 0) {
+        discountRow.style.display = 'flex';
+        document.getElementById('invSlipDiscount').innerText = '-' + formatNaira(discount);
+    } else {
+        discountRow.style.display = 'none';
+    }
+
+    document.getElementById('invSlipGrandTotal').innerText = formatNaira(grandTotal);
+
+    updateInvoiceMessageTemplate();
+}
+
+function updateInvoiceMessageTemplate() {
+    const merchant = currentInvoiceState.merchant;
+    if (!merchant) return;
+
+    const plan = INVOICE_PLANS[currentInvoiceState.planKey] || INVOICE_PLANS.standard;
+    const isAnnual = currentInvoiceState.cycle === 'annual';
+    const cycleLabel = isAnnual ? 'Annual License (12 Months)' : 'Monthly License (1 Month)';
+    
+    const amountVal = document.getElementById('invoiceAmountInput').value || (isAnnual ? plan.annual : plan.monthly);
+    const formattedAmount = '₦' + amountVal;
+
+    const today = new Date();
+    const dueDate = new Date(today);
+    dueDate.setDate(dueDate.getDate() + 7);
+    const dueDateStr = dueDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+    const msg = `Dear ${merchant.name || 'Merchant'},
+
+Please find your official ShopKite Merchant subscription invoice details below:
+
+• Store: "${merchant.store_name}"
+• Invoice No: ${currentInvoiceState.invoiceNo}
+• Plan: ${plan.name} (${cycleLabel})
+• Amount Due: ${formattedAmount}
+• Due Date: ${dueDateStr}
+
+Bank Settlement Account:
+Bank: Zenith Bank Plc
+Account Name: ShopKite Technologies Limited
+Account Number: 1018392019
+Reference: ${currentInvoiceState.invoiceNo}
+
+Kindly complete payment or click here to pay online: https://pay.shopkite.ng/inv/${currentInvoiceState.invoiceNo}
+
+Thank you for choosing ShopKite!
+ShopKite Merchant Billing Operations`;
+
+    document.getElementById('invoiceCustomMessage').value = msg;
+}
+
+function toggleInvoiceChannel(channel) {
+    if (channel === 'email') {
+        const checkbox = document.getElementById('invSendEmailCheckbox');
+        const pill = document.getElementById('invChannelEmailPill');
+        currentInvoiceState.sendEmail = checkbox.checked;
+        if (checkbox.checked) pill.classList.add('active');
+        else pill.classList.remove('active');
+    } else if (channel === 'whatsapp') {
+        const checkbox = document.getElementById('invSendWhatsappCheckbox');
+        const pill = document.getElementById('invChannelWhatsappPill');
+        currentInvoiceState.sendWhatsapp = checkbox.checked;
+        if (checkbox.checked) pill.classList.add('active');
+        else pill.classList.remove('active');
+    }
+}
+
+function printReceiptSlipDirectly(sourceElementId) {
+    const sourceEl = document.getElementById(sourceElementId);
+    if (!sourceEl) {
+        window.print();
+        return;
+    }
+
+    let mount = document.getElementById('shopkitePrintMount');
+    if (!mount) {
+        mount = document.createElement('div');
+        mount.id = 'shopkitePrintMount';
+        mount.className = 'admin-receipt-slip';
+        document.body.appendChild(mount);
+    }
+    mount.innerHTML = sourceEl.innerHTML;
+
+    document.body.classList.add('printing-receipt-mode');
+
+    const cleanup = () => {
+        document.body.classList.remove('printing-receipt-mode');
+        if (mount && mount.parentNode) {
+            mount.parentNode.removeChild(mount);
+        }
+    };
+
+    window.addEventListener('afterprint', cleanup, { once: true });
+    setTimeout(cleanup, 3000);
+
+    setTimeout(() => {
+        window.print();
+    }, 150);
+}
+
+function printMerchantInvoiceSlip() {
+    showAdminToast('Preparing subscription invoice for printing...', 'info');
+    printReceiptSlipDirectly('merchantInvoiceSlipPrintArea');
+}
+
+function submitSendMerchantInvoice(e) {
+    if (e) e.preventDefault();
+
+    const merchant = currentInvoiceState.merchant;
+    if (!merchant) return;
+
+    const sendEmail = document.getElementById('invSendEmailCheckbox').checked;
+    const sendWhatsapp = document.getElementById('invSendWhatsappCheckbox').checked;
+    const email = document.getElementById('invoiceRecipientEmail').value.trim();
+    const phone = document.getElementById('invoiceRecipientPhone').value.trim();
+
+    if (!sendEmail && !sendWhatsapp) {
+        showAdminToast('Please select at least one delivery channel (Email or WhatsApp)', 'error');
+        return;
+    }
+
+    showAdminToast('Dispatching subscription invoice to ' + merchant.store_name + '...', 'info');
+
+    setTimeout(() => {
+        let channelStr = [];
+        if (sendEmail && email) channelStr.push('Email (' + email + ')');
+        if (sendWhatsapp && phone) channelStr.push('WhatsApp (' + phone + ')');
+
+        showAdminToast(`Invoice ${currentInvoiceState.invoiceNo} successfully dispatched via ${channelStr.join(' & ')}!`, 'success');
+        closeMerchantInvoiceModal();
+    }, 450);
+}
+
+function openWhatsAppInvoice() {
+    const merchant = currentInvoiceState.merchant;
+    if (!merchant) return;
+
+    const phone = document.getElementById('invoiceRecipientPhone').value.replace(/[^0-9]/g, '');
+    const message = encodeURIComponent(document.getElementById('invoiceCustomMessage').value);
+
+    let cleanPhone = phone;
+    if (cleanPhone.startsWith('0')) {
+        cleanPhone = '234' + cleanPhone.substring(1);
+    }
+
+    showAdminToast('Opening WhatsApp with pre-composed invoice summary...', 'info');
+
+    const waUrl = cleanPhone
+        ? `https://wa.me/${cleanPhone}?text=${message}`
+        : `https://wa.me/?text=${message}`;
+
+    window.open(waUrl, '_blank');
+}
+
 // Deep linking support for managing a merchant and opening notice or extension
 document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const manageId = urlParams.get('manage');
     const noticeType = urlParams.get('notice');
     const extendType = urlParams.get('extend');
+    const invoiceType = urlParams.get('invoice');
 
     if (manageId) {
         openMerchantDetail(manageId);
@@ -1489,6 +2085,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('extendPeriodSelect').value = extendType;
                 handleExtendPeriodChange(extendType);
             }
+        } else if (invoiceType) {
+            switchMerchantTab('subscription');
+            openMerchantInvoiceModal(manageId);
         }
     }
 });

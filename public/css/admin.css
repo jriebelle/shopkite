@@ -2718,9 +2718,31 @@ html.sidebar-collapsed .admin-main-wrapper,
     color: #16a34a;
 }
 
-.admin-ibr-banner.inactive-user .admin-ibr-banner-icon {
-    background: #fee2e2;
-    color: #dc2626;
+.admin-merchant-title-link {
+    color: #0f172a;
+    font-weight: 700;
+    font-size: 13.5px;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.admin-merchant-title-link:hover {
+    color: #ff6600 !important;
+    text-decoration: underline;
+}
+
+.admin-merchant-sub-link {
+    color: #64748b;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.15s ease;
+}
+
+.admin-merchant-sub-link:hover {
+    color: #ff6600 !important;
+    text-decoration: underline;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -3695,6 +3717,81 @@ html.sidebar-collapsed .admin-main-wrapper,
     transform: translateY(-1px);
 }
 
+/* ── Invoice Modal Component Styles ────────────────────────── */
+.admin-invoice-cycle-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    background: #f1f5f9;
+    padding: 4px;
+    border-radius: 10px;
+}
+
+.admin-invoice-cycle-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.admin-invoice-cycle-btn.active {
+    background: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.admin-invoice-cycle-title {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #334155;
+}
+
+.admin-invoice-cycle-btn.active .admin-invoice-cycle-title {
+    color: #ff6600;
+}
+
+.admin-invoice-cycle-save {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #16a34a;
+    background: #dcfce7;
+    padding: 1px 6px;
+    border-radius: 99px;
+    margin-top: 3px;
+}
+
+.admin-invoice-bank-card {
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-top: 14px;
+}
+
+.admin-invoice-bank-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #64748b;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.admin-invoice-bank-details {
+    font-size: 12px;
+    color: #1e293b;
+    line-height: 1.5;
+}
+
 /* Dedicated Print Mount outside normal layout tree */
 #shopkitePrintMount {
     display: none;
@@ -3781,7 +3878,8 @@ html.sidebar-collapsed .admin-main-wrapper,
     }
 
     body:not(.printing-receipt-mode) #transactionReceiptSlipPrintArea,
-    body:not(.printing-receipt-mode) #storeOrderReceiptSlipPrintArea {
+    body:not(.printing-receipt-mode) #storeOrderReceiptSlipPrintArea,
+    body:not(.printing-receipt-mode) #merchantInvoiceSlipPrintArea {
         display: block !important;
         position: static !important;
         width: 100% !important;
