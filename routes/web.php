@@ -83,6 +83,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/api/enterprise/status', [AdminController::class, 'updateEnterpriseLeadStatus'])->name('api.enterprise.status');
     Route::post('/api/enterprise/delete', [AdminController::class, 'deleteEnterpriseLead'])->name('api.enterprise.delete');
     Route::post('/api/merchants/send-notice', [AdminController::class, 'sendMerchantNotice'])->name('api.merchants.send_notice');
+    Route::post('/api/merchants/in-app-message', [AdminController::class, 'sendInAppMessage'])->name('api.merchants.in_app_message');
     Route::post('/api/merchants/extend-trial', [AdminController::class, 'extendMerchantTrial'])->name('api.merchants.extend_trial');
     Route::post('/api/transactions/send-receipt', [AdminController::class, 'sendTransactionReceipt'])->name('api.transactions.send_receipt');
     Route::post('/api/users/permission', [AdminController::class, 'toggleUserPermission'])->name('api.user.permission');

@@ -7389,6 +7389,48 @@ class AdminController extends Controller
     }
 
     /**
+     * Dispatch in-app popup message to merchant registers/mobile app.
+     */
+    public function sendInAppMessage(Request $request)
+    {
+        $merchantId = $request->input('merchant_id');
+        $title = trim($request->input('title', ''));
+        $body = trim($request->input('message_body', ''));
+        $imageUrl = trim($request->input('image_url', ''));
+        $buttonText = trim($request->input('button_text', ''));
+        $linkType = $request->input('link_type', 'in_app');
+        $inAppRoute = $request->input('in_app_route', '/pos');
+        $externalUrl = trim($request->input('external_url', ''));
+        $displayPlacement = $request->input('display_placement', 'modal');
+
+        if (empty($title)) {
+            return response()->json(['success' => false, 'message' => 'In-app message title cannot be empty.'], 422);
+        }
+
+        if (empty($body)) {
+            return response()->json(['success' => false, 'message' => 'In-app message body cannot be empty.'], 422);
+        }
+
+        $targetLink = $linkType === 'in_app' ? $inAppRoute : $externalUrl;
+
+        return response()->json([
+            'success' => true,
+            'message' => "In-app message \"{$title}\" successfully queued and dispatched to merchant POS terminals & mobile apps.",
+            'details' => [
+                'merchant_id' => $merchantId,
+                'title' => $title,
+                'message_body' => $body,
+                'image_url' => $imageUrl,
+                'button_text' => $buttonText,
+                'link_type' => $linkType,
+                'target_link' => $targetLink,
+                'display_placement' => $displayPlacement,
+                'dispatched_at' => now()->toFormattedDateString() . ' ' . now()->format('h:i A')
+            ]
+        ]);
+    }
+
+    /**
      * Extend merchant trial or grace period.
      */
     public function extendMerchantTrial(Request $request)

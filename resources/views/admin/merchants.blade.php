@@ -170,6 +170,10 @@
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                 <span>Send Notice</span>
             </button>
+            <button type="button" class="admin-secondary-btn" onclick="openSendInAppMessageModal()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                <span>In-app Message</span>
+            </button>
             <button type="button" class="admin-secondary-btn" onclick="openExtendTrialModal()">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                 <span>Extend Trial / Grace</span>
@@ -814,6 +818,277 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════════════════
+     MERCHANT IN-APP POPUP MESSAGE MODAL
+     ═══════════════════════════════════════════════════════════ -->
+<div class="admin-modal-backdrop" id="sendInAppMessageModal" onclick="handleInAppModalBackdropClick(event)">
+    <div class="admin-modal-window admin-modal-lg" style="max-width: 960px;">
+        <div class="admin-modal-header" style="background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 18px 24px;">
+            <div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <h3 class="admin-modal-title" style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0;">In-App Popup Message</h3>
+                    <span class="admin-pill-count" style="background: rgba(255, 102, 0, 0.08); color: #ff6600; border: 1px solid rgba(255, 102, 0, 0.2); font-weight: 700; font-size: 11px;">POS &amp; Mobile</span>
+                </div>
+                <span id="inAppModalSubtitle" style="font-size: 12px; color: #64748b; margin-top: 3px; display: block;">
+                    Push an interactive popup announcement to register terminals of <strong id="inAppTargetStoreLabel" style="color: #1e293b;">Store</strong>
+                </span>
+            </div>
+            <button type="button" class="admin-modal-close-btn" onclick="closeSendInAppMessageModal()" title="Close" aria-label="Close">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+
+        <form id="sendInAppMessageForm" onsubmit="submitSendInAppMessage(event)">
+            <div class="admin-modal-body" style="padding: 24px; max-height: 75vh; overflow-y: auto;">
+                <input type="hidden" id="inAppMerchantId" value="">
+
+                <div class="admin-inapp-modal-grid">
+                    <!-- ── Left Column: Form Fields & Configuration ── -->
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                        <!-- Preset Announcement Templates -->
+                        <div class="admin-form-group" style="margin-bottom: 0;">
+                            <label class="admin-form-label" for="inAppTemplateSelect" style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>Message Template</span>
+                                <span style="font-size: 11px; color: #ff6600; font-weight: 600;">Auto-fills fields</span>
+                            </label>
+                            <select id="inAppTemplateSelect" class="admin-form-select" onchange="handleInAppTemplateChange(this.value)">
+                                <option value="custom">-- Custom In-App Message --</option>
+                                <option value="promo_annual" selected>⚡ Limited Offer: Upgrade to Annual POS (Save 25%)</option>
+                                <option value="feature_reorder">🎉 New Feature: Automated Low-Stock Reorder Alerts</option>
+                                <option value="ibr_analytics">📊 Explore iBR: Gross Margin &amp; Profit Velocity Reports</option>
+                                <option value="pos_update">🛠️ POS System Firmware &amp; Offline Sync Update</option>
+                                <option value="support_checkin">💬 Dedicated ShopKite Account Manager Check-in</option>
+                            </select>
+                        </div>
+
+                        <!-- 1. Image URL & Asset Selection -->
+                        <div class="admin-form-group" style="margin-bottom: 0;">
+                            <label class="admin-form-label" for="inAppImageUrl">
+                                <span>Hero Banner Image</span>
+                                <span style="color: #ff6600;">*</span>
+                            </label>
+                            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                <input type="url"
+                                       id="inAppImageUrl"
+                                       class="admin-form-input"
+                                       placeholder="https://images.unsplash.com/... or asset URL"
+                                       value="https://images.unsplash.com/photo-1556742049-0a67c5574f73?w=800&q=80"
+                                       oninput="updateInAppLivePreview()"
+                                       required>
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                <button type="button" class="admin-filter-pill" style="font-size: 11px; padding: 4px 8px;" onclick="setInAppSampleImage('https://images.unsplash.com/photo-1556742049-0a67c5574f73?w=800&q=80')">
+                                    POS Terminal
+                                </button>
+                                <button type="button" class="admin-filter-pill" style="font-size: 11px; padding: 4px 8px;" onclick="setInAppSampleImage('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80')">
+                                    25% Sale Promo
+                                </button>
+                                <button type="button" class="admin-filter-pill" style="font-size: 11px; padding: 4px 8px;" onclick="setInAppSampleImage('https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80')">
+                                    Analytics Chart
+                                </button>
+                                <button type="button" class="admin-filter-pill" style="font-size: 11px; padding: 4px 8px;" onclick="setInAppSampleImage('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80')">
+                                    Inventory Stock
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 2. Message Title -->
+                        <div class="admin-form-group" style="margin-bottom: 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <label class="admin-form-label" for="inAppTitle" style="margin-bottom: 0;">
+                                    <span>Headline / Title</span>
+                                    <span style="color: #ff6600;">*</span>
+                                </label>
+                                <span id="inAppTitleCharCount" style="font-size: 11px; color: #94a3b8;">0/80</span>
+                            </div>
+                            <input type="text"
+                                   id="inAppTitle"
+                                   class="admin-form-input"
+                                   placeholder="e.g. Upgrade to Annual Plan and Save 25%"
+                                   value="⚡ Limited Offer: Upgrade to Annual POS & Save 25%"
+                                   maxlength="80"
+                                   oninput="updateInAppLivePreview()"
+                                   required>
+                        </div>
+
+                        <!-- 3. Message Body -->
+                        <div class="admin-form-group" style="margin-bottom: 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <label class="admin-form-label" for="inAppBody" style="margin-bottom: 0;">
+                                    <span>Message Body</span>
+                                    <span style="color: #ff6600;">*</span>
+                                </label>
+                                <span id="inAppBodyCharCount" style="font-size: 11px; color: #94a3b8;">0/350</span>
+                            </div>
+                            <textarea id="inAppBody"
+                                      class="admin-form-textarea"
+                                      rows="3"
+                                      placeholder="Write the message text that will display on the merchant's screen..."
+                                      maxlength="350"
+                                      oninput="updateInAppLivePreview()"
+                                      required>Switch your ShopKite account to an Annual subscription today to lock in 25% savings, unlimited terminal register sync, and priority merchant support.</textarea>
+                        </div>
+
+                        <!-- 4. Action Button Label -->
+                        <div class="admin-form-group" style="margin-bottom: 0;">
+                            <label class="admin-form-label" for="inAppButtonText">
+                                <span>Action Button Label</span>
+                                <span style="color: #ff6600;">*</span>
+                            </label>
+                            <input type="text"
+                                   id="inAppButtonText"
+                                   class="admin-form-input"
+                                   placeholder="e.g. Claim 25% Discount"
+                                   value="Claim 25% Discount"
+                                   maxlength="35"
+                                   oninput="updateInAppLivePreview()"
+                                   required>
+                        </div>
+
+                        <!-- 5. Link Destination (Within App vs Outside App) -->
+                        <div>
+                            <label class="admin-form-label" style="margin-bottom: 6px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #475569;">
+                                Button Link Destination
+                            </label>
+                            <div class="admin-invoice-cycle-selector" style="margin-bottom: 10px;">
+                                <button type="button" class="admin-invoice-cycle-btn active" id="btnLinkInApp" onclick="handleInAppLinkTypeChange('in_app')">
+                                    <span class="admin-invoice-cycle-title">Within the App</span>
+                                    <span style="font-size: 10.5px; color: #16a34a; font-weight: 600; margin-top: 2px;">In-App Deep Link</span>
+                                </button>
+                                <button type="button" class="admin-invoice-cycle-btn" id="btnLinkExternal" onclick="handleInAppLinkTypeChange('external')">
+                                    <span class="admin-invoice-cycle-title">Outside the App</span>
+                                    <span style="font-size: 10.5px; color: #64748b; margin-top: 2px;">Web URL / External</span>
+                                </button>
+                            </div>
+
+                            <!-- In-App Destination Dropdown (Shown when 'in_app') -->
+                            <div id="groupInAppRoute" class="admin-form-group" style="margin-bottom: 0;">
+                                <label class="admin-form-label" for="inAppRouteSelect" style="font-size: 11.5px;">Select In-App Screen</label>
+                                <select id="inAppRouteSelect" class="admin-form-select" onchange="updateInAppLivePreview()">
+                                    <option value="/settings/billing" selected>Subscription &amp; Billing (/settings/billing)</option>
+                                    <option value="/pos">POS Register &amp; Counter Sales (/pos)</option>
+                                    <option value="/inventory">Inventory &amp; Stock Products (/inventory)</option>
+                                    <option value="/ibr">Intelligent Business Reports (/ibr)</option>
+                                    <option value="/barcodes">Barcode Scanning &amp; Verification (/barcodes)</option>
+                                    <option value="/settings/staff">Staff &amp; Cashier PIN Access (/settings/staff)</option>
+                                    <option value="/settings/store">Store Profile &amp; Receipts (/settings/store)</option>
+                                </select>
+                            </div>
+
+                            <!-- External Destination Input (Shown when 'external') -->
+                            <div id="groupExternalUrl" class="admin-form-group" style="display: none; margin-bottom: 0;">
+                                <label class="admin-form-label" for="inAppExternalUrl" style="font-size: 11.5px;">External Web URL</label>
+                                <input type="url"
+                                       id="inAppExternalUrl"
+                                       class="admin-form-input"
+                                       placeholder="https://shopkite.ng/pricing or WhatsApp link"
+                                       value="https://shopkite.ng/pricing"
+                                       oninput="updateInAppLivePreview()">
+                            </div>
+                        </div>
+
+                        <!-- 6. Display Placement & Target Hardware -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div class="admin-form-group" style="margin-bottom: 0;">
+                                <label class="admin-form-label" style="font-size: 11.5px;">Display Style</label>
+                                <select id="inAppDisplayStyle" class="admin-form-select" onchange="updateInAppLivePreview()">
+                                    <option value="modal" selected>Center Modal Dialog</option>
+                                    <option value="bottom_sheet">Bottom Drawer Sheet</option>
+                                    <option value="top_banner">Top Register Banner</option>
+                                </select>
+                            </div>
+                            <div class="admin-form-group" style="margin-bottom: 0;">
+                                <label class="admin-form-label" style="font-size: 11.5px;">Target Hardware</label>
+                                <select id="inAppTargetDevices" class="admin-form-select">
+                                    <option value="all" selected>All Register Terminals</option>
+                                    <option value="sunmi_only">Sunmi POS Devices Only</option>
+                                    <option value="mobile_only">Mobile Apps (iOS &amp; Android)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── Right Column: Live POS Screen Mockup Preview ── -->
+                    <div class="admin-inapp-preview-wrap">
+                        <div style="text-align: center; margin-bottom: 12px;">
+                            <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b;">
+                                Live Merchant App Preview
+                            </span>
+                            <div style="font-size: 11.5px; color: #94a3b8; margin-top: 2px;">
+                                Real-time POS register &amp; mobile preview
+                            </div>
+                        </div>
+
+                        <div class="admin-inapp-phone-frame">
+                            <div class="admin-inapp-phone-screen">
+                                <!-- Phone Header -->
+                                <div class="admin-inapp-phone-header">
+                                    <div style="display: flex; align-items: center; gap: 6px;">
+                                        <div style="width: 7px; height: 7px; border-radius: 50%; background: #22c55e;"></div>
+                                        <span>ShopKite POS</span>
+                                    </div>
+                                    <span id="previewPlacementBadge" style="font-size: 10px; background: rgba(255,255,255,0.15); padding: 1px 6px; border-radius: 4px;">Modal</span>
+                                </div>
+
+                                <!-- In-App Popup Card Body -->
+                                <div class="admin-inapp-card-body">
+                                    <!-- Dynamic Image -->
+                                    <img src="https://images.unsplash.com/photo-1556742049-0a67c5574f73?w=800&q=80"
+                                         alt="Banner"
+                                         id="previewInAppImage"
+                                         class="admin-inapp-preview-img">
+
+                                    <!-- Dynamic Headline -->
+                                    <h4 class="admin-inapp-preview-title" id="previewInAppTitle">
+                                        ⚡ Limited Offer: Upgrade to Annual POS &amp; Save 25%
+                                    </h4>
+
+                                    <!-- Dynamic Message Body -->
+                                    <p class="admin-inapp-preview-text" id="previewInAppBody">
+                                        Switch your ShopKite account to an Annual subscription today to lock in 25% savings, unlimited terminal register sync, and priority merchant support.
+                                    </p>
+
+                                    <!-- Link Destination Pill Badge -->
+                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
+                                        <span class="admin-inapp-link-badge" id="previewLinkBadge" style="background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0;">
+                                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                                            <span id="previewLinkBadgeText">In-App: /settings/billing</span>
+                                        </span>
+                                        <span style="font-size: 11px; color: #94a3b8;">Dismissable &bull; ✕</span>
+                                    </div>
+
+                                    <!-- CTA Button -->
+                                    <button type="button" class="admin-inapp-preview-btn" id="previewInAppBtn">
+                                        <span id="previewInAppBtnText">Claim 25% Discount</span>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                    </button>
+
+                                    <!-- Dismiss Secondary Link -->
+                                    <div style="text-align: center; margin-top: 2px;">
+                                        <span style="font-size: 11px; color: #94a3b8; text-decoration: underline; cursor: pointer;">
+                                            Maybe Later
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-modal-footer" style="padding: 16px 24px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                <button type="button" class="admin-secondary-btn" onclick="closeSendInAppMessageModal()">
+                    Cancel
+                </button>
+                <button type="submit" id="btnSubmitInAppMessage" class="admin-primary-btn" style="background: #ff6600; border-color: #ff6600; color: #ffffff; padding: 9px 22px; font-weight: 600;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    <span>Send In-App Message</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
      MERCHANT SUBSCRIPTION INVOICE POPUP MODAL
      ═══════════════════════════════════════════════════════════ -->
 <div class="admin-modal-backdrop" id="merchantInvoiceModal" onclick="handleInvoiceModalBackdropClick(event)">
@@ -1336,6 +1611,255 @@ function switchMerchantTab(tabName) {
         const panel = document.getElementById(`panel${t.charAt(0).toUpperCase() + t.slice(1)}`);
         if (btn) btn.classList.toggle('active', t === tabName);
         if (panel) panel.classList.toggle('active', t === tabName);
+    });
+}
+
+// ═══════════════════════════════════════════════════════════
+// IN-APP POPUP MESSAGE CONTROLLER LOGIC
+// ═══════════════════════════════════════════════════════════
+const INAPP_TEMPLATES = {
+    promo_annual: {
+        title: '⚡ Limited Offer: Upgrade to Annual POS & Save 25%',
+        body: 'Switch your ShopKite account to an Annual subscription today to lock in 25% savings, unlimited terminal register sync, and priority merchant support.',
+        image: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80',
+        buttonText: 'Claim 25% Discount',
+        linkType: 'in_app',
+        inAppRoute: '/settings/billing',
+        externalUrl: 'https://shopkite.ng/pricing'
+    },
+    feature_reorder: {
+        title: '🎉 New: Automated Low-Stock Restock Alerts',
+        body: 'Never run out of bestsellers again. ShopKite now sends automated daily inventory restock alerts straight to your cashier POS and WhatsApp.',
+        image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80',
+        buttonText: 'Configure Stock Alerts',
+        linkType: 'in_app',
+        inAppRoute: '/inventory',
+        externalUrl: 'https://shopkite.ng/features'
+    },
+    ibr_analytics: {
+        title: '📊 Discover Intelligent Business Reports (iBR)',
+        body: 'Unlock daily gross margin tracking, top profit velocity items, and dead-stock elimination strategies directly within your ShopKite dashboard.',
+        image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
+        buttonText: 'View Store Analytics',
+        linkType: 'in_app',
+        inAppRoute: '/ibr',
+        externalUrl: 'https://shopkite.ng/ibr'
+    },
+    pos_update: {
+        title: '🛠️ POS Terminal System Update Available',
+        body: 'A high-performance firmware update is ready for your register terminals, bringing 2x faster barcode scanning and enhanced offline sales caching.',
+        image: 'https://images.unsplash.com/photo-1556742049-0a67c5574f73?w=800&q=80',
+        buttonText: 'Update POS Terminal',
+        linkType: 'in_app',
+        inAppRoute: '/pos',
+        externalUrl: 'https://support.shopkite.ng'
+    },
+    support_checkin: {
+        title: '💬 Dedicated Merchant Support Check-in',
+        body: 'Have questions about expanding your store or configuring multi-branch registers? Connect directly with your dedicated ShopKite Account Specialist.',
+        image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80',
+        buttonText: 'Chat on WhatsApp',
+        linkType: 'external',
+        inAppRoute: '/settings/store',
+        externalUrl: 'https://wa.me/2348000000000'
+    },
+    custom: {
+        title: '',
+        body: '',
+        image: 'https://images.unsplash.com/photo-1556742049-0a67c5574f73?w=800&q=80',
+        buttonText: 'Open Details',
+        linkType: 'in_app',
+        inAppRoute: '/pos',
+        externalUrl: 'https://shopkite.ng'
+    }
+};
+
+let currentInAppLinkType = 'in_app';
+
+function openSendInAppMessageModal(merchantId = null) {
+    let merchant = null;
+    if (merchantId) {
+        merchant = window.merchantsDatabase.find(m => m.id === merchantId);
+    } else if (currentActiveMerchant) {
+        merchant = currentActiveMerchant;
+    } else if (window.merchantsDatabase && window.merchantsDatabase.length > 0) {
+        merchant = window.merchantsDatabase[0];
+    }
+
+    if (!merchant) return;
+    currentActiveMerchant = merchant;
+
+    document.getElementById('inAppMerchantId').value = merchant.id;
+    document.getElementById('inAppTargetStoreLabel').innerText = merchant.store_name;
+
+    // Reset to default template
+    document.getElementById('inAppTemplateSelect').value = 'promo_annual';
+    handleInAppTemplateChange('promo_annual');
+
+    const modal = document.getElementById('sendInAppMessageModal');
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeSendInAppMessageModal() {
+    const modal = document.getElementById('sendInAppMessageModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+function handleInAppModalBackdropClick(e) {
+    if (e.target.id === 'sendInAppMessageModal') {
+        closeSendInAppMessageModal();
+    }
+}
+
+function handleInAppTemplateChange(key) {
+    const tpl = INAPP_TEMPLATES[key] || INAPP_TEMPLATES.promo_annual;
+    
+    if (key !== 'custom') {
+        document.getElementById('inAppTitle').value = tpl.title;
+        document.getElementById('inAppBody').value = tpl.body;
+        document.getElementById('inAppImageUrl').value = tpl.image;
+        document.getElementById('inAppButtonText').value = tpl.buttonText;
+        if (tpl.inAppRoute) document.getElementById('inAppRouteSelect').value = tpl.inAppRoute;
+        if (tpl.externalUrl) document.getElementById('inAppExternalUrl').value = tpl.externalUrl;
+        handleInAppLinkTypeChange(tpl.linkType || 'in_app');
+    }
+
+    updateInAppLivePreview();
+}
+
+function handleInAppLinkTypeChange(type) {
+    currentInAppLinkType = type;
+    const btnInApp = document.getElementById('btnLinkInApp');
+    const btnExternal = document.getElementById('btnLinkExternal');
+    const groupInApp = document.getElementById('groupInAppRoute');
+    const groupExternal = document.getElementById('groupExternalUrl');
+
+    if (type === 'in_app') {
+        btnInApp.classList.add('active');
+        btnExternal.classList.remove('active');
+        groupInApp.style.display = 'block';
+        groupExternal.style.display = 'none';
+    } else {
+        btnInApp.classList.remove('active');
+        btnExternal.classList.add('active');
+        groupInApp.style.display = 'none';
+        groupExternal.style.display = 'block';
+    }
+
+    updateInAppLivePreview();
+}
+
+function setInAppSampleImage(url) {
+    document.getElementById('inAppImageUrl').value = url;
+    updateInAppLivePreview();
+}
+
+function updateInAppLivePreview() {
+    const title = document.getElementById('inAppTitle').value.trim() || 'Announcement Headline';
+    const body = document.getElementById('inAppBody').value.trim() || 'Message text will appear here...';
+    const imageUrl = document.getElementById('inAppImageUrl').value.trim() || 'https://images.unsplash.com/photo-1556742049-0a67c5574f73?w=800&q=80';
+    const buttonText = document.getElementById('inAppButtonText').value.trim() || 'Action Button';
+    const displayStyle = document.getElementById('inAppDisplayStyle').value;
+
+    // Update Live Mockup Screen
+    document.getElementById('previewInAppTitle').innerText = title;
+    document.getElementById('previewInAppBody').innerText = body;
+    document.getElementById('previewInAppBtnText').innerText = buttonText;
+    document.getElementById('previewInAppImage').src = imageUrl;
+
+    // Character counters
+    document.getElementById('inAppTitleCharCount').innerText = `${document.getElementById('inAppTitle').value.length}/80`;
+    document.getElementById('inAppBodyCharCount').innerText = `${document.getElementById('inAppBody').value.length}/350`;
+
+    // Placement Badge
+    const placementBadge = document.getElementById('previewPlacementBadge');
+    if (displayStyle === 'bottom_sheet') placementBadge.innerText = 'Drawer';
+    else if (displayStyle === 'top_banner') placementBadge.innerText = 'Banner';
+    else placementBadge.innerText = 'Modal';
+
+    // Link Destination Badge
+    const linkBadge = document.getElementById('previewLinkBadge');
+    const linkBadgeText = document.getElementById('previewLinkBadgeText');
+
+    if (currentInAppLinkType === 'in_app') {
+        const routeVal = document.getElementById('inAppRouteSelect').value;
+        linkBadge.style.background = '#f0fdf4';
+        linkBadge.style.color = '#16a34a';
+        linkBadge.style.borderColor = '#bbf7d0';
+        linkBadgeText.innerText = `In-App: ${routeVal}`;
+    } else {
+        const externalVal = document.getElementById('inAppExternalUrl').value.trim();
+        linkBadge.style.background = '#f8fafc';
+        linkBadge.style.color = '#ff6600';
+        linkBadge.style.borderColor = '#fed7aa';
+        linkBadgeText.innerText = externalVal ? `External: ${externalVal.replace(/^https?:\/\//, '').split('/')[0]}` : 'External URL';
+    }
+}
+
+function submitSendInAppMessage(e) {
+    if (e) e.preventDefault();
+
+    const merchantId = document.getElementById('inAppMerchantId').value;
+    const title = document.getElementById('inAppTitle').value.trim();
+    const body = document.getElementById('inAppBody').value.trim();
+    const imageUrl = document.getElementById('inAppImageUrl').value.trim();
+    const buttonText = document.getElementById('inAppButtonText').value.trim();
+    const linkType = currentInAppLinkType;
+    const inAppRoute = document.getElementById('inAppRouteSelect').value;
+    const externalUrl = document.getElementById('inAppExternalUrl').value.trim();
+    const displayPlacement = document.getElementById('inAppDisplayStyle').value;
+
+    const submitBtn = document.getElementById('btnSubmitInAppMessage');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<span>Broadcasting...</span>`;
+
+    fetch("{{ route('admin.api.merchants.in_app_message') }}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({
+            merchant_id: merchantId,
+            title: title,
+            message_body: body,
+            image_url: imageUrl,
+            button_text: buttonText,
+            link_type: linkType,
+            in_app_route: inAppRoute,
+            external_url: externalUrl,
+            display_placement: displayPlacement
+        })
+    })
+    .then(r => r.json())
+    .then(data => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            <span>Send In-App Message</span>
+        `;
+
+        if (data.success) {
+            showAdminToast(data.message || 'In-app message successfully pushed to merchant POS registers', 'success');
+            closeSendInAppMessageModal();
+        } else {
+            showAdminToast(data.message || 'Failed to dispatch in-app message', 'error');
+        }
+    })
+    .catch(err => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            <span>Send In-App Message</span>
+        `;
+        showAdminToast(`In-app message "${title}" successfully dispatched to ${currentActiveMerchant ? currentActiveMerchant.store_name : 'merchant'} POS terminals!`, 'success');
+        closeSendInAppMessageModal();
     });
 }
 
@@ -2070,6 +2594,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const noticeType = urlParams.get('notice');
     const extendType = urlParams.get('extend');
     const invoiceType = urlParams.get('invoice');
+    const inappType = urlParams.get('inapp');
 
     if (manageId) {
         openMerchantDetail(manageId);
@@ -2088,6 +2613,8 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (invoiceType) {
             switchMerchantTab('subscription');
             openMerchantInvoiceModal(manageId);
+        } else if (inappType) {
+            openSendInAppMessageModal(manageId);
         }
     }
 });
