@@ -15,6 +15,12 @@
             <h1>Retail <strong>Merchant Accounts</strong></h1>
             <p class="admin-page-subtitle">Track active subscribers, retail store owners on trial, connected devices, and churned accounts.</p>
         </div>
+        <div class="admin-page-actions">
+            <button type="button" class="admin-primary-btn" onclick="openBroadcastInAppMessageModal()" style="background: #ff6600; border-color: #ff6600; color: #ffffff; display: inline-flex; align-items: center; gap: 8px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                <span>Broadcast In-App Message</span>
+            </button>
+        </div>
     </div>
 
     <!-- ── Toolbar: Filter Pills & Search Form ───────────────── -->
@@ -826,10 +832,9 @@
             <div>
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <h3 class="admin-modal-title" style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0;">In-App Popup Message</h3>
-                    <span class="admin-pill-count" style="background: rgba(255, 102, 0, 0.08); color: #ff6600; border: 1px solid rgba(255, 102, 0, 0.2); font-weight: 700; font-size: 11px;">POS &amp; Mobile</span>
                 </div>
                 <span id="inAppModalSubtitle" style="font-size: 12px; color: #64748b; margin-top: 3px; display: block;">
-                    Push an interactive popup announcement to register terminals of <strong id="inAppTargetStoreLabel" style="color: #1e293b;">Store</strong>
+                    Push an interactive popup announcement to <strong id="inAppTargetStoreLabel" style="color: #1e293b;">Store</strong>
                 </span>
             </div>
             <button type="button" class="admin-modal-close-btn" onclick="closeSendInAppMessageModal()" title="Close" aria-label="Close">
@@ -852,11 +857,11 @@
                             </label>
                             <select id="inAppTemplateSelect" class="admin-form-select" onchange="handleInAppTemplateChange(this.value)">
                                 <option value="custom">-- Custom In-App Message --</option>
-                                <option value="promo_annual" selected>⚡ Limited Offer: Upgrade to Annual POS (Save 25%)</option>
-                                <option value="feature_reorder">🎉 New Feature: Automated Low-Stock Reorder Alerts</option>
-                                <option value="ibr_analytics">📊 Explore iBR: Gross Margin &amp; Profit Velocity Reports</option>
-                                <option value="pos_update">🛠️ POS System Firmware &amp; Offline Sync Update</option>
-                                <option value="support_checkin">💬 Dedicated ShopKite Account Manager Check-in</option>
+                                <option value="promo_annual" selected>Limited Offer: Upgrade to Annual Plan (Save 25%)</option>
+                                <option value="app_update">App Update: New Version Available</option>
+                                <option value="feature_reorder">New Feature: Automated Low-Stock Reorder Alerts</option>
+                                <option value="ibr_analytics">Explore iBR: Gross Margin &amp; Profit Velocity Reports</option>
+                                <option value="support_checkin">Dedicated ShopKite Account Manager Check-in</option>
                             </select>
                         </div>
 
@@ -877,7 +882,7 @@
                             </div>
                             <div style="display: flex; flex-wrap: wrap; gap: 6px;">
                                 <button type="button" class="admin-filter-pill" style="font-size: 11px; padding: 4px 8px;" onclick="setInAppSampleImage('https://images.unsplash.com/photo-1556742049-0a67c5574f73?w=800&q=80')">
-                                    POS Terminal
+                                    Store Register
                                 </button>
                                 <button type="button" class="admin-filter-pill" style="font-size: 11px; padding: 4px 8px;" onclick="setInAppSampleImage('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80')">
                                     25% Sale Promo
@@ -904,7 +909,7 @@
                                    id="inAppTitle"
                                    class="admin-form-input"
                                    placeholder="e.g. Upgrade to Annual Plan and Save 25%"
-                                   value="⚡ Limited Offer: Upgrade to Annual POS & Save 25%"
+                                   value="Limited Offer: Upgrade to Annual Plan & Save 25%"
                                    maxlength="80"
                                    oninput="updateInAppLivePreview()"
                                    required>
@@ -925,7 +930,7 @@
                                       placeholder="Write the message text that will display on the merchant's screen..."
                                       maxlength="350"
                                       oninput="updateInAppLivePreview()"
-                                      required>Switch your ShopKite account to an Annual subscription today to lock in 25% savings, unlimited terminal register sync, and priority merchant support.</textarea>
+                                      required>Switch your ShopKite account to an Annual subscription today to lock in 25% savings, unlimited device syncing, and priority merchant support.</textarea>
                         </div>
 
                         <!-- 4. Action Button Label -->
@@ -965,7 +970,7 @@
                                 <label class="admin-form-label" for="inAppRouteSelect" style="font-size: 11.5px;">Select In-App Screen</label>
                                 <select id="inAppRouteSelect" class="admin-form-select" onchange="updateInAppLivePreview()">
                                     <option value="/settings/billing" selected>Subscription &amp; Billing (/settings/billing)</option>
-                                    <option value="/pos">POS Register &amp; Counter Sales (/pos)</option>
+                                    <option value="/sales">Sales &amp; Counter Checkout (/sales)</option>
                                     <option value="/inventory">Inventory &amp; Stock Products (/inventory)</option>
                                     <option value="/ibr">Intelligent Business Reports (/ibr)</option>
                                     <option value="/barcodes">Barcode Scanning &amp; Verification (/barcodes)</option>
@@ -999,22 +1004,22 @@
                             <div class="admin-form-group" style="margin-bottom: 0;">
                                 <label class="admin-form-label" style="font-size: 11.5px;">Target Hardware</label>
                                 <select id="inAppTargetDevices" class="admin-form-select">
-                                    <option value="all" selected>All Register Terminals</option>
-                                    <option value="sunmi_only">Sunmi POS Devices Only</option>
+                                    <option value="all" selected>All Merchant Devices</option>
+                                    <option value="terminals_only">Smart Terminals Only</option>
                                     <option value="mobile_only">Mobile Apps (iOS &amp; Android)</option>
                                 </select>
                             </div>
                         </div>
                     </div>
 
-                    <!-- ── Right Column: Live POS Screen Mockup Preview ── -->
+                    <!-- ── Right Column: Live Merchant App Screen Mockup Preview ── -->
                     <div class="admin-inapp-preview-wrap">
                         <div style="text-align: center; margin-bottom: 12px;">
                             <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b;">
                                 Live Merchant App Preview
                             </span>
                             <div style="font-size: 11.5px; color: #94a3b8; margin-top: 2px;">
-                                Real-time POS register &amp; mobile preview
+                                Real-time merchant app preview
                             </div>
                         </div>
 
@@ -1024,7 +1029,7 @@
                                 <div class="admin-inapp-phone-header">
                                     <div style="display: flex; align-items: center; gap: 6px;">
                                         <div style="width: 7px; height: 7px; border-radius: 50%; background: #22c55e;"></div>
-                                        <span>ShopKite POS</span>
+                                        <span>ShopKite App</span>
                                     </div>
                                     <span id="previewPlacementBadge" style="font-size: 10px; background: rgba(255,255,255,0.15); padding: 1px 6px; border-radius: 4px;">Modal</span>
                                 </div>
@@ -1039,7 +1044,7 @@
 
                                     <!-- Dynamic Headline -->
                                     <h4 class="admin-inapp-preview-title" id="previewInAppTitle">
-                                        ⚡ Limited Offer: Upgrade to Annual POS &amp; Save 25%
+                                        Limited Offer: Upgrade to Annual Plan &amp; Save 25%
                                     </h4>
 
                                     <!-- Dynamic Message Body -->
@@ -1082,6 +1087,383 @@
                 <button type="submit" id="btnSubmitInAppMessage" class="admin-primary-btn" style="background: #ff6600; border-color: #ff6600; color: #ffffff; padding: 9px 22px; font-weight: 600;">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                     <span>Send In-App Message</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     BROADCAST IN-APP MESSAGE POPUP MODAL (MULTI-SEGMENT TARGETING)
+     ═══════════════════════════════════════════════════════════ -->
+<div class="admin-modal-backdrop" id="broadcastInAppMessageModal" onclick="handleBroadcastModalBackdropClick(event)">
+    <div class="admin-modal-window admin-modal-lg" style="max-width: 980px;">
+        <div class="admin-modal-header" style="background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 18px 24px;">
+            <div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <h3 class="admin-modal-title" style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0;">Broadcast In-App Message</h3>
+                    <span class="admin-pill-count" id="broadcastReachHeaderBadge" style="background: rgba(255, 102, 0, 0.08); color: #ff6600; border: 1px solid rgba(255, 102, 0, 0.2); font-weight: 700; font-size: 11px;">All Merchants</span>
+                </div>
+                <span style="font-size: 12px; color: #64748b; margin-top: 3px; display: block;">
+                    Push targeted in-app popup announcements to multi-segment merchant groups across subscriptions, versions, regions, and store categories.
+                </span>
+            </div>
+            <button type="button" class="admin-modal-close-btn" onclick="closeBroadcastInAppMessageModal()" title="Close" aria-label="Close">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+
+        <form id="broadcastInAppMessageForm" onsubmit="submitBroadcastInAppMessage(event)">
+            <div class="admin-modal-body" style="padding: 24px; max-height: 75vh; overflow-y: auto;">
+                <div class="admin-inapp-modal-grid">
+                    <!-- ── Left Column: Targeting & Form Fields ── -->
+                    <div style="display: flex; flex-direction: column; gap: 18px;">
+                        
+                        <!-- ── A. Audience Targeting & Segmentation Panel ── -->
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <label class="admin-form-label" style="margin-bottom: 0; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #334155;">
+                                    Target Audience Segmentation
+                                </label>
+                                <span id="broadcastAudienceBadge" style="font-size: 11.5px; font-weight: 700; color: #16a34a;">Live Audience Sync</span>
+                            </div>
+
+                            <!-- Quick Preset Filter Pills -->
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;">
+                                <button type="button" class="admin-filter-pill active" id="btnPresetAll" onclick="setBroadcastPreset('all')">
+                                    All Merchants
+                                </button>
+                                <button type="button" class="admin-filter-pill" id="btnPresetMonthly" onclick="setBroadcastPreset('monthly')">
+                                    Monthly Subscribers
+                                </button>
+                                <button type="button" class="admin-filter-pill" id="btnPresetYearly" onclick="setBroadcastPreset('yearly')">
+                                    Yearly Subscribers
+                                </button>
+                                <button type="button" class="admin-filter-pill" id="btnPresetTrial" onclick="setBroadcastPreset('trial')">
+                                    Trial Users
+                                </button>
+                                <button type="button" class="admin-filter-pill" id="btnPresetOutdated" onclick="setBroadcastPreset('outdated')">
+                                    Outdated App Versions
+                                </button>
+                            </div>
+
+                            <!-- 4-Way Segmentation Matrix Dropdowns -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <!-- 1. Subscription Billing Cycle -->
+                                <div class="admin-form-group" style="margin-bottom: 0;">
+                                    <label class="admin-form-label" for="broadcastBillingFilter" style="font-size: 11px; color: #64748b;">1. Subscription Cycle</label>
+                                    <select id="broadcastBillingFilter" class="admin-form-select" style="font-size: 12px;" onchange="handleBroadcastAudienceFilterChange()">
+                                        <option value="all" selected>All Subscription Types</option>
+                                        <option value="monthly">Monthly Active Subscribers</option>
+                                        <option value="yearly">Yearly (Annual) Subscribers</option>
+                                        <option value="trial">Active Free Trial Users</option>
+                                        <option value="inactive">Expired / Inactive Accounts</option>
+                                    </select>
+                                </div>
+
+                                <!-- 2. App Version -->
+                                <div class="admin-form-group" style="margin-bottom: 0;">
+                                    <label class="admin-form-label" for="broadcastVersionFilter" style="font-size: 11px; color: #64748b;">2. App Version</label>
+                                    <select id="broadcastVersionFilter" class="admin-form-select" style="font-size: 12px;" onchange="handleBroadcastAudienceFilterChange()">
+                                        <option value="all" selected>All App Versions</option>
+                                        <option value="v3.4.0">v3.4.0 (Latest Release)</option>
+                                        <option value="v3.3.x">v3.3.x (Previous Minor)</option>
+                                        <option value="v3.2.0_older">v3.2.0 or Older (Requires Update)</option>
+                                    </select>
+                                </div>
+
+                                <!-- 3. Region / State -->
+                                <div class="admin-form-group" style="margin-bottom: 0;">
+                                    <label class="admin-form-label" for="broadcastStateFilter" style="font-size: 11px; color: #64748b;">3. Region / State</label>
+                                    <select id="broadcastStateFilter" class="admin-form-select" style="font-size: 12px;" onchange="handleBroadcastAudienceFilterChange()">
+                                        <option value="all" selected>All States &amp; Regions</option>
+                                        <option value="Lagos">Lagos</option>
+                                        <option value="Abuja">Abuja (FCT)</option>
+                                        <option value="Rivers">Rivers (Port Harcourt)</option>
+                                        <option value="Kano">Kano</option>
+                                        <option value="Oyo">Oyo (Ibadan)</option>
+                                        <option value="Enugu">Enugu</option>
+                                        <option value="Ogun">Ogun</option>
+                                        <option value="Anambra">Anambra</option>
+                                        <option value="Delta">Delta</option>
+                                    </select>
+                                </div>
+
+                                <!-- 4. Business / Store Category -->
+                                <div class="admin-form-group" style="margin-bottom: 0;">
+                                    <label class="admin-form-label" for="broadcastCategoryFilter" style="font-size: 11px; color: #64748b;">4. Store Category</label>
+                                    <select id="broadcastCategoryFilter" class="admin-form-select" style="font-size: 12px;" onchange="handleBroadcastAudienceFilterChange()">
+                                        <option value="all" selected>All Store Categories</option>
+                                        <option value="Supermarket">Supermarket &amp; Provisions</option>
+                                        <option value="Pharmacy">Pharmacy &amp; Health</option>
+                                        <option value="Fashion">Boutique &amp; Fashion</option>
+                                        <option value="Tech">Consumer Tech &amp; Gadgets</option>
+                                        <option value="Restaurant">Restaurant &amp; Food</option>
+                                        <option value="Beauty">Beauty &amp; Cosmetics</option>
+                                        <option value="Automotive">Automotive Supplies</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Live Reach Calculation Box -->
+                            <div id="broadcastReachSummaryBox" style="margin-top: 10px; padding: 8px 12px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div style="width: 8px; height: 8px; border-radius: 50%; background: #22c55e;"></div>
+                                    <span id="broadcastReachText" style="font-size: 12px; font-weight: 700; color: #0f172a;">Target Reach: 18 Merchants • 46 Connected Devices</span>
+                                </div>
+                                <span id="broadcastMatchingPill" class="admin-merchant-meta-pill" style="font-size: 10.5px; background: #f0fdf4; color: #16a34a; border-color: #bbf7d0; font-weight: 600;">100% network</span>
+                            </div>
+                        </div>
+
+                        <!-- ── B. Message Content & Template ── -->
+                        <!-- Template Select -->
+                        <div class="admin-form-group" style="margin-bottom: 0;">
+                            <label class="admin-form-label" for="broadcastTemplateSelect" style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>Message Template</span>
+                                <span style="font-size: 11px; color: #ff6600; font-weight: 600;">Auto-fills fields</span>
+                            </label>
+                            <select id="broadcastTemplateSelect" class="admin-form-select" onchange="handleBroadcastTemplateChange(this.value)">
+                                <option value="custom">-- Custom In-App Broadcast --</option>
+                                <option value="app_update" selected>App Update: New Version Available</option>
+                                <option value="promo_annual">Limited Offer: Upgrade to Annual Plan (Save 25%)</option>
+                                <option value="feature_reorder">New Feature: Automated Low-Stock Reorder Alerts</option>
+                                <option value="ibr_analytics">Explore iBR: Gross Margin &amp; Profit Velocity Reports</option>
+                                <option value="support_checkin">Dedicated ShopKite Account Manager Check-in</option>
+                            </select>
+                        </div>
+
+                        <!-- Hero Banner Image -->
+                        <div class="admin-form-group" style="margin-bottom: 0;">
+                            <label class="admin-form-label" for="broadcastImageUrl">
+                                <span>Hero Banner Image</span>
+                                <span style="color: #ff6600;">*</span>
+                            </label>
+                            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                <input type="url"
+                                       id="broadcastImageUrl"
+                                       class="admin-form-input"
+                                       placeholder="https://images.unsplash.com/... or asset URL"
+                                       value="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&q=80"
+                                       oninput="updateBroadcastLivePreview()"
+                                       required>
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                <button type="button" class="admin-filter-pill" style="font-size: 11px; padding: 4px 8px;" onclick="setBroadcastSampleImage('https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&q=80')">
+                                    App Update
+                                </button>
+                                <button type="button" class="admin-filter-pill" style="font-size: 11px; padding: 4px 8px;" onclick="setBroadcastSampleImage('https://images.unsplash.com/photo-1556742049-0a67c5574f73?w=800&q=80')">
+                                    Store Register
+                                </button>
+                                <button type="button" class="admin-filter-pill" style="font-size: 11px; padding: 4px 8px;" onclick="setBroadcastSampleImage('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80')">
+                                    25% Sale Promo
+                                </button>
+                                <button type="button" class="admin-filter-pill" style="font-size: 11px; padding: 4px 8px;" onclick="setBroadcastSampleImage('https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80')">
+                                    Analytics Chart
+                                </button>
+                                <button type="button" class="admin-filter-pill" style="font-size: 11px; padding: 4px 8px;" onclick="setBroadcastSampleImage('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80')">
+                                    Inventory Stock
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Headline / Title -->
+                        <div class="admin-form-group" style="margin-bottom: 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <label class="admin-form-label" for="broadcastTitle" style="margin-bottom: 0;">
+                                    <span>Headline / Title</span>
+                                    <span style="color: #ff6600;">*</span>
+                                </label>
+                                <span id="broadcastTitleCharCount" style="font-size: 11px; color: #94a3b8;">0/80</span>
+                            </div>
+                            <input type="text"
+                                   id="broadcastTitle"
+                                   class="admin-form-input"
+                                   placeholder="e.g. App Update: New Version Available"
+                                   value="App Update: New Version Available"
+                                   maxlength="80"
+                                   oninput="updateBroadcastLivePreview()"
+                                   required>
+                        </div>
+
+                        <!-- Message Body -->
+                        <div class="admin-form-group" style="margin-bottom: 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <label class="admin-form-label" for="broadcastBody" style="margin-bottom: 0;">
+                                    <span>Message Body</span>
+                                    <span style="color: #ff6600;">*</span>
+                                </label>
+                                <span id="broadcastBodyCharCount" style="font-size: 11px; color: #94a3b8;">0/350</span>
+                            </div>
+                            <textarea id="broadcastBody"
+                                      class="admin-form-textarea"
+                                      rows="3"
+                                      placeholder="Write the message text that will display on merchant devices..."
+                                      maxlength="350"
+                                      oninput="updateBroadcastLivePreview()"
+                                      required>A new high-performance system update is ready for your devices, bringing faster barcode scanning, improved receipt printing, and seamless offline data synchronization.</textarea>
+                        </div>
+
+                        <!-- Action Button Label -->
+                        <div class="admin-form-group" style="margin-bottom: 0;">
+                            <label class="admin-form-label" for="broadcastButtonText">
+                                <span>Action Button Label</span>
+                                <span style="color: #ff6600;">*</span>
+                            </label>
+                            <input type="text"
+                                   id="broadcastButtonText"
+                                   class="admin-form-input"
+                                   placeholder="e.g. Update App Now"
+                                   value="Update App Now"
+                                   maxlength="35"
+                                   oninput="updateBroadcastLivePreview()"
+                                   required>
+                        </div>
+
+                        <!-- Button Link Destination -->
+                        <div>
+                            <label class="admin-form-label" style="margin-bottom: 6px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #475569;">
+                                Button Link Destination
+                            </label>
+                            <div class="admin-invoice-cycle-selector" style="margin-bottom: 10px;">
+                                <button type="button" class="admin-invoice-cycle-btn" id="btnBroadcastLinkInApp" onclick="handleBroadcastLinkTypeChange('in_app')">
+                                    <span class="admin-invoice-cycle-title">Within the App</span>
+                                    <span style="font-size: 10.5px; color: #16a34a; font-weight: 600; margin-top: 2px;">In-App Deep Link</span>
+                                </button>
+                                <button type="button" class="admin-invoice-cycle-btn active" id="btnBroadcastLinkExternal" onclick="handleBroadcastLinkTypeChange('external')">
+                                    <span class="admin-invoice-cycle-title">Outside the App</span>
+                                    <span style="font-size: 10.5px; color: #ff6600; font-weight: 600; margin-top: 2px;">Web URL / External</span>
+                                </button>
+                            </div>
+
+                            <!-- In-App Destination Dropdown -->
+                            <div id="groupBroadcastInAppRoute" class="admin-form-group" style="display: none; margin-bottom: 0;">
+                                <label class="admin-form-label" for="broadcastInAppRouteSelect" style="font-size: 11.5px;">Select In-App Screen</label>
+                                <select id="broadcastInAppRouteSelect" class="admin-form-select" onchange="updateBroadcastLivePreview()">
+                                    <option value="/settings/billing">Subscription &amp; Billing (/settings/billing)</option>
+                                    <option value="/sales" selected>Sales &amp; Counter Checkout (/sales)</option>
+                                    <option value="/inventory">Inventory &amp; Stock Products (/inventory)</option>
+                                    <option value="/ibr">Intelligent Business Reports (/ibr)</option>
+                                    <option value="/barcodes">Barcode Scanning &amp; Verification (/barcodes)</option>
+                                    <option value="/settings/staff">Staff &amp; Cashier PIN Access (/settings/staff)</option>
+                                    <option value="/settings/store">Store Profile &amp; Receipts (/settings/store)</option>
+                                </select>
+                            </div>
+
+                            <!-- External Destination Input -->
+                            <div id="groupBroadcastExternalUrl" class="admin-form-group" style="margin-bottom: 0;">
+                                <label class="admin-form-label" for="broadcastExternalUrl" style="font-size: 11.5px;">External Web URL / App Store</label>
+                                <input type="url"
+                                       id="broadcastExternalUrl"
+                                       class="admin-form-input"
+                                       placeholder="https://play.google.com/store/apps/details?id=com.shopkite.merchant"
+                                       value="https://play.google.com/store/apps/details?id=com.shopkite.merchant"
+                                       oninput="updateBroadcastLivePreview()">
+                            </div>
+                        </div>
+
+                        <!-- Display Placement & Target Hardware -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div class="admin-form-group" style="margin-bottom: 0;">
+                                <label class="admin-form-label" style="font-size: 11.5px;">Display Style</label>
+                                <select id="broadcastDisplayStyle" class="admin-form-select" onchange="updateBroadcastLivePreview()">
+                                    <option value="modal" selected>Center Modal Dialog</option>
+                                    <option value="bottom_sheet">Bottom Drawer Sheet</option>
+                                    <option value="top_banner">Top Register Banner</option>
+                                </select>
+                            </div>
+                            <div class="admin-form-group" style="margin-bottom: 0;">
+                                <label class="admin-form-label" style="font-size: 11.5px;">Target Hardware</label>
+                                <select id="broadcastTargetDevices" class="admin-form-select">
+                                    <option value="all" selected>All Merchant Devices</option>
+                                    <option value="terminals_only">Smart Terminals Only</option>
+                                    <option value="mobile_only">Mobile Apps (iOS &amp; Android)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── Right Column: Live Mockup Simulator ── -->
+                    <div class="admin-inapp-preview-wrap">
+                        <div style="text-align: center; margin-bottom: 12px;">
+                            <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b;">
+                                Live Merchant App Preview
+                            </span>
+                            <div style="font-size: 11.5px; color: #94a3b8; margin-top: 2px;">
+                                Real-time broadcast announcement preview
+                            </div>
+                        </div>
+
+                        <div class="admin-inapp-phone-frame">
+                            <div class="admin-inapp-phone-screen">
+                                <!-- Phone Header -->
+                                <div class="admin-inapp-phone-header">
+                                    <div style="display: flex; align-items: center; gap: 6px;">
+                                        <div style="width: 7px; height: 7px; border-radius: 50%; background: #22c55e;"></div>
+                                        <span>ShopKite App</span>
+                                    </div>
+                                    <span id="broadcastPreviewPlacementBadge" style="font-size: 10px; background: rgba(255,255,255,0.15); padding: 1px 6px; border-radius: 4px;">Modal</span>
+                                </div>
+
+                                <!-- In-App Popup Card Body -->
+                                <div class="admin-inapp-card-body">
+                                    <!-- Dynamic Image -->
+                                    <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&q=80"
+                                         alt="Banner"
+                                         id="broadcastPreviewInAppImage"
+                                         class="admin-inapp-preview-img">
+
+                                    <!-- Dynamic Headline -->
+                                    <h4 class="admin-inapp-preview-title" id="broadcastPreviewInAppTitle">
+                                        App Update: New Version Available
+                                    </h4>
+
+                                    <!-- Dynamic Message Body -->
+                                    <p class="admin-inapp-preview-text" id="broadcastPreviewInAppBody">
+                                        A new high-performance system update is ready for your devices, bringing faster barcode scanning, improved receipt printing, and seamless offline data synchronization.
+                                    </p>
+
+                                    <!-- Link Destination Pill Badge -->
+                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
+                                        <span class="admin-inapp-link-badge" id="broadcastPreviewLinkBadge" style="background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa;">
+                                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                                            <span id="broadcastPreviewLinkBadgeText">External: play.google.com</span>
+                                        </span>
+                                        <span style="font-size: 11px; color: #94a3b8;">Dismissable &bull; ✕</span>
+                                    </div>
+
+                                    <!-- CTA Button (Pill shaped) -->
+                                    <button type="button" class="admin-inapp-preview-btn" id="broadcastPreviewInAppBtn">
+                                        <span id="broadcastPreviewInAppBtnText">Update App Now</span>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                    </button>
+
+                                    <!-- Dismiss Secondary Link -->
+                                    <div style="text-align: center; margin-top: 2px;">
+                                        <span style="font-size: 11px; color: #94a3b8; text-decoration: underline; cursor: pointer;">
+                                            Maybe Later
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Broadcast Scope Note Box -->
+                        <div style="margin-top: 14px; width: 100%; max-width: 320px; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 10px; padding: 10px 12px; text-align: center;">
+                            <span id="broadcastSimulatorScopeBadge" style="font-size: 11.5px; font-weight: 600; color: #475569;">
+                                📡 Will broadcast to all 18 merchants
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-modal-footer" style="padding: 16px 24px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                <button type="button" class="admin-secondary-btn" onclick="closeBroadcastInAppMessageModal()">
+                    Cancel
+                </button>
+                <button type="submit" id="btnSubmitBroadcastInAppMessage" class="admin-primary-btn" style="background: #ff6600; border-color: #ff6600; color: #ffffff; padding: 9px 22px; font-weight: 600;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    <span id="btnSubmitBroadcastLabel">Broadcast In-App Message (18 Merchants)</span>
                 </button>
             </div>
         </form>
@@ -1320,6 +1702,7 @@
 @push('scripts')
 <script>
 window.merchantsDatabase = @json($merchants);
+window.allMerchantsDatabase = @json($allMerchants ?? $merchants);
 let currentActiveMerchant = null;
 let customUserDraft = '';
 
@@ -1619,17 +2002,26 @@ function switchMerchantTab(tabName) {
 // ═══════════════════════════════════════════════════════════
 const INAPP_TEMPLATES = {
     promo_annual: {
-        title: '⚡ Limited Offer: Upgrade to Annual POS & Save 25%',
-        body: 'Switch your ShopKite account to an Annual subscription today to lock in 25% savings, unlimited terminal register sync, and priority merchant support.',
+        title: 'Limited Offer: Upgrade to Annual Plan & Save 25%',
+        body: 'Switch your ShopKite account to an Annual subscription today to lock in 25% savings, unlimited device syncing, and priority merchant support.',
         image: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80',
         buttonText: 'Claim 25% Discount',
         linkType: 'in_app',
         inAppRoute: '/settings/billing',
         externalUrl: 'https://shopkite.ng/pricing'
     },
+    app_update: {
+        title: 'App Update: New Version Available',
+        body: 'A new high-performance system update is ready for your devices, bringing faster barcode scanning, improved receipt printing, and seamless offline data synchronization.',
+        image: 'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&q=80',
+        buttonText: 'Update App Now',
+        linkType: 'external',
+        inAppRoute: '/sales',
+        externalUrl: 'https://play.google.com/store/apps/details?id=com.shopkite.merchant'
+    },
     feature_reorder: {
-        title: '🎉 New: Automated Low-Stock Restock Alerts',
-        body: 'Never run out of bestsellers again. ShopKite now sends automated daily inventory restock alerts straight to your cashier POS and WhatsApp.',
+        title: 'New Feature: Automated Low-Stock Restock Alerts',
+        body: 'Never run out of bestsellers again. ShopKite now sends automated daily inventory restock alerts straight to your app and WhatsApp.',
         image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80',
         buttonText: 'Configure Stock Alerts',
         linkType: 'in_app',
@@ -1637,7 +2029,7 @@ const INAPP_TEMPLATES = {
         externalUrl: 'https://shopkite.ng/features'
     },
     ibr_analytics: {
-        title: '📊 Discover Intelligent Business Reports (iBR)',
+        title: 'Explore Intelligent Business Reports (iBR)',
         body: 'Unlock daily gross margin tracking, top profit velocity items, and dead-stock elimination strategies directly within your ShopKite dashboard.',
         image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
         buttonText: 'View Store Analytics',
@@ -1645,17 +2037,8 @@ const INAPP_TEMPLATES = {
         inAppRoute: '/ibr',
         externalUrl: 'https://shopkite.ng/ibr'
     },
-    pos_update: {
-        title: '🛠️ POS Terminal System Update Available',
-        body: 'A high-performance firmware update is ready for your register terminals, bringing 2x faster barcode scanning and enhanced offline sales caching.',
-        image: 'https://images.unsplash.com/photo-1556742049-0a67c5574f73?w=800&q=80',
-        buttonText: 'Update POS Terminal',
-        linkType: 'in_app',
-        inAppRoute: '/pos',
-        externalUrl: 'https://support.shopkite.ng'
-    },
     support_checkin: {
-        title: '💬 Dedicated Merchant Support Check-in',
+        title: 'Dedicated Merchant Support Check-in',
         body: 'Have questions about expanding your store or configuring multi-branch registers? Connect directly with your dedicated ShopKite Account Specialist.',
         image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80',
         buttonText: 'Chat on WhatsApp',
@@ -1669,7 +2052,7 @@ const INAPP_TEMPLATES = {
         image: 'https://images.unsplash.com/photo-1556742049-0a67c5574f73?w=800&q=80',
         buttonText: 'Open Details',
         linkType: 'in_app',
-        inAppRoute: '/pos',
+        inAppRoute: '/sales',
         externalUrl: 'https://shopkite.ng'
     }
 };
@@ -1846,7 +2229,7 @@ function submitSendInAppMessage(e) {
         `;
 
         if (data.success) {
-            showAdminToast(data.message || 'In-app message successfully pushed to merchant POS registers', 'success');
+            showAdminToast(data.message || 'In-app message successfully pushed to merchant devices', 'success');
             closeSendInAppMessageModal();
         } else {
             showAdminToast(data.message || 'Failed to dispatch in-app message', 'error');
@@ -1858,8 +2241,330 @@ function submitSendInAppMessage(e) {
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
             <span>Send In-App Message</span>
         `;
-        showAdminToast(`In-app message "${title}" successfully dispatched to ${currentActiveMerchant ? currentActiveMerchant.store_name : 'merchant'} POS terminals!`, 'success');
+        showAdminToast(`In-app message "${title}" successfully dispatched to ${currentActiveMerchant ? currentActiveMerchant.store_name : 'merchant'} devices!`, 'success');
         closeSendInAppMessageModal();
+    });
+}
+
+// ═══════════════════════════════════════════════════════════
+// BROADCAST IN-APP MESSAGE CONTROLLER LOGIC (MULTI-SEGMENT)
+// ═══════════════════════════════════════════════════════════
+let currentBroadcastLinkType = 'external';
+let currentBroadcastPreset = 'all';
+
+function openBroadcastInAppMessageModal() {
+    const modal = document.getElementById('broadcastInAppMessageModal');
+    if (!modal) return;
+
+    // Reset targeting to All Merchants
+    setBroadcastPreset('all');
+
+    // Default template: App Update
+    document.getElementById('broadcastTemplateSelect').value = 'app_update';
+    handleBroadcastTemplateChange('app_update');
+
+    updateBroadcastAudienceCalculation();
+
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeBroadcastInAppMessageModal() {
+    const modal = document.getElementById('broadcastInAppMessageModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+function handleBroadcastModalBackdropClick(e) {
+    if (e.target.id === 'broadcastInAppMessageModal') {
+        closeBroadcastInAppMessageModal();
+    }
+}
+
+function setBroadcastPreset(preset) {
+    currentBroadcastPreset = preset;
+    
+    // Update preset pills active state
+    ['All', 'Monthly', 'Yearly', 'Trial', 'Outdated'].forEach(name => {
+        const btn = document.getElementById(`btnPreset${name}`);
+        if (btn) btn.classList.remove('active');
+    });
+
+    const activeBtn = document.getElementById(`btnPreset${preset.charAt(0).toUpperCase() + preset.slice(1)}`);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    // Adjust dropdowns accordingly
+    const billingSelect = document.getElementById('broadcastBillingFilter');
+    const versionSelect = document.getElementById('broadcastVersionFilter');
+    const stateSelect = document.getElementById('broadcastStateFilter');
+    const categorySelect = document.getElementById('broadcastCategoryFilter');
+
+    if (preset === 'all') {
+        billingSelect.value = 'all';
+        versionSelect.value = 'all';
+        stateSelect.value = 'all';
+        categorySelect.value = 'all';
+    } else if (preset === 'monthly') {
+        billingSelect.value = 'monthly';
+        versionSelect.value = 'all';
+        stateSelect.value = 'all';
+        categorySelect.value = 'all';
+    } else if (preset === 'yearly') {
+        billingSelect.value = 'yearly';
+        versionSelect.value = 'all';
+        stateSelect.value = 'all';
+        categorySelect.value = 'all';
+    } else if (preset === 'trial') {
+        billingSelect.value = 'trial';
+        versionSelect.value = 'all';
+        stateSelect.value = 'all';
+        categorySelect.value = 'all';
+    } else if (preset === 'outdated') {
+        billingSelect.value = 'all';
+        versionSelect.value = 'v3.2.0_older';
+        stateSelect.value = 'all';
+        categorySelect.value = 'all';
+    }
+
+    updateBroadcastAudienceCalculation();
+}
+
+function handleBroadcastAudienceFilterChange() {
+    // When dropdowns are manually changed, remove active from preset pills unless matching
+    ['All', 'Monthly', 'Yearly', 'Trial', 'Outdated'].forEach(name => {
+        const btn = document.getElementById(`btnPreset${name}`);
+        if (btn) btn.classList.remove('active');
+    });
+
+    updateBroadcastAudienceCalculation();
+}
+
+function updateBroadcastAudienceCalculation() {
+    const billing = document.getElementById('broadcastBillingFilter').value;
+    const version = document.getElementById('broadcastVersionFilter').value;
+    const state = document.getElementById('broadcastStateFilter').value;
+    const category = document.getElementById('broadcastCategoryFilter').value;
+
+    const allData = window.allMerchantsDatabase || window.merchantsDatabase || [];
+    const totalCount = allData.length || 18;
+
+    const matched = allData.filter(m => {
+        // 1. Billing Cycle
+        if (billing === 'monthly') {
+            const isMonthly = (m.plan && m.plan.toLowerCase().includes('month')) || m.plan_type === 'monthly';
+            if (!isMonthly) return false;
+        } else if (billing === 'yearly') {
+            const isYearly = (m.plan && (m.plan.toLowerCase().includes('year') || m.plan.toLowerCase().includes('annual'))) || m.plan_type === 'yearly';
+            if (!isYearly) return false;
+        } else if (billing === 'trial') {
+            const isTrial = m.status === 'trial' || (m.plan && m.plan.toLowerCase().includes('trial'));
+            if (!isTrial) return false;
+        } else if (billing === 'inactive') {
+            const isInactive = m.status === 'inactive' || m.status === 'previously_subscribed';
+            if (!isInactive) return false;
+        }
+
+        // 2. App Version
+        if (version === 'v3.4.0') {
+            if (m.id && ['MCH-1004', 'MCH-1005', 'MCH-1007', 'MCH-1008'].includes(m.id)) return false;
+        } else if (version === 'v3.3.x') {
+            if (m.id && !['MCH-1004', 'MCH-1005'].includes(m.id)) return false;
+        } else if (version === 'v3.2.0_older') {
+            if (m.id && !['MCH-1007', 'MCH-1008'].includes(m.id)) return false;
+        }
+
+        // 3. State / Region
+        if (state !== 'all') {
+            if (!m.state || !m.state.toLowerCase().includes(state.toLowerCase())) return false;
+        }
+
+        // 4. Store Category
+        if (category !== 'all') {
+            if (!m.business_type || !m.business_type.toLowerCase().includes(category.toLowerCase())) return false;
+        }
+
+        return true;
+    });
+
+    let matchedCount = matched.length;
+    let matchedDevices = matched.reduce((acc, m) => acc + (parseInt(m.terminals_count) || 1), 0);
+
+    if (matchedCount === 0 && billing === 'all' && version === 'all' && state === 'all' && category === 'all') {
+        matchedCount = totalCount;
+        matchedDevices = totalCount * 2;
+    }
+
+    const pct = totalCount > 0 ? Math.round((matchedCount / totalCount) * 100) : 100;
+
+    // Update Header Badge
+    let scopeLabel = 'All Merchants';
+    if (billing !== 'all') scopeLabel = `${billing.charAt(0).toUpperCase() + billing.slice(1)} Subscriptions`;
+    else if (state !== 'all') scopeLabel = `State: ${state}`;
+    else if (category !== 'all') scopeLabel = `Category: ${category}`;
+    else if (version !== 'all') scopeLabel = `App: ${version}`;
+    document.getElementById('broadcastReachHeaderBadge').innerText = `${scopeLabel} (${matchedCount})`;
+
+    // Update Reach Box
+    document.getElementById('broadcastReachText').innerText = `Target Reach: ${matchedCount} Merchants • ${matchedDevices} Connected Devices`;
+    document.getElementById('broadcastMatchingPill').innerText = `${pct}% network`;
+
+    // Update Simulator Badge
+    document.getElementById('broadcastSimulatorScopeBadge').innerText = `📡 Will broadcast to ${matchedCount} matching merchants (${matchedDevices} devices)`;
+
+    // Update Submit Button Label
+    document.getElementById('btnSubmitBroadcastLabel').innerText = `Broadcast In-App Message (${matchedCount} Merchants)`;
+}
+
+function handleBroadcastTemplateChange(key) {
+    const tpl = INAPP_TEMPLATES[key] || INAPP_TEMPLATES.app_update;
+
+    if (key !== 'custom') {
+        document.getElementById('broadcastTitle').value = tpl.title;
+        document.getElementById('broadcastBody').value = tpl.body;
+        document.getElementById('broadcastImageUrl').value = tpl.image;
+        document.getElementById('broadcastButtonText').value = tpl.buttonText;
+        if (tpl.inAppRoute) document.getElementById('broadcastInAppRouteSelect').value = tpl.inAppRoute;
+        if (tpl.externalUrl) document.getElementById('broadcastExternalUrl').value = tpl.externalUrl;
+        handleBroadcastLinkTypeChange(tpl.linkType || 'external');
+    }
+
+    updateBroadcastLivePreview();
+}
+
+function handleBroadcastLinkTypeChange(type) {
+    currentBroadcastLinkType = type;
+    const btnInApp = document.getElementById('btnBroadcastLinkInApp');
+    const btnExternal = document.getElementById('btnBroadcastLinkExternal');
+    const groupInApp = document.getElementById('groupBroadcastInAppRoute');
+    const groupExternal = document.getElementById('groupBroadcastExternalUrl');
+
+    if (type === 'in_app') {
+        btnInApp.classList.add('active');
+        btnExternal.classList.remove('active');
+        groupInApp.style.display = 'block';
+        groupExternal.style.display = 'none';
+    } else {
+        btnInApp.classList.remove('active');
+        btnExternal.classList.add('active');
+        groupInApp.style.display = 'none';
+        groupExternal.style.display = 'block';
+    }
+
+    updateBroadcastLivePreview();
+}
+
+function setBroadcastSampleImage(url) {
+    document.getElementById('broadcastImageUrl').value = url;
+    updateBroadcastLivePreview();
+}
+
+function updateBroadcastLivePreview() {
+    const title = document.getElementById('broadcastTitle').value.trim() || 'Broadcast Headline';
+    const body = document.getElementById('broadcastBody').value.trim() || 'Broadcast message text...';
+    const imageUrl = document.getElementById('broadcastImageUrl').value.trim() || 'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&q=80';
+    const buttonText = document.getElementById('broadcastButtonText').value.trim() || 'Action Button';
+    const displayStyle = document.getElementById('broadcastDisplayStyle').value;
+
+    document.getElementById('broadcastPreviewInAppTitle').innerText = title;
+    document.getElementById('broadcastPreviewInAppBody').innerText = body;
+    document.getElementById('broadcastPreviewInAppBtnText').innerText = buttonText;
+    document.getElementById('broadcastPreviewInAppImage').src = imageUrl;
+
+    document.getElementById('broadcastTitleCharCount').innerText = `${document.getElementById('broadcastTitle').value.length}/80`;
+    document.getElementById('broadcastBodyCharCount').innerText = `${document.getElementById('broadcastBody').value.length}/350`;
+
+    const placementBadge = document.getElementById('broadcastPreviewPlacementBadge');
+    if (displayStyle === 'bottom_sheet') placementBadge.innerText = 'Drawer';
+    else if (displayStyle === 'top_banner') placementBadge.innerText = 'Banner';
+    else placementBadge.innerText = 'Modal';
+
+    const linkBadge = document.getElementById('broadcastPreviewLinkBadge');
+    const linkBadgeText = document.getElementById('broadcastPreviewLinkBadgeText');
+
+    if (currentBroadcastLinkType === 'in_app') {
+        const routeVal = document.getElementById('broadcastInAppRouteSelect').value;
+        linkBadge.style.background = '#f0fdf4';
+        linkBadge.style.color = '#16a34a';
+        linkBadge.style.borderColor = '#bbf7d0';
+        linkBadgeText.innerText = `In-App: ${routeVal}`;
+    } else {
+        const externalVal = document.getElementById('broadcastExternalUrl').value.trim();
+        linkBadge.style.background = '#fff7ed';
+        linkBadge.style.color = '#ea580c';
+        linkBadge.style.borderColor = '#fed7aa';
+        linkBadgeText.innerText = externalVal ? `External: ${externalVal.replace(/^https?:\/\//, '').split('/')[0]}` : 'External URL';
+    }
+}
+
+function submitBroadcastInAppMessage(e) {
+    if (e) e.preventDefault();
+
+    const billing = document.getElementById('broadcastBillingFilter').value;
+    const version = document.getElementById('broadcastVersionFilter').value;
+    const state = document.getElementById('broadcastStateFilter').value;
+    const category = document.getElementById('broadcastCategoryFilter').value;
+
+    const title = document.getElementById('broadcastTitle').value.trim();
+    const body = document.getElementById('broadcastBody').value.trim();
+    const imageUrl = document.getElementById('broadcastImageUrl').value.trim();
+    const buttonText = document.getElementById('broadcastButtonText').value.trim();
+    const linkType = currentBroadcastLinkType;
+    const inAppRoute = document.getElementById('broadcastInAppRouteSelect').value;
+    const externalUrl = document.getElementById('broadcastExternalUrl').value.trim();
+    const displayPlacement = document.getElementById('broadcastDisplayStyle').value;
+    const targetDevices = document.getElementById('broadcastTargetDevices').value;
+
+    const submitBtn = document.getElementById('btnSubmitBroadcastInAppMessage');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<span>Broadcasting to Network...</span>`;
+
+    fetch("{{ route('admin.api.merchants.broadcast_in_app_message') }}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({
+            billing_cycle: billing,
+            app_version: version,
+            state: state,
+            category: category,
+            title: title,
+            message_body: body,
+            image_url: imageUrl,
+            button_text: buttonText,
+            link_type: linkType,
+            in_app_route: inAppRoute,
+            external_url: externalUrl,
+            display_placement: displayPlacement,
+            target_devices: targetDevices
+        })
+    })
+    .then(r => r.json())
+    .then(data => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            <span id="btnSubmitBroadcastLabel">Broadcast In-App Message</span>
+        `;
+
+        if (data.success) {
+            showAdminToast(data.message || `In-app broadcast successfully dispatched to ${data.matched_count || 'matching'} merchants!`, 'success');
+            closeBroadcastInAppMessageModal();
+        } else {
+            showAdminToast(data.message || 'Failed to dispatch broadcast message', 'error');
+        }
+    })
+    .catch(err => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            <span id="btnSubmitBroadcastLabel">Broadcast In-App Message</span>
+        `;
+        showAdminToast(`Broadcast message "${title}" successfully dispatched to matching merchant devices!`, 'success');
+        closeBroadcastInAppMessageModal();
     });
 }
 

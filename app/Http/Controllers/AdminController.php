@@ -5980,6 +5980,7 @@ class AdminController extends Controller
 
         return view('admin.merchants', [
             'merchants' => collect($sliced),
+            'allMerchants' => self::$merchants,
             'selectedFilter' => $filter,
             'searchQuery' => $request->query('q', ''),
             'counts' => $counts,
@@ -6309,16 +6310,45 @@ class AdminController extends Controller
                 'categories' => true,
                 'manufacturers' => true,
                 'merchants' => true,
+                'in_app_broadcast' => true,
+                'enterprise' => true,
                 'transactions' => true,
                 'store_sales' => true,
                 'analytics' => true,
+                'users' => true,
                 'faqs' => true,
                 'blog' => true,
-                'users' => true,
             ]
         ],
         [
             'id' => 'USR-102',
+            'name' => 'Damilola Adeleke',
+            'email' => 'damilola.admin@shopkite.com',
+            'avatar_initials' => 'DA',
+            'role' => 'admin',
+            'role_label' => 'Admin',
+            'status' => 'active',
+            'status_label' => 'Active',
+            'last_active' => '10 mins ago',
+            'created_at' => 'Feb 14, 2025',
+            'permissions' => [
+                'products' => true,
+                'barcodes' => true,
+                'categories' => true,
+                'manufacturers' => true,
+                'merchants' => true,
+                'in_app_broadcast' => true,
+                'enterprise' => true,
+                'transactions' => true,
+                'store_sales' => true,
+                'analytics' => true,
+                'users' => false,
+                'faqs' => true,
+                'blog' => true,
+            ]
+        ],
+        [
+            'id' => 'USR-103',
             'name' => 'Tunde Fashola',
             'email' => 'tunde.dev@shopkite.com',
             'avatar_initials' => 'TF',
@@ -6326,7 +6356,7 @@ class AdminController extends Controller
             'role_label' => 'Technical Support',
             'status' => 'active',
             'status_label' => 'Active',
-            'last_active' => '14 mins ago',
+            'last_active' => '25 mins ago',
             'created_at' => 'Mar 02, 2025',
             'permissions' => [
                 'products' => true,
@@ -6334,16 +6364,18 @@ class AdminController extends Controller
                 'categories' => true,
                 'manufacturers' => true,
                 'merchants' => true,
+                'in_app_broadcast' => true,
+                'enterprise' => false,
                 'transactions' => false,
                 'store_sales' => false,
                 'analytics' => true,
+                'users' => false,
                 'faqs' => true,
                 'blog' => false,
-                'users' => false,
             ]
         ],
         [
-            'id' => 'USR-103',
+            'id' => 'USR-104',
             'name' => 'Chioma Nwachukwu',
             'email' => 'chioma.support@shopkite.com',
             'avatar_initials' => 'CN',
@@ -6359,16 +6391,18 @@ class AdminController extends Controller
                 'categories' => false,
                 'manufacturers' => false,
                 'merchants' => true,
+                'in_app_broadcast' => true,
+                'enterprise' => true,
                 'transactions' => true,
                 'store_sales' => true,
                 'analytics' => false,
+                'users' => false,
                 'faqs' => true,
                 'blog' => false,
-                'users' => false,
             ]
         ],
         [
-            'id' => 'USR-104',
+            'id' => 'USR-105',
             'name' => 'Ibrahim Danladi',
             'email' => 'ibrahim.tech@shopkite.com',
             'avatar_initials' => 'ID',
@@ -6384,16 +6418,18 @@ class AdminController extends Controller
                 'categories' => true,
                 'manufacturers' => true,
                 'merchants' => false,
+                'in_app_broadcast' => false,
+                'enterprise' => false,
                 'transactions' => false,
                 'store_sales' => false,
                 'analytics' => true,
+                'users' => false,
                 'faqs' => false,
                 'blog' => false,
-                'users' => false,
             ]
         ],
         [
-            'id' => 'USR-105',
+            'id' => 'USR-106',
             'name' => 'Ngozi Balogun',
             'email' => 'ngozi.cx@shopkite.com',
             'avatar_initials' => 'NB',
@@ -6409,12 +6445,14 @@ class AdminController extends Controller
                 'categories' => false,
                 'manufacturers' => false,
                 'merchants' => true,
+                'in_app_broadcast' => true,
+                'enterprise' => true,
                 'transactions' => true,
                 'store_sales' => true,
                 'analytics' => false,
+                'users' => false,
                 'faqs' => true,
                 'blog' => true,
-                'users' => false,
             ]
         ]
     ];
@@ -6448,6 +6486,16 @@ class AdminController extends Controller
             'description' => 'Retail store accounts, active terminals, and subscription tiers.',
             'category' => 'Operations & Commerce'
         ],
+        'in_app_broadcast' => [
+            'name' => 'In-App Broadcasts',
+            'description' => 'Push targeted popup messages, app update alerts, and promo notices to merchants.',
+            'category' => 'Operations & Commerce'
+        ],
+        'enterprise' => [
+            'name' => 'Enterprise Leads',
+            'description' => 'Inbound enterprise vendor requests, demo inquiries, and sales qualification pipeline.',
+            'category' => 'Operations & Commerce'
+        ],
         'transactions' => [
             'name' => 'Transactions & Ledger',
             'description' => 'Subscription billing, service fees, and hardware receipts.',
@@ -6463,6 +6511,11 @@ class AdminController extends Controller
             'description' => 'API volume, active terminals, CPU/RAM levels, and sync metrics.',
             'category' => 'System & Intelligence'
         ],
+        'users' => [
+            'name' => 'Users & Access Control',
+            'description' => 'Manage admin team roles and granular section permissions.',
+            'category' => 'System & Intelligence'
+        ],
         'faqs' => [
             'name' => 'FAQs Manager',
             'description' => 'Update live questions and answers on public help center.',
@@ -6472,17 +6525,46 @@ class AdminController extends Controller
             'name' => 'Blog Articles',
             'description' => 'Draft and edit retail management guides.',
             'category' => 'Content & Help'
+        ]
+    ];
+
+    /**
+     * Admin Sections Categorized Subsections & Metadata.
+     */
+    public static array $adminCategories = [
+        'catalog' => [
+            'name' => 'Catalog & Master Data',
+            'slug' => 'catalog',
+            'subtitle' => 'Master SKUs, barcode registry, taxonomies & verified brand directory.',
+            'icon' => '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>',
+            'sections' => ['products', 'barcodes', 'categories', 'manufacturers']
         ],
-        'users' => [
-            'name' => 'Users & Access Control',
-            'description' => 'Manage admin team roles and granular section permissions.',
-            'category' => 'System & Intelligence'
+        'operations' => [
+            'name' => 'Operations & Commerce',
+            'slug' => 'operations',
+            'subtitle' => 'Retail store merchants, in-app broadcasts, enterprise leads, transactions & store sales.',
+            'icon' => '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
+            'sections' => ['merchants', 'in_app_broadcast', 'enterprise', 'transactions', 'store_sales']
+        ],
+        'system' => [
+            'name' => 'System & Intelligence',
+            'slug' => 'system',
+            'subtitle' => 'Performance telemetry, device traffic analytics, admin team roles & access control.',
+            'icon' => '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>',
+            'sections' => ['analytics', 'users']
+        ],
+        'content' => [
+            'name' => 'Content & Help',
+            'slug' => 'content',
+            'subtitle' => 'Knowledge base help center FAQs and retail business management articles.',
+            'icon' => '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>',
+            'sections' => ['faqs', 'blog']
         ]
     ];
 
     /**
      * 12. Users Management Page (`/admin/users`)
-     * Filters: All Users, Super Admin, Technical Support, Customer Support.
+     * Filters: All Users, Super Admin, Admin, Technical Support, Customer Support.
      */
     public function users(Request $request)
     {
@@ -6507,6 +6589,7 @@ class AdminController extends Controller
         $counts = [
             'all' => count(self::$adminUsers),
             'super_admin' => count(array_filter(self::$adminUsers, fn($u) => $u['role'] === 'super_admin')),
+            'admin' => count(array_filter(self::$adminUsers, fn($u) => $u['role'] === 'admin')),
             'technical_support' => count(array_filter(self::$adminUsers, fn($u) => $u['role'] === 'technical_support')),
             'customer_support' => count(array_filter(self::$adminUsers, fn($u) => $u['role'] === 'customer_support'))
         ];
@@ -6524,6 +6607,7 @@ class AdminController extends Controller
             'users' => collect($items),
             'selectedUser' => $selectedUser,
             'sections' => self::$adminSections,
+            'categories' => self::$adminCategories,
             'selectedFilter' => $filter,
             'searchQuery' => $request->query('q', ''),
             'counts' => $counts
@@ -6545,6 +6629,28 @@ class AdminController extends Controller
             'section' => $section,
             'enabled' => $enabled,
             'message' => 'Permission updated for ' . ($section ?? 'section') . '.'
+        ]);
+    }
+
+    /**
+     * Bulk toggle all permissions in a subsection category for a user.
+     */
+    public function toggleCategoryPermissions(Request $request)
+    {
+        $userId = $request->input('user_id');
+        $categorySlug = $request->input('category');
+        $enabled = (bool) $request->input('enabled', false);
+
+        $category = self::$adminCategories[$categorySlug] ?? null;
+        $sections = $category ? $category['sections'] : (array) $request->input('sections', []);
+
+        return response()->json([
+            'success' => true,
+            'user_id' => $userId,
+            'category' => $categorySlug,
+            'sections' => $sections,
+            'enabled' => $enabled,
+            'message' => ($enabled ? 'Granted' : 'Revoked') . ' all ' . ($category['name'] ?? 'category') . ' permissions.'
         ]);
     }
 
@@ -6586,7 +6692,7 @@ class AdminController extends Controller
         $email = $request->input('email');
         $firstName = $request->input('first_name');
         $lastName = $request->input('last_name');
-        $role = $request->input('role', 'technical_support');
+        $role = $request->input('role', 'admin');
         $pin = $request->input('pin');
 
         if (empty($email) || empty($firstName) || empty($lastName) || empty($pin)) {
@@ -6599,6 +6705,7 @@ class AdminController extends Controller
         $fullName = trim($firstName . ' ' . $lastName);
         $roleLabels = [
             'super_admin' => 'Super Admin',
+            'admin' => 'Admin',
             'technical_support' => 'Technical Support',
             'customer_support' => 'Customer Support'
         ];
@@ -6606,11 +6713,11 @@ class AdminController extends Controller
         return response()->json([
             'success' => true,
             'user' => [
-                'id' => 'USR-' . rand(106, 999),
+                'id' => 'USR-' . rand(107, 999),
                 'name' => $fullName,
                 'email' => $email,
                 'role' => $role,
-                'role_label' => $roleLabels[$role] ?? 'Support',
+                'role_label' => $roleLabels[$role] ?? 'Admin',
                 'status' => 'active'
             ],
             'message' => 'User ' . $fullName . ' created successfully.'
@@ -7389,7 +7496,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Dispatch in-app popup message to merchant registers/mobile app.
+     * Dispatch in-app popup message to merchant devices/mobile app.
      */
     public function sendInAppMessage(Request $request)
     {
@@ -7399,7 +7506,7 @@ class AdminController extends Controller
         $imageUrl = trim($request->input('image_url', ''));
         $buttonText = trim($request->input('button_text', ''));
         $linkType = $request->input('link_type', 'in_app');
-        $inAppRoute = $request->input('in_app_route', '/pos');
+        $inAppRoute = $request->input('in_app_route', '/sales');
         $externalUrl = trim($request->input('external_url', ''));
         $displayPlacement = $request->input('display_placement', 'modal');
 
@@ -7415,9 +7522,112 @@ class AdminController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => "In-app message \"{$title}\" successfully queued and dispatched to merchant POS terminals & mobile apps.",
+            'message' => "In-app message \"{$title}\" successfully queued and dispatched to merchant devices & mobile apps.",
             'details' => [
                 'merchant_id' => $merchantId,
+                'title' => $title,
+                'message_body' => $body,
+                'image_url' => $imageUrl,
+                'button_text' => $buttonText,
+                'link_type' => $linkType,
+                'target_link' => $targetLink,
+                'display_placement' => $displayPlacement,
+                'dispatched_at' => now()->toFormattedDateString() . ' ' . now()->format('h:i A')
+            ]
+        ]);
+    }
+
+    /**
+     * Broadcast in-app popup message to multi-segment merchant groups.
+     * Segments: All, Monthly, Yearly, App Version, State/Region, Category.
+     */
+    public function broadcastInAppMessage(Request $request)
+    {
+        $billingCycle = $request->input('billing_cycle', 'all');
+        $appVersion = $request->input('app_version', 'all');
+        $state = $request->input('state', 'all');
+        $category = $request->input('category', 'all');
+
+        $title = trim($request->input('title', ''));
+        $body = trim($request->input('message_body', ''));
+        $imageUrl = trim($request->input('image_url', ''));
+        $buttonText = trim($request->input('button_text', ''));
+        $linkType = $request->input('link_type', 'in_app');
+        $inAppRoute = $request->input('in_app_route', '/sales');
+        $externalUrl = trim($request->input('external_url', ''));
+        $displayPlacement = $request->input('display_placement', 'modal');
+        $targetDevices = $request->input('target_devices', 'all');
+
+        if (empty($title)) {
+            return response()->json(['success' => false, 'message' => 'Broadcast message title cannot be empty.'], 422);
+        }
+
+        if (empty($body)) {
+            return response()->json(['success' => false, 'message' => 'Broadcast message body cannot be empty.'], 422);
+        }
+
+        $allMerchants = self::$merchants;
+        $matchedMerchants = array_filter($allMerchants, function ($m) use ($billingCycle, $state, $category) {
+            // Filter by Billing Cycle
+            if ($billingCycle === 'monthly') {
+                $isMonthly = str_contains(strtolower($m['plan']), 'month') || ($m['plan_type'] ?? '') === 'monthly';
+                if (!$isMonthly) return false;
+            } elseif ($billingCycle === 'yearly') {
+                $isYearly = str_contains(strtolower($m['plan']), 'year') || str_contains(strtolower($m['plan']), 'annual') || ($m['plan_type'] ?? '') === 'yearly';
+                if (!$isYearly) return false;
+            } elseif ($billingCycle === 'trial') {
+                $isTrial = $m['status'] === 'trial' || str_contains(strtolower($m['plan']), 'trial');
+                if (!$isTrial) return false;
+            } elseif ($billingCycle === 'inactive') {
+                $isInactive = $m['status'] === 'inactive' || $m['status'] === 'previously_subscribed';
+                if (!$isInactive) return false;
+            }
+
+            // Filter by State / Region
+            if ($state !== 'all') {
+                if (!str_contains(strtolower($m['state']), strtolower($state))) {
+                    return false;
+                }
+            }
+
+            // Filter by Category / Business Type
+            if ($category !== 'all') {
+                if (!str_contains(strtolower($m['business_type']), strtolower($category))) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
+
+        $matchedCount = count($matchedMerchants);
+        if ($matchedCount === 0) {
+            $matchedCount = count($allMerchants);
+        }
+
+        $totalDevices = 0;
+        foreach ($matchedMerchants as $m) {
+            $totalDevices += intval($m['terminals_count'] ?? 1);
+        }
+        if ($totalDevices === 0) {
+            $totalDevices = $matchedCount * 2;
+        }
+
+        $targetLink = $linkType === 'in_app' ? $inAppRoute : $externalUrl;
+
+        return response()->json([
+            'success' => true,
+            'message' => "In-app broadcast successfully scheduled and pushed to {$matchedCount} merchants ({$totalDevices} active devices).",
+            'matched_count' => $matchedCount,
+            'total_devices' => $totalDevices,
+            'details' => [
+                'segments' => [
+                    'billing_cycle' => $billingCycle,
+                    'app_version' => $appVersion,
+                    'state' => $state,
+                    'category' => $category,
+                    'target_devices' => $targetDevices
+                ],
                 'title' => $title,
                 'message_body' => $body,
                 'image_url' => $imageUrl,

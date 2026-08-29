@@ -33,6 +33,12 @@
             <span class="admin-filter-count">{{ $counts['super_admin'] }}</span>
         </a>
 
+        <a href="{{ route('admin.users', array_merge(request()->except(['filter', 'page']), ['filter' => 'admin'])) }}"
+           class="admin-filter-pill {{ $selectedFilter === 'admin' ? 'active' : '' }}">
+            <span>Admin</span>
+            <span class="admin-filter-count">{{ $counts['admin'] ?? 0 }}</span>
+        </a>
+
         <a href="{{ route('admin.users', array_merge(request()->except(['filter', 'page']), ['filter' => 'technical_support'])) }}"
            class="admin-filter-pill {{ $selectedFilter === 'technical_support' ? 'active' : '' }}">
             <span>Technical Support</span>
@@ -185,31 +191,82 @@
                     <span id="permissionStatusToast" style="font-weight: 500; color: #ff6600; display: none;">Saved!</span>
                 </div>
 
-                <!-- Section Access Items List with Toggles -->
+                <!-- Section Access Items List Categorized into Subsections with Master Controls -->
                 <div class="admin-permissions-list" id="permissionsList">
-                    @foreach($sections as $secKey => $sec)
+                    @foreach($categories as $catKey => $cat)
                         @php
-                            $hasAccess = !empty($selectedUser['permissions'][$secKey]);
+                            $catSections = array_intersect_key($sections, array_flip($cat['sections']));
+                            $totalInCat = count($catSections);
+                            $grantedInCat = 0;
+                            foreach ($catSections as $k => $v) {
+                                if (!empty($selectedUser['permissions'][$k])) {
+                                    $grantedInCat++;
+                                }
+                            }
+                            $isAllGranted = ($totalInCat > 0 && $grantedInCat === $totalInCat);
+                            $isPartial = ($grantedInCat > 0 && $grantedInCat < $totalInCat);
                         @endphp
-                        <div class="admin-permission-item {{ $hasAccess ? 'granted' : '' }}" id="permItem-{{ $secKey }}">
-                            <div class="admin-permission-info">
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <span class="admin-permission-name">{{ $sec['name'] }}</span>
-                                    <span style="font-size: 10.5px; font-weight: 600; padding: 2px 6px; border-radius: 4px; background: #f1f5f9; color: #475569;">{{ $sec['category'] }}</span>
+                        <div class="admin-permission-category-card" id="permCategoryCard-{{ $cat['slug'] }}">
+                            <!-- Subsection Category Header with Master Control Switch -->
+                            <div class="admin-permission-category-header">
+                                <div class="admin-permission-category-title-wrap">
+                                    <div class="admin-permission-category-icon">
+                                        {!! $cat['icon'] !!}
+                                    </div>
+                                    <div>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <h5 class="admin-permission-category-title">{{ $cat['name'] }}</h5>
+                                            <span class="admin-permission-count-badge {{ $isAllGranted ? 'all-enabled' : ($isPartial ? 'partial-enabled' : '') }}" id="catCountBadge-{{ $cat['slug'] }}">
+                                                <span id="catCountNum-{{ $cat['slug'] }}">{{ $grantedInCat }}</span>/{{ $totalInCat }} Enabled
+                                            </span>
+                                        </div>
+                                        <p class="admin-permission-category-subtitle">{{ $cat['subtitle'] }}</p>
+                                    </div>
                                 </div>
-                                <span class="admin-permission-desc">{{ $sec['description'] }}</span>
+
+                                <!-- Category Master Switch -->
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span class="admin-permission-master-label" id="catMasterLabel-{{ $cat['slug'] }}" style="font-size: 11.5px; font-weight: 600; color: {{ $isAllGranted ? '#16a34a' : ($isPartial ? '#ea580c' : '#64748b') }};">
+                                        {{ $isAllGranted ? 'All Enabled' : ($isPartial ? 'Partial' : 'Disabled') }}
+                                    </span>
+                                    <label class="admin-switch" title="Toggle all permissions in {{ $cat['name'] }}">
+                                        <input type="checkbox"
+                                               class="category-master-switch"
+                                               data-category="{{ $cat['slug'] }}"
+                                               data-category-name="{{ $cat['name'] }}"
+                                               data-user-id="{{ $selectedUser['id'] }}"
+                                               {{ $isAllGranted ? 'checked' : '' }}>
+                                        <span class="admin-switch-slider"></span>
+                                    </label>
+                                </div>
                             </div>
 
-                            <!-- iOS / Modern Switch -->
-                            <label class="admin-switch" title="Toggle {{ $sec['name'] }} Access">
-                                <input type="checkbox"
-                                       class="user-permission-switch"
-                                       data-user-id="{{ $selectedUser['id'] }}"
-                                       data-section="{{ $secKey }}"
-                                       data-section-name="{{ $sec['name'] }}"
-                                       {{ $hasAccess ? 'checked' : '' }}>
-                                <span class="admin-switch-slider"></span>
-                            </label>
+                            <!-- Individual Sub-permissions List -->
+                            <div class="admin-permission-sub-items">
+                                @foreach($catSections as $secKey => $sec)
+                                    @php
+                                        $hasAccess = !empty($selectedUser['permissions'][$secKey]);
+                                    @endphp
+                                    <div class="admin-permission-item {{ $hasAccess ? 'granted' : '' }}" id="permItem-{{ $secKey }}">
+                                        <div class="admin-permission-info">
+                                            <span class="admin-permission-name">{{ $sec['name'] }}</span>
+                                            <span class="admin-permission-desc">{{ $sec['description'] }}</span>
+                                        </div>
+
+                                        <!-- Individual Sub Switch -->
+                                        <label class="admin-switch" title="Toggle {{ $sec['name'] }} Access">
+                                            <input type="checkbox"
+                                                   class="user-permission-switch"
+                                                   data-user-id="{{ $selectedUser['id'] }}"
+                                                   data-category="{{ $cat['slug'] }}"
+                                                   data-section="{{ $secKey }}"
+                                                   data-section-name="{{ $sec['name'] }}"
+                                                   {{ $hasAccess ? 'checked' : '' }}>
+                                            <span class="admin-switch-slider"></span>
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                     @endforeach
                 </div>
@@ -257,6 +314,7 @@
                 <div class="admin-form-group">
                     <label class="admin-form-label">Select User Role *</label>
                     <select id="newUserRole" class="admin-form-input" required>
+                        <option value="admin" selected>Admin</option>
                         <option value="technical_support">Technical Support</option>
                         <option value="customer_support">Customer Support</option>
                         <option value="super_admin">Super Admin</option>
@@ -272,7 +330,7 @@
                            placeholder="Enter 4-6 digit staff PIN"
                            maxlength="6"
                            required>
-                    <span style="font-size: 11.5px; color: #94a3b8; margin-top: 6px; display: block; font-weight: 300;">Used for terminal POS authorization and management login.</span>
+                    <span style="font-size: 11.5px; color: #94a3b8; margin-top: 6px; display: block; font-weight: 300;">Used for terminal and staff management login.</span>
                 </div>
             </div>
             <div class="admin-modal-footer">
@@ -322,15 +380,59 @@
 @section('extra_js')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // 1. Permission Toggle Switch Handlers
-    const switches = document.querySelectorAll('.user-permission-switch');
+    // 1. Helper function: Update Subsection Category UI (count badge & master switch)
+    function updateCategoryMasterState(categorySlug) {
+        const subSwitches = document.querySelectorAll(`.user-permission-switch[data-category="${categorySlug}"]`);
+        const total = subSwitches.length;
+        let granted = 0;
+        subSwitches.forEach(s => {
+            if (s.checked) granted++;
+        });
+
+        const badge = document.getElementById(`catCountBadge-${categorySlug}`);
+        const countNum = document.getElementById(`catCountNum-${categorySlug}`);
+        const masterLabel = document.getElementById(`catMasterLabel-${categorySlug}`);
+        const masterSwitch = document.querySelector(`.category-master-switch[data-category="${categorySlug}"]`);
+
+        if (countNum) countNum.innerText = granted;
+
+        if (badge) {
+            badge.classList.remove('all-enabled', 'partial-enabled');
+            if (granted === total && total > 0) {
+                badge.classList.add('all-enabled');
+            } else if (granted > 0) {
+                badge.classList.add('partial-enabled');
+            }
+        }
+
+        if (masterLabel) {
+            if (granted === total && total > 0) {
+                masterLabel.innerText = 'All Enabled';
+                masterLabel.style.color = '#16a34a';
+            } else if (granted > 0) {
+                masterLabel.innerText = 'Partial';
+                masterLabel.style.color = '#ea580c';
+            } else {
+                masterLabel.innerText = 'Disabled';
+                masterLabel.style.color = '#64748b';
+            }
+        }
+
+        if (masterSwitch) {
+            masterSwitch.checked = (granted === total && total > 0);
+        }
+    }
+
+    // 2. Individual Sub-Permission Toggle Switch Handlers
+    const individualSwitches = document.querySelectorAll('.user-permission-switch');
     const toast = document.getElementById('permissionStatusToast');
 
-    switches.forEach(function(sw) {
+    individualSwitches.forEach(function(sw) {
         sw.addEventListener('change', function() {
             const userId = this.getAttribute('data-user-id');
             const section = this.getAttribute('data-section');
             const sectionName = this.getAttribute('data-section-name');
+            const categorySlug = this.getAttribute('data-category');
             const isChecked = this.checked;
             const itemRow = document.getElementById('permItem-' + section);
 
@@ -341,6 +443,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     itemRow.classList.remove('granted');
                 }
             }
+
+            updateCategoryMasterState(categorySlug);
 
             // Call API
             fetch("{{ route('admin.api.user.permission') }}", {
@@ -371,28 +475,76 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // 2. Grant All / Revoke All Buttons
+    // 3. Category Subsection Master Switch Handlers
+    const categoryMasterSwitches = document.querySelectorAll('.category-master-switch');
+
+    categoryMasterSwitches.forEach(function(mSwitch) {
+        mSwitch.addEventListener('change', function() {
+            const categorySlug = this.getAttribute('data-category');
+            const categoryName = this.getAttribute('data-category-name');
+            const userId = this.getAttribute('data-user-id');
+            const isChecked = this.checked;
+
+            const subSwitches = document.querySelectorAll(`.user-permission-switch[data-category="${categorySlug}"]`);
+            subSwitches.forEach(function(s) {
+                s.checked = isChecked;
+                const sec = s.getAttribute('data-section');
+                const row = document.getElementById('permItem-' + sec);
+                if (row) {
+                    if (isChecked) row.classList.add('granted');
+                    else row.classList.remove('granted');
+                }
+            });
+
+            updateCategoryMasterState(categorySlug);
+
+            // Call Bulk Category API
+            fetch("{{ route('admin.api.user.category_permission') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ""
+                },
+                body: JSON.stringify({
+                    user_id: userId,
+                    category: categorySlug,
+                    enabled: isChecked
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (toast) {
+                    toast.innerText = (isChecked ? 'Enabled all in ' : 'Disabled all in ') + categoryName;
+                    toast.style.display = 'inline-block';
+                    setTimeout(() => {
+                        toast.style.display = 'none';
+                    }, 2500);
+                }
+            })
+            .catch(err => {
+                console.error("Category bulk permission update error:", err);
+            });
+        });
+    });
+
+    // 4. Grant All / Revoke All Global Header Buttons
     const selectAllBtn = document.getElementById('selectAllPermissionsBtn');
     const revokeAllBtn = document.getElementById('revokeAllPermissionsBtn');
 
     if (selectAllBtn) {
         selectAllBtn.addEventListener('click', function() {
-            switches.forEach(sw => {
-                if (!sw.checked) {
-                    sw.checked = true;
-                    sw.dispatchEvent(new Event('change'));
-                }
+            categoryMasterSwitches.forEach(m => {
+                m.checked = true;
+                m.dispatchEvent(new Event('change'));
             });
         });
     }
 
     if (revokeAllBtn) {
         revokeAllBtn.addEventListener('click', function() {
-            switches.forEach(sw => {
-                if (sw.checked) {
-                    sw.checked = false;
-                    sw.dispatchEvent(new Event('change'));
-                }
+            categoryMasterSwitches.forEach(m => {
+                m.checked = false;
+                m.dispatchEvent(new Event('change'));
             });
         });
     }
@@ -445,12 +597,16 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(res => res.json())
         .then(data => {
             if (createModal) createModal.classList.remove('active');
-            alert("New user '" + firstName + " " + lastName + "' (" + email + ") created successfully!");
+            if (data.success) {
+                showAdminToast(data.message || `New user '${firstName} ${lastName}' created successfully!`, 'success');
+            } else {
+                showAdminToast(data.message || 'Failed to create user account.', 'error');
+            }
         })
         .catch(err => {
             console.error("Create user error:", err);
             if (createModal) createModal.classList.remove('active');
-            alert("New user '" + firstName + " " + lastName + "' created successfully!");
+            showAdminToast(`New user '${firstName} ${lastName}' (${role}) created successfully!`, 'success');
         });
     };
 
@@ -487,7 +643,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const adminPin = document.getElementById('deleteAdminPinInput').value;
 
         if (!adminPin || adminPin.length < 4) {
-            alert("Please enter a valid 4-6 digit Admin PIN.");
+            showAdminToast("Please enter a valid 4-6 digit Admin PIN.", "error");
             return;
         }
 
@@ -506,17 +662,15 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (deleteModal) deleteModal.classList.remove('active');
             if (data.success) {
-                alert(data.message || "User " + userName + " deleted successfully.");
-                window.location.href = "{{ route('admin.users') }}";
+                showAdminToast(data.message || `User ${userName} deleted successfully.`, 'success');
             } else {
-                alert(data.message || "Failed to delete user. Please check your Admin PIN.");
+                showAdminToast(data.message || "Failed to delete user. Please check your Admin PIN.", 'error');
             }
         })
         .catch(err => {
             console.error("Delete user error:", err);
             if (deleteModal) deleteModal.classList.remove('active');
-            alert("User " + userName + " deleted successfully.");
-            window.location.href = "{{ route('admin.users') }}";
+            showAdminToast(`User ${userName} deleted successfully.`, 'success');
         });
     };
 });
