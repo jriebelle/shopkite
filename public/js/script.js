@@ -975,6 +975,119 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Drag to scroll, with a fling on release, for the infinite carousels.
+    // Pointer events cover mouse, touch and pen. Touch events are only a fallback for browsers
+    // without them: handling both counts every finger movement twice.
+    // onMove(step) gets each move in px and onEnd(flingSpeed) the finger's release speed in px per
+    // frame, both in the carousels' pos direction (a leftward swipe is positive). flingSpeed is
+    // null when the browser took the gesture over, e.g. for a vertical page scroll.
+    function enableCarouselDrag(section, { onStart, onMove, onEnd }) {
+        const usePointerEvents = "PointerEvent" in window;
+        // A release flings at the speed the finger moved over this many ms
+        const FLING_SAMPLE_MS = 100;
+        const MAX_FLING_SPEED = 40;
+        let isDragging = false;
+        let pointerId = null;
+        let lastX = 0;
+        let samples = [];
+        let distance = 0;
+
+        // The finger's speed just before release. It drops towards zero if the finger paused before lifting.
+        const getFlingSpeed = () => {
+            const now = performance.now();
+            const last = samples.length - 1;
+            if (last < 1 || now - samples[last][0] > FLING_SAMPLE_MS) return 0;
+            // Measure from the oldest move in the window, or the one before the last if moves were sparse
+            let first = last - 1;
+            while (first > 0 && now - samples[first - 1][0] <= FLING_SAMPLE_MS) first--;
+            const [startTime, startX] = samples[first];
+            const speed = (startX - samples[last][1]) / Math.max(now - startTime, 1) * (1000 / 60);
+            return Math.max(-MAX_FLING_SPEED, Math.min(MAX_FLING_SPEED, speed));
+        };
+
+        const move = (clientX) => {
+            const now = performance.now();
+            distance += Math.abs(clientX - lastX);
+            onMove(lastX - clientX);
+            lastX = clientX;
+            samples.push([now, clientX]);
+            while (samples.length > 2 && now - samples[0][0] > FLING_SAMPLE_MS) samples.shift();
+        };
+
+        const onPointerMove = (e) => {
+            if (e.pointerId === pointerId) move(e.clientX);
+        };
+
+        const onPointerEnd = (e) => {
+            if (e.pointerId === pointerId) end(e.type === "pointerup");
+        };
+
+        const onTouchMove = (e) => {
+            if (e.touches.length === 1) move(e.touches[0].clientX);
+        };
+
+        const onTouchEnd = (e) => end(e.type === "touchend");
+
+        const start = (clientX) => {
+            isDragging = true;
+            lastX = clientX;
+            samples = [[performance.now(), clientX]];
+            distance = 0;
+            section.style.cursor = "grabbing";
+            if (usePointerEvents) {
+                window.addEventListener("pointermove", onPointerMove);
+                window.addEventListener("pointerup", onPointerEnd);
+                window.addEventListener("pointercancel", onPointerEnd);
+            } else {
+                window.addEventListener("touchmove", onTouchMove, { passive: true });
+                window.addEventListener("touchend", onTouchEnd);
+                window.addEventListener("touchcancel", onTouchEnd);
+            }
+            onStart();
+        };
+
+        // fling is false when the browser took the gesture over (pointercancel or touchcancel)
+        const end = (fling) => {
+            if (!isDragging) return;
+            isDragging = false;
+            pointerId = null;
+            section.style.cursor = "grab";
+            window.removeEventListener("pointermove", onPointerMove);
+            window.removeEventListener("pointerup", onPointerEnd);
+            window.removeEventListener("pointercancel", onPointerEnd);
+            window.removeEventListener("touchmove", onTouchMove);
+            window.removeEventListener("touchend", onTouchEnd);
+            window.removeEventListener("touchcancel", onTouchEnd);
+            onEnd(fling ? getFlingSpeed() : null);
+            // The click listener below only swallows the click that ends this drag
+            setTimeout(() => { distance = 0; });
+        };
+
+        if (usePointerEvents) {
+            section.addEventListener("pointerdown", (e) => {
+                // A second finger doesn't restart the drag
+                if (isDragging) return;
+                pointerId = e.pointerId;
+                start(e.clientX);
+            });
+        } else {
+            section.addEventListener("touchstart", (e) => {
+                if (e.touches.length === 1) start(e.touches[0].clientX);
+            }, { passive: true });
+        }
+
+        // Stop the browser dragging the carousel's links or images instead of the carousel
+        section.addEventListener("dragstart", (e) => e.preventDefault());
+
+        // Releasing a mouse drag over a link would otherwise open it
+        section.addEventListener("click", (e) => {
+            if (distance > 6) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }, true);
+    }
+
     // Testimonials infinite carousel with scroll acceleration & hover pause
     const testimonySection = document.querySelector(".merchant-testimony-section");
     const testimonyTrack = document.querySelector(".testimony-track");
@@ -988,10 +1101,19 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         let pos = 0;
-        const cardWidth = 330;
-        const gap = 20;
-        const originalCount = testimonials.length;
-        const W = (cardWidth + gap) * originalCount;
+        // Width of one loop of the original cards, which the clones repeat. Measured because the
+        // cards are smaller on mobile; 350px a card (330px + 20px gap) until then.
+        let W = 350 * testimonials.length;
+        const measureLoop = () => {
+            const loopWidth = testimonyTrack.children[testimonials.length].offsetLeft - testimonials[0].offsetLeft;
+            if (loopWidth > 0) {
+                // Keep the same cards in view when the card size changes
+                pos = pos / W * loopWidth;
+                W = loopWidth;
+            }
+        };
+        measureLoop();
+        window.addEventListener("resize", measureLoop);
 
         const baseSpeed = 1.0;
         let targetSpeed = baseSpeed;
@@ -1032,132 +1154,25 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         testimonySection.addEventListener("wheel", accelHandler, { passive: true });
 
-        // Drag & Touch Gesture Handlers for Testimonials.
-        // Pointer events cover mouse, touch and pen. Touch events are only a fallback for browsers
-        // without them: handling both counts every finger movement twice.
-        const usePointerEvents = "PointerEvent" in window;
-        // A release flings the carousel at the speed the finger moved over this many ms
-        const FLING_SAMPLE_MS = 100;
-        const MAX_FLING_SPEED = 40;
+        // Drag & touch gestures for Testimonials
         let isTestimonyDragging = false;
-        let testimonyPointerId = null;
-        let testimonyLastX = 0;
-        let testimonyDragSamples = [];
-        let testimonyDragDistance = 0;
         let testimonyRafId = null;
         let isTestimonyVisible = false;
 
-        // The finger's speed just before release, in px per frame like the carousel speeds.
-        // It drops towards zero if the finger paused before lifting.
-        const getFlingSpeed = () => {
-            const now = performance.now();
-            const samples = testimonyDragSamples;
-            const last = samples.length - 1;
-            if (last < 1 || now - samples[last][0] > FLING_SAMPLE_MS) return 0;
-            // Measure from the oldest move in the window, or the one before the last if moves were sparse
-            let first = last - 1;
-            while (first > 0 && now - samples[first - 1][0] <= FLING_SAMPLE_MS) first--;
-            const [startTime, startX] = samples[first];
-            // The track moves opposite to pos, so a leftward swipe is a positive speed
-            const speed = (startX - samples[last][1]) / Math.max(now - startTime, 1) * (1000 / 60);
-            return Math.max(-MAX_FLING_SPEED, Math.min(MAX_FLING_SPEED, speed));
-        };
-
-        const onTestimonyPointerMove = (e) => {
-            if (e.pointerId === testimonyPointerId) {
-                onTestimonyDragMove(e.clientX);
-            }
-        };
-
-        const onTestimonyPointerEnd = (e) => {
-            if (e.pointerId === testimonyPointerId) {
-                // pointercancel means the browser took the gesture over (e.g. a vertical page scroll)
-                onTestimonyDragEnd(e.type === "pointerup");
-            }
-        };
-
-        const onTestimonyTouchMove = (e) => {
-            if (e.touches.length === 1) {
-                onTestimonyDragMove(e.touches[0].clientX);
-            }
-        };
-
-        const onTestimonyTouchEnd = (e) => {
-            onTestimonyDragEnd(e.type === "touchend");
-        };
-
-        const onTestimonyDragStart = (clientX) => {
-            isTestimonyDragging = true;
-            testimonyLastX = clientX;
-            testimonyDragSamples = [[performance.now(), clientX]];
-            testimonyDragDistance = 0;
-            testimonySection.style.cursor = "grabbing";
-            if (usePointerEvents) {
-                window.addEventListener("pointermove", onTestimonyPointerMove);
-                window.addEventListener("pointerup", onTestimonyPointerEnd);
-                window.addEventListener("pointercancel", onTestimonyPointerEnd);
-            } else {
-                window.addEventListener("touchmove", onTestimonyTouchMove, { passive: true });
-                window.addEventListener("touchend", onTestimonyTouchEnd);
-                window.addEventListener("touchcancel", onTestimonyTouchEnd);
-            }
-        };
-
-        const onTestimonyDragMove = (clientX) => {
-            if (!isTestimonyDragging) return;
-            const now = performance.now();
-            pos += testimonyLastX - clientX;
-            testimonyDragDistance += Math.abs(clientX - testimonyLastX);
-            testimonyLastX = clientX;
-            testimonyDragSamples.push([now, clientX]);
-            while (testimonyDragSamples.length > 2 && now - testimonyDragSamples[0][0] > FLING_SAMPLE_MS) testimonyDragSamples.shift();
-            scrollResumed = true;
-        };
-
-        const onTestimonyDragEnd = (fling) => {
-            if (!isTestimonyDragging) return;
-            isTestimonyDragging = false;
-            testimonyPointerId = null;
-            testimonySection.style.cursor = "grab";
-            if (fling) {
+        enableCarouselDrag(testimonySection, {
+            onStart: () => {
+                isTestimonyDragging = true;
+            },
+            onMove: (step) => {
+                pos += step;
+                scrollResumed = true;
+            },
+            onEnd: (flingSpeed) => {
+                isTestimonyDragging = false;
                 // Carry on at the finger's speed; updateCarousel() eases back to auto-scroll from there
-                currentSpeed = targetSpeed = getFlingSpeed();
+                if (flingSpeed !== null) currentSpeed = targetSpeed = flingSpeed;
             }
-            // The click listener below only swallows the click that ends this drag
-            setTimeout(() => { testimonyDragDistance = 0; });
-            window.removeEventListener("pointermove", onTestimonyPointerMove);
-            window.removeEventListener("pointerup", onTestimonyPointerEnd);
-            window.removeEventListener("pointercancel", onTestimonyPointerEnd);
-            window.removeEventListener("touchmove", onTestimonyTouchMove);
-            window.removeEventListener("touchend", onTestimonyTouchEnd);
-            window.removeEventListener("touchcancel", onTestimonyTouchEnd);
-        };
-
-        if (usePointerEvents) {
-            testimonySection.addEventListener("pointerdown", (e) => {
-                // A second finger doesn't restart the drag
-                if (isTestimonyDragging) return;
-                testimonyPointerId = e.pointerId;
-                onTestimonyDragStart(e.clientX);
-            });
-        } else {
-            testimonySection.addEventListener("touchstart", (e) => {
-                if (e.touches.length === 1) {
-                    onTestimonyDragStart(e.touches[0].clientX);
-                }
-            }, { passive: true });
-        }
-
-        // The cards are links: stop the browser dragging them (or their images) instead of the carousel
-        testimonyTrack.addEventListener("dragstart", (e) => e.preventDefault());
-
-        // Releasing a mouse drag over a card would otherwise open its link
-        testimonySection.addEventListener("click", (e) => {
-            if (testimonyDragDistance > 6) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-        }, true);
+        });
 
         function updateCarousel() {
             if (!isTestimonyVisible) return;
@@ -1239,67 +1254,24 @@ document.addEventListener("DOMContentLoaded", function () {
         let isHovered = false;
         let scrollResumed = false;
 
-        // Drag & Touch Gesture Handlers for Brands
+        // Drag & touch gestures for Brands
         let isBrandsDragging = false;
-        let brandsLastX = 0;
         let brandsRafId = null;
         let isBrandsVisible = false;
 
-        const onBrandsPointerMove = (e) => {
-            if (isBrandsDragging) {
-                onBrandsDragMove(e.clientX);
+        enableCarouselDrag(brandsSection, {
+            onStart: () => {
+                isBrandsDragging = true;
+            },
+            onMove: (step) => {
+                pos += step;
+                scrollResumed = true;
+            },
+            onEnd: (flingSpeed) => {
+                isBrandsDragging = false;
+                // Carry on at the finger's speed; updateBrandsCarousel() eases back to auto-scroll from there
+                if (flingSpeed !== null) currentSpeed = targetSpeed = flingSpeed;
             }
-        };
-
-        const onBrandsTouchMove = (e) => {
-            if (isBrandsDragging && e.touches.length === 1) {
-                onBrandsDragMove(e.touches[0].clientX);
-            }
-        };
-
-        const onBrandsDragStart = (clientX) => {
-            isBrandsDragging = true;
-            brandsLastX = clientX;
-            brandsSection.style.cursor = "grabbing";
-            window.addEventListener("pointermove", onBrandsPointerMove);
-            window.addEventListener("pointerup", onBrandsDragEnd);
-            window.addEventListener("pointercancel", onBrandsDragEnd);
-            window.addEventListener("touchmove", onBrandsTouchMove, { passive: true });
-            window.addEventListener("touchend", onBrandsDragEnd);
-        };
-
-        const onBrandsDragMove = (clientX) => {
-            if (!isBrandsDragging) return;
-            const deltaX = clientX - brandsLastX;
-            brandsLastX = clientX;
-            pos += -deltaX;
-            targetSpeed = -deltaX * 0.5;
-            scrollResumed = true;
-        };
-
-        const onBrandsDragEnd = () => {
-            if (!isBrandsDragging) return;
-            isBrandsDragging = false;
-            brandsSection.style.cursor = "grab";
-            window.removeEventListener("pointermove", onBrandsPointerMove);
-            window.removeEventListener("pointerup", onBrandsDragEnd);
-            window.removeEventListener("pointercancel", onBrandsDragEnd);
-            window.removeEventListener("touchmove", onBrandsTouchMove);
-            window.removeEventListener("touchend", onBrandsDragEnd);
-        };
-
-        brandsSection.addEventListener("pointerdown", (e) => {
-            onBrandsDragStart(e.clientX);
-        });
-
-        brandsSection.addEventListener("touchstart", (e) => {
-            if (e.touches.length === 1) {
-                onBrandsDragStart(e.touches[0].clientX);
-            }
-        }, { passive: true });
-
-        brandsTrack.querySelectorAll("img").forEach(img => {
-            img.addEventListener("dragstart", (e) => e.preventDefault());
         });
 
         // Hover listeners to pause auto-scrolling
@@ -1310,8 +1282,6 @@ document.addEventListener("DOMContentLoaded", function () {
         brandsSection.addEventListener("mouseleave", () => {
             isHovered = false;
             scrollResumed = false;
-            isBrandsDragging = false;
-            brandsSection.style.cursor = "grab";
         });
 
         // Wheel acceleration listener
