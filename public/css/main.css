@@ -612,19 +612,24 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  perspective: 900px;
-  perspective-origin: 50% 0%;
   z-index: 22;
 }
 
 /* The device wrapper carries the 3D transform so the screen and the
-   GSAP-generated body layers (see script.js) tilt together */
+   GSAP-generated body layers (see script.js) tilt together.
+   The perspective is part of the transform rather than a perspective on .phone:
+   Safari keeps applying a parent's perspective after it is switched off. */
 .phone-device {
+  /* Hero pose, also read by script.js so the flight starts from it */
+  --hero-tilt: 75deg;
+  --hero-perspective: 900px;
+  /* How far above the phone's top edge the perspective is seen from */
+  --hero-eye: 30px;
   position: relative;
   max-width: 400px;
   width: 100%;
   margin-top: 30px;
-  transform: rotateX(75deg);
+  transform: translateY(calc(-1 * var(--hero-eye))) perspective(var(--hero-perspective)) translateY(var(--hero-eye)) rotateX(var(--hero-tilt));
   transform-origin: top;
   transform-style: preserve-3d;
 }
@@ -759,8 +764,6 @@ a {
 .phone.is-flying {
   position: relative;
   z-index: 2;
-  /* A perspective here would trap the fixed phone inside .phone */
-  perspective: none;
 }
 
 .phone.is-flying .phone-slot {
@@ -2484,8 +2487,7 @@ a {
   }
 
   .phone-device {
-    transform: perspective(900px) rotateX(0deg);
-    transform-origin: top;
+    --hero-tilt: 0deg;
   }
 
     .section-2 p { font-size: 93px;}

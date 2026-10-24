@@ -367,9 +367,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const layout = {};
             let docked = false;
 
-            // The hero's perspective comes from .phone in main.css (read before .is-flying removes it)
-            const heroPerspective = parseFloat(getComputedStyle(phone).perspective) || 0;
-
             phone.classList.add("is-flying");
             phoneDevice.classList.add("is-flying");
             // The phone itself becomes the roof, so the flat roof artwork is only shown on mobile.
@@ -385,12 +382,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 const roofBox = roofArt.getBoundingClientRect();
                 const { width, height } = slotBox;
                 const artToRoof = roofBox.width / ROOF_ART.width;
-
-                // Start from the tilt main.css gives the hero at this width (flat up to 900px).
-                // Clear the inline pose to read it; render() puts it back before the next paint.
-                phoneDevice.style.transform = "";
-                const cssPose = new DOMMatrix(getComputedStyle(phoneDevice).transform);
                 const roofScale = ROOF_ART.scale * (PHONE_PNG_WIDTH / width) * artToRoof;
+
+                // The hero pose from main.css at this width (the phone is flat up to 900px)
+                const heroStyle = getComputedStyle(phoneDevice);
+                const heroValue = (name) => parseFloat(heroStyle.getPropertyValue(name)) || 0;
 
                 // Offset from the phone's pivot (top centre) to its centre in the roof pose
                 const centre = new DOMMatrix()
@@ -403,12 +399,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     width,
                     height,
                     roofScale,
-                    heroTilt: Math.atan2(cssPose.m23, cssPose.m22) * 180 / Math.PI,
+                    heroTilt: heroValue("--hero-tilt"),
+                    heroPerspective: heroValue("--hero-perspective"),
                     // The phone holds still while the hero scrolls away, so it starts where the
                     // slot sits when the hero is at the top of the viewport
                     heroPivot: [slotBox.left + width / 2, slotBox.top - heroBox.top],
-                    // .phone's perspective-origin is its top edge, just above the phone
-                    vanish: slotBox.top - phone.getBoundingClientRect().top,
+                    // Distance from the phone's top edge up to where the hero perspective is seen from
+                    vanish: heroValue("--hero-eye"),
                     // Where the pivot lands in the viewport once the store has pinned to the top
                     roofPivot: [
                         roofBox.left + ROOF_ART.center[0] * artToRoof - centre.x,
@@ -449,7 +446,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const scale = lerp(1, layout.roofScale, t);
                 // Fade the perspective out so the phone lands as a flat isometric drawing
                 const perspective = new DOMMatrix();
-                perspective.m34 = heroPerspective ? -lerp(1 / heroPerspective, 0, flattenEase(t)) : 0;
+                perspective.m34 = layout.heroPerspective ? -lerp(1 / layout.heroPerspective, 0, flattenEase(t)) : 0;
 
                 phoneDevice.style.transform = new DOMMatrix()
                     .translate(pivot[0], pivot[1] - layout.vanish)
