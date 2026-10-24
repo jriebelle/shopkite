@@ -295,131 +295,210 @@ document.addEventListener("DOMContentLoaded", function () {
 
     gsap.registerPlugin(ScrollTrigger);
 
-    const isMobile = window.matchMedia("(max-width: 820px)").matches;
     const phone = document.querySelector(".phone");
+    const phoneDevice = phone && phone.querySelector(".phone-device");
 
     // Only run hero/phone scroll animations when the phone element exists (homepage only)
-    if (phone) {
-        let phonePinWrap = phone.parentElement;
+    if (phoneDevice) {
+        // How phone.png is drawn in img/section3/phone-store-top-side.png: an isometric view
+        // at 1.0907x the png's size, with the screen centred at (837.9, 481.7) in the 1675px-wide
+        // artwork. The flying phone finishes in exactly this pose so it can stand in for it.
+        const ROOF_ART = { width: 1675, scale: 1.0907, center: [837.9, 481.7] };
+        const PHONE_PNG_WIDTH = 772;
+        // Chassis depth relative to the phone's width, measured from the same artwork
+        const PHONE_DEPTH_RATIO = 0.0605;
+        const PHONE_LAYERS = 20;
+        // rotateX + rotateZ that give a true isometric view
+        const ISO_TILT = 54.7356;
+        const ISO_SPIN = -45;
 
-        if (!isMobile) {
-            if (!phonePinWrap.classList.contains("phone-pin-wrap")) {
-                phonePinWrap = document.createElement("div");
-                phonePinWrap.className = "phone-pin-wrap";
-                phone.parentElement.insertBefore(phonePinWrap, phone);
-                phonePinWrap.appendChild(phone);
+        // Give the flat phone.png a solid chassis: stack thin rounded slices behind
+        // the screen along Z so the device reads as 3D at any tilt. The slices darken
+        // towards the back to fake light falling on the edges.
+        const phoneBody = document.createElement("div");
+        phoneBody.className = "phone-body";
+        phoneBody.setAttribute("aria-hidden", "true");
+
+        const shade = gsap.utils.interpolate("#4a4a4a", "#232323");
+        const bodyLayers = [];
+        for (let i = 1; i <= PHONE_LAYERS; i++) {
+            const layer = document.createElement("div");
+            layer.className = "phone-body-layer";
+            layer.style.backgroundColor = shade(i / PHONE_LAYERS);
+            bodyLayers.push(layer);
+        }
+
+        // iPhone details on the chassis: mic holes, charging port and speaker holes along
+        // the bottom, and the volume buttons on the left side
+        const phoneBottom = document.createElement("div");
+        phoneBottom.className = "phone-bottom";
+        phoneBottom.innerHTML = '<span class="phone-grille"></span><span class="phone-port"></span><span class="phone-grille"></span>';
+        const phoneSide = document.createElement("div");
+        phoneSide.className = "phone-side";
+        phoneSide.innerHTML = '<span class="phone-volume"></span><span class="phone-volume"></span>';
+
+        phoneBody.append(...bodyLayers, phoneBottom, phoneSide);
+        phoneDevice.prepend(phoneBody);
+
+        function setPhoneDepth(width) {
+            const depth = width * PHONE_DEPTH_RATIO;
+            gsap.set(bodyLayers, { z: (i) => -depth * (i + 1) / PHONE_LAYERS });
+            // Sizes the bottom edge and side in main.css
+            phoneBody.style.setProperty("--phone-depth", `${depth}px`);
+        }
+        setPhoneDepth(phoneDevice.offsetWidth);
+
+        const mm = gsap.matchMedia();
+
+        // Desktop: the phone flies from the hero onto the Pharmacies store and docks as its roof.
+        // gsap.matchMedia reverts all of this if the window is resized down to mobile.
+        mm.add("(min-width: 821px)", () => {
+            const hero = document.querySelector(".hero-section");
+            const phoneSlot = phone.querySelector(".phone-slot");
+            const storeWrap = document.querySelector(".section3-4-wrap");
+            const store = document.querySelector(".section-3");
+            const imgCont = store && store.querySelector(".img-cont");
+            const roofArt = imgCont && imgCont.querySelector(".store-top");
+            if (!hero || !phoneSlot || !storeWrap || !roofArt) return;
+
+            const lerp = gsap.utils.interpolate;
+            // Perspective drops away quickly, as it did when it was tweened from 900px to 7000px
+            const flattenEase = gsap.parseEase("power3.out");
+            const layout = {};
+            let docked = false;
+
+            // The hero's perspective comes from .phone in main.css (read before .is-flying removes it)
+            const heroPerspective = parseFloat(getComputedStyle(phone).perspective) || 0;
+
+            phone.classList.add("is-flying");
+            phoneDevice.classList.add("is-flying");
+            // The phone itself becomes the roof, so the flat roof artwork is only shown on mobile.
+            // It stays in the layout so we can measure where the roof goes.
+            gsap.set(roofArt, { autoAlpha: 0 });
+
+            // Measure once per layout change so scrolling only does maths
+            function measure() {
+                const heroBox = hero.getBoundingClientRect();
+                const slotBox = phoneSlot.getBoundingClientRect();
+                const wrapBox = storeWrap.getBoundingClientRect();
+                const storeBox = store.getBoundingClientRect();
+                const roofBox = roofArt.getBoundingClientRect();
+                const { width, height } = slotBox;
+                const artToRoof = roofBox.width / ROOF_ART.width;
+
+                // Start from the tilt main.css gives the hero at this width (flat up to 900px).
+                // Clear the inline pose to read it; render() puts it back before the next paint.
+                phoneDevice.style.transform = "";
+                const cssPose = new DOMMatrix(getComputedStyle(phoneDevice).transform);
+                const roofScale = ROOF_ART.scale * (PHONE_PNG_WIDTH / width) * artToRoof;
+
+                // Offset from the phone's pivot (top centre) to its centre in the roof pose
+                const centre = new DOMMatrix()
+                    .rotateAxisAngle(1, 0, 0, ISO_TILT)
+                    .rotateAxisAngle(0, 0, 1, ISO_SPIN)
+                    .scale3d(roofScale)
+                    .transformPoint(new DOMPoint(0, height / 2));
+
+                Object.assign(layout, {
+                    width,
+                    height,
+                    roofScale,
+                    heroTilt: Math.atan2(cssPose.m23, cssPose.m22) * 180 / Math.PI,
+                    // The phone holds still while the hero scrolls away, so it starts where the
+                    // slot sits when the hero is at the top of the viewport
+                    heroPivot: [slotBox.left + width / 2, slotBox.top - heroBox.top],
+                    // .phone's perspective-origin is its top edge, just above the phone
+                    vanish: slotBox.top - phone.getBoundingClientRect().top,
+                    // Where the pivot lands in the viewport once the store has pinned to the top
+                    roofPivot: [
+                        roofBox.left + ROOF_ART.center[0] * artToRoof - centre.x,
+                        roofBox.top - wrapBox.top + ROOF_ART.center[1] * artToRoof - centre.y
+                    ],
+                    // The pinned store's viewport position, which docked transforms are relative to
+                    storeOrigin: [storeBox.left, storeBox.top - wrapBox.top]
+                });
+
+                phoneDevice.style.width = `${width}px`;
+                phoneDevice.style.height = `${height}px`;
+                setPhoneDepth(width);
             }
 
-            phonePinWrap.style.width = "100%";
-            phonePinWrap.style.position = "relative";
-            phonePinWrap.style.zIndex = "2";
-            phone.style.position = "relative";
-            phone.style.zIndex = "2";
+            function render(progress) {
+                if (!layout.width) return;
 
-            // Pin the phone wrapper so it stays fixed on screen through Section 3 & 4, then unpins when out of view
-            ScrollTrigger.create({
-                trigger: ".hero-section",
+                // Hand the phone to the store once it has landed, and take it back on the way up.
+                // Both sit at the viewport's top left at that moment, so the swap is invisible
+                // and the phone then scrolls and gets wiped away with the store.
+                if ((progress >= 1) !== docked) {
+                    docked = progress >= 1;
+                    if (docked) {
+                        store.appendChild(phoneDevice);
+                    } else {
+                        phone.insertBefore(phoneDevice, phoneSlot);
+                    }
+                    phoneDevice.classList.toggle("is-docked", docked);
+                }
+
+                const t = Math.min(progress, 1);
+                const { heroPivot, roofPivot, storeOrigin } = layout;
+                const pivot = [lerp(heroPivot[0], roofPivot[0], t), lerp(heroPivot[1], roofPivot[1], t)];
+                if (docked) {
+                    pivot[0] -= storeOrigin[0];
+                    pivot[1] -= storeOrigin[1];
+                }
+                const scale = lerp(1, layout.roofScale, t);
+                // Fade the perspective out so the phone lands as a flat isometric drawing
+                const perspective = new DOMMatrix();
+                perspective.m34 = heroPerspective ? -lerp(1 / heroPerspective, 0, flattenEase(t)) : 0;
+
+                phoneDevice.style.transform = new DOMMatrix()
+                    .translate(pivot[0], pivot[1] - layout.vanish)
+                    .multiply(perspective)
+                    .translate(0, layout.vanish)
+                    .rotateAxisAngle(1, 0, 0, lerp(layout.heroTilt, ISO_TILT, t))
+                    .rotateAxisAngle(0, 0, 1, lerp(0, ISO_SPIN, t))
+                    .scale3d(scale)
+                    .translate(-layout.width / 2, 0)
+                    .toString();
+            }
+
+            // Follows the scroll exactly (no scrub smoothing) so the phone and the store
+            // reach the hand-off point on the same frame
+            const flight = ScrollTrigger.create({
+                trigger: hero,
                 start: "top top",
-                endTrigger: ".section3-4-wrap",
-                end: "bottom top",
-                pin: phonePinWrap,
-                pinSpacing: false,
-                anticipatePin: 1
+                endTrigger: storeWrap,
+                end: "top top",
+                refreshPriority: 1,
+                onUpdate: (self) => render(self.progress)
             });
 
-            // Phone image transform animation timeline with scroll scrub
-            const phoneImg = document.querySelector(".phone img");
-            const transformVals = {
-                pers: 900,
-                rotX: 75,
-                skewX: 0,
-                scaleY: 1,
-                rotY: 0
+            const relayout = () => {
+                measure();
+                render(flight.progress);
             };
+            ScrollTrigger.addEventListener("refresh", relayout);
+            window.addEventListener("resize", relayout);
+            relayout();
 
-            function getTop10PercentOffset() {
-                const phoneRect = phone.getBoundingClientRect();
-                const height = phoneRect.height || 800;
-
-                // Get the absolute top relative to the document to handle page loads when already scrolled down
-                const absoluteTop = phoneRect.top + window.scrollY;
-
-                // Compensate for the top moving down when scaled down to 0.70 around the center
-                const scaleCorrection = (1 - 0.70) * height / 2;
-
-                // Align to 10% from the top of the viewport
-                const targetY = (window.innerHeight * 0.10) - absoluteTop - scaleCorrection;
-                return targetY;
-            }
-
-            const phoneImgTl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: ".hero-section",
-                    start: "top top",
-                    endTrigger: ".section-3",
-                    end: "top top",
-                    scrub: 0.3,
-                    invalidateOnRefresh: true
-                }
-            });
-
-            phoneImgTl.to(transformVals, {
-                pers: 7000,
-                rotX: 60,
-                skewX: 40,
-                scaleY: 0.94,
-                rotY: -35,
-                ease: "none",
-                onUpdate: () => {
-                    phone.style.perspective = `${transformVals.pers}px`;
-                    phoneImg.style.transform = `rotateX(${transformVals.rotX}deg) skewX(${transformVals.skewX}deg) scaleY(${transformVals.scaleY}) rotateY(${transformVals.rotY}deg)`;
-                }
-            });
-
-            phoneImgTl.to(phone, {
-                y: getTop10PercentOffset(),
-                xPercent: -15,
-                scale: 0.7,
-                ease: "none"
-            }, "<");
-
-            phoneImgTl.fromTo(phoneImg, {
-                width: 400
-            }, {
-                width: 380,
-                ease: "none"
-            }, "<");
-
-            // Section 3 sequence animation on pinning (triggers when 98% in view)
-            const s3Images = document.querySelectorAll(".section-3 .img-cont img");
-            const imgCont = document.querySelector(".section-3 .img-cont");
-
-            // Initially hide all elements for the animation sequence
-            gsap.set(s3Images, { opacity: 0 });
+            // Section 3: pin the store and build it piece by piece under the phone roof
+            const storeParts = imgCont.querySelectorAll(":scope > img:not(.store-top)");
+            gsap.set(storeParts, { opacity: 0 });
             gsap.set([".section-3 .title", ".section-3 .text-cont"], { opacity: 0 });
 
             const s3Timeline = gsap.timeline({
                 scrollTrigger: {
-                    trigger: ".section3-4-wrap",
+                    trigger: storeWrap,
                     start: "top top", // Pin flush at the top of the viewport to prevent any gaps
                     end: "+=300%",   // pin for 300vh of scroll (100% for store building, 100% for s3 wipe, 100% for s4 wipe)
                     pin: true,
                     pinSpacing: true,
                     scrub: true,
+                    // Refresh before the later pins on the page, even when created after them on resize
+                    refreshPriority: 1,
                     invalidateOnRefresh: true
                 }
             });
-
-            // Phone fades out from 1 to 0 over the first 0.5s of the timeline (at time 0)
-            s3Timeline.to(phone, {
-                opacity: 0,
-                duration: 0.5,
-                ease: "power1.inOut"
-            }, 0);
-
-            // Manage display state dynamically to save GPU rendering cycles when out of view
-            s3Timeline.set([phone, phoneImg], { display: "flex" }, 0);
-            s3Timeline.set([phone, phoneImg], { display: "none" }, 0.5);
 
             // Title and text-cont fade in from left/right at the very start (time 0)
             s3Timeline.fromTo(".section-3 .title", {
@@ -442,52 +521,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 ease: "power2.out"
             }, 0);
 
-            const imgContHeight = imgCont.offsetHeight || 870;
-            const threePercent = imgContHeight * 0.03;
-
-            s3Images.forEach((img) => {
-                const style = window.getComputedStyle(img);
-
-                // Check if element is bottom positioned
-                const isBottom = img.className.includes("floor") ||
-                    img.className.includes("counter") ||
-                    img.className.includes("customer");
-
-                const isStoreTop = img.className.includes("store-top");
-                // store-top fades in over 0.3s starting concurrently at 0, so it appears before phone is completely gone
-                const duration = isStoreTop ? 0.3 : 0.4;
-                const ease = isStoreTop ? "power1.out" : "power2.out";
-                const position = isStoreTop ? 0 : "+=0.15";
-
-                if (isBottom) {
-                    const originalBottom = style.bottom;
-                    const baseVal = parseFloat(originalBottom) || 0;
-                    const startBottom = baseVal - threePercent;
-
-                    s3Timeline.fromTo(img, {
-                        bottom: `${startBottom}px`,
-                        opacity: 0
-                    }, {
-                        bottom: originalBottom,
-                        opacity: 1,
-                        duration: duration,
-                        ease: ease
-                    }, position);
-                } else {
-                    const originalTop = style.top;
-                    const baseVal = parseFloat(originalTop) || 0;
-                    const startTop = baseVal + threePercent;
-
-                    s3Timeline.fromTo(img, {
-                        top: `${startTop}px`,
-                        opacity: 0
-                    }, {
-                        top: originalTop,
-                        opacity: 1,
-                        duration: duration,
-                        ease: ease
-                    }, position);
-                }
+            // Each part rises 3% of the store's height into place as it fades in. Moving with
+            // transforms leaves the CSS % positions in charge, so parts stay put on resize.
+            const rise = () => imgCont.offsetHeight * 0.03;
+            storeParts.forEach((part) => {
+                s3Timeline.fromTo(part, {
+                    y: rise,
+                    opacity: 0
+                }, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.4,
+                    ease: "power2.out"
+                }, "+=0.15");
             });
 
             // After Section 3 building sequence completes, wipe Section 3 out from bottom-to-top using clip-path to reveal Section 4 underneath
@@ -504,30 +550,31 @@ document.addEventListener("DOMContentLoaded", function () {
                 ease: "none"
             }, "+=0.3");
 
-        } else {
-            gsap.set(".phone", { clearProps: "all" });
-            gsap.set(".phone img", { clearProps: "transform,transformOrigin" });
-            gsap.set([".section-3", ".section-4"], { clearProps: "all" });
-            gsap.set(".section-3 .img-cont img", { clearProps: "all" });
-            gsap.set([".section-3 .title", ".section-3 .text-cont"], { clearProps: "all" });
+            return () => {
+                ScrollTrigger.removeEventListener("refresh", relayout);
+                window.removeEventListener("resize", relayout);
+                phone.insertBefore(phoneDevice, phoneSlot);
+                phone.classList.remove("is-flying");
+                phoneDevice.classList.remove("is-flying", "is-docked");
+                ["transform", "width", "height"].forEach((prop) => phoneDevice.style.removeProperty(prop));
+            };
+        });
 
-            // Mobile scroll trigger to scale down phone.png by 70% (to scale: 0.3)
-            const mobilePhoneImg = document.querySelector(".phone img");
-            if (mobilePhoneImg) {
-                gsap.to(mobilePhoneImg, {
-                    scale: 0.3,
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: ".hero-section",
-                        start: "top top",
-                        end: "bottom top",
-                        scrub: true,
-                        invalidateOnRefresh: true
-                    }
-                });
-            }
-        }
-    } // end if (phone)
+        // Mobile: the phone stays in the hero and shrinks as it scrolls away (to scale: 0.3)
+        mm.add("(max-width: 820px)", () => {
+            gsap.to(phoneDevice, {
+                scale: 0.3,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: ".hero-section",
+                    start: "top top",
+                    end: "bottom top",
+                    scrub: true,
+                    invalidateOnRefresh: true
+                }
+            });
+        });
+    } // end if (phoneDevice)
 
     // Split text effect for Section 2
     const section2Text = document.querySelector(".section-2 p");
@@ -538,8 +585,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 const baseWord = word.replace("?", "");
                 const hasQuestionMark = word.includes("?");
 
+                // Starts lower than the other words so the pill's border doesn't peek out of
+                // the wrapper before the word is revealed
                 let result = `<span style="display: inline-block; overflow: hidden; padding-bottom: 0.15em; margin-bottom: -0.15em; vertical-align: bottom;">` +
-                    `<span class="word highlight" style="display: inline-block; transform: translate3d(0, 110%, 0);">${baseWord}</span>` +
+                    `<span class="word highlight" style="display: inline-block; transform: translate3d(0, 125%, 0);">${baseWord}</span>` +
                     `</span>`;
 
                 if (hasQuestionMark) {

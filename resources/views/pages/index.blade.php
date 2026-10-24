@@ -26,7 +26,11 @@
         </div>
     </div>
     <div class="phone">
-        <img src="{{ asset('img/phone.png') }}" alt="">
+        <div class="phone-device">
+            <img class="phone-screen" src="{{ asset('img/phone.png') }}" alt="">
+        </div>
+        {{-- Holds the phone's place in the hero while script.js flies it down to the store roof --}}
+        <div class="phone-slot"></div>
     </div>
     <div class="hero-buttons-container">
         <div class="buttons-row">
@@ -64,6 +68,7 @@
             <h2>Pharmacies</h2>
         </div>
         <div class="img-cont">
+            {{-- On desktop the hero phone lands on this spot and becomes the roof (see script.js) --}}
             <img class="store-top" src="{{ asset('img/section3/phone-store-top-side.png') }}" alt="">
             <img class="store-left-wall" src="{{ asset('img/section3/store-left-wall.png') }}" alt="">
             <img class="store-right-wall" src="{{ asset('img/section3/store-right-wall.png') }}" alt="">
