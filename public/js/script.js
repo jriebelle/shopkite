@@ -293,6 +293,30 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Light/dark theme switch in the hero (landing page only; the dark styles are in dark.css).
+    // The page starts light unless the visitor chose dark before.
+    const themeSwitch = document.querySelector(".theme-switch");
+    if (themeSwitch) {
+        const root = document.documentElement;
+        const syncThemeSwitch = () => {
+            themeSwitch.setAttribute("aria-checked", String(root.dataset.theme === "dark"));
+        };
+        syncThemeSwitch();
+        themeSwitch.addEventListener("click", () => {
+            // The hero fades between themes (see the end of dark.css)
+            const theme = root.dataset.theme === "dark" ? "light" : "dark";
+            if (theme === "dark") {
+                root.dataset.theme = "dark";
+            } else {
+                delete root.dataset.theme;
+            }
+            try {
+                localStorage.setItem("shopkite-theme", theme);
+            } catch (e) {}
+            syncThemeSwitch();
+        });
+    }
+
     gsap.registerPlugin(ScrollTrigger);
 
     const phone = document.querySelector(".phone");
@@ -314,17 +338,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Give the flat phone.png a solid chassis: stack thin rounded slices behind
         // the screen along Z so the device reads as 3D at any tilt. The slices darken
-        // towards the back to fake light falling on the edges.
+        // towards the back to fake light falling on the edges (colours in main.css and dark.css).
         const phoneBody = document.createElement("div");
         phoneBody.className = "phone-body";
         phoneBody.setAttribute("aria-hidden", "true");
 
-        const shade = gsap.utils.interpolate("#4a4a4a", "#232323");
         const bodyLayers = [];
         for (let i = 1; i <= PHONE_LAYERS; i++) {
             const layer = document.createElement("div");
             layer.className = "phone-body-layer";
-            layer.style.backgroundColor = shade(i / PHONE_LAYERS);
+            layer.style.setProperty("--layer-depth", i / PHONE_LAYERS);
             bodyLayers.push(layer);
         }
 
@@ -350,7 +373,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const mm = gsap.matchMedia();
 
-        // Desktop: the phone flies from the hero onto the Pharmacies store and docks as its roof.
+        // Desktop: the phone flies from the hero onto the Pharmacies store and docks as the roof of all three stores.
         // gsap.matchMedia reverts all of this if the window is resized down to mobile.
         mm.add("(min-width: 821px)", () => {
             const hero = document.querySelector(".hero-section");
@@ -378,7 +401,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 const heroBox = hero.getBoundingClientRect();
                 const slotBox = phoneSlot.getBoundingClientRect();
                 const wrapBox = storeWrap.getBoundingClientRect();
-                const storeBox = store.getBoundingClientRect();
                 const roofBox = roofArt.getBoundingClientRect();
                 const { width, height } = slotBox;
                 const artToRoof = roofBox.width / ROOF_ART.width;
@@ -411,8 +433,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         roofBox.left + ROOF_ART.center[0] * artToRoof - centre.x,
                         roofBox.top - wrapBox.top + ROOF_ART.center[1] * artToRoof - centre.y
                     ],
-                    // The pinned store's viewport position, which docked transforms are relative to
-                    storeOrigin: [storeBox.left, storeBox.top - wrapBox.top]
+                    // The pinned stores' viewport position, which docked transforms are relative to
+                    storeOrigin: [wrapBox.left, 0]
                 });
 
                 phoneDevice.style.width = `${width}px`;
@@ -423,13 +445,14 @@ document.addEventListener("DOMContentLoaded", function () {
             function render(progress) {
                 if (!layout.width) return;
 
-                // Hand the phone to the store once it has landed, and take it back on the way up.
-                // Both sit at the viewport's top left at that moment, so the swap is invisible
-                // and the phone then scrolls and gets wiped away with the store.
+                // Hand the phone to the stores once it has landed, and take it back on the way up.
+                // Both sit at the viewport's top left at that moment, so the swap is invisible.
+                // Docked in the stores' wrapper rather than one store, it stays the roof while each
+                // store wipes to the next (they all draw their roof in the same place).
                 if ((progress >= 1) !== docked) {
                     docked = progress >= 1;
                     if (docked) {
-                        store.appendChild(phoneDevice);
+                        storeWrap.appendChild(phoneDevice);
                     } else {
                         phone.insertBefore(phoneDevice, phoneSlot);
                     }

@@ -1,0 +1,506 @@
+/*
+ * ShopKite landing page: dark theme
+ * Loaded only by pages/index.blade.php and applied when <html data-theme="dark">,
+ * which the theme switch in the hero sets (see script.js).
+ */
+
+html[data-theme="dark"] {
+  /* Grey night palette that continues the bottom of img/dark/main-bg-dark.jpg (#272727) */
+  --dark-bg: #1e1e1e;
+  --dark-bg-warm: #24201d;
+  --dark-bg-cool: #262626;
+  --dark-surface: #2a2a2a;
+  --dark-surface-raised: #313131;
+  --dark-border: #2f2f2f;
+  --dark-text: #ededed;
+  --dark-text-muted: #b0b0b0;
+  --dark-text-faint: #8a8a8a;
+  color-scheme: dark;
+}
+
+html[data-theme="dark"],
+html[data-theme="dark"] body {
+  background: var(--dark-bg);
+}
+
+/* ----------------- Page loader */
+
+html[data-theme="dark"] #page-loader {
+  background: var(--dark-bg);
+}
+
+html[data-theme="dark"] .loader-bar-bg {
+  background-color: var(--dark-surface-raised);
+}
+
+/* ----------------- Top navigation */
+
+/* The logo's grey wordmark would disappear on dark, so the white-wordmark version fades in over it */
+.top-nav .logo a,
+.footer-col.logo-col a {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+
+.top-nav .logo a::after,
+.footer-col.logo-col a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('../img/dark/shopkite-logo-white.png') no-repeat left center / contain;
+  opacity: 0;
+  pointer-events: none;
+}
+
+html[data-theme="dark"] .top-nav .logo a::after,
+html[data-theme="dark"] .footer-col.logo-col a::after {
+  opacity: 1;
+}
+
+html[data-theme="dark"] .top-nav .logo img,
+html[data-theme="dark"] .footer-logo {
+  opacity: 0;
+}
+
+html[data-theme="dark"] .top-nav-info {
+  background: #000000;
+  box-shadow: 0 22px 15px rgba(0, 0, 0, 0.2);
+}
+
+html[data-theme="dark"] .top-nav-info .sub-text .marquee-text,
+html[data-theme="dark"] .top-nav-info .sub-text .marquee-divider {
+  color: var(--dark-text-muted);
+}
+
+html[data-theme="dark"] .top-nav-info .gradient-edge {
+  background: linear-gradient(to right, #000000, rgba(0, 0, 0, 0));
+}
+
+html[data-theme="dark"] .nav-dropdown {
+  background: var(--dark-surface);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45), 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="dark"] .nav-item {
+  color: #d6d6d6;
+}
+
+html[data-theme="dark"] .nav-item:hover {
+  background: var(--dark-surface-raised);
+}
+
+html[data-theme="dark"] #menu-cursor {
+  background: var(--dark-surface);
+  color: var(--dark-text);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* ----------------- Hero */
+
+/* The night sky is a layer over the day sky, so it can fade in */
+.hero-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('../img/dark/main-bg-dark.jpg') no-repeat center / cover;
+  opacity: 0;
+  pointer-events: none;
+}
+
+html[data-theme="dark"] .hero-section::before {
+  opacity: 1;
+}
+
+/* The daytime clouds become a faint night haze */
+html[data-theme="dark"] .clouds .set1,
+html[data-theme="dark"] .clouds .set2,
+html[data-theme="dark"] .clouds .set3 {
+  opacity: 0.12;
+}
+
+html[data-theme="dark"] .clouds .cloud-bg-img {
+  opacity: 0;
+}
+
+html[data-theme="dark"] .welcome-text .text,
+html[data-theme="dark"] .welcome-text .copy {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .welcome-text .copy .changing-text span {
+  background: #000000;
+}
+
+html[data-theme="dark"] .welcome-text .sub-text {
+  color: #dcdcdc;
+}
+
+html[data-theme="dark"] .hero-btn {
+  background: var(--dark-surface);
+  color: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+html[data-theme="dark"] .theme-switch {
+  background: var(--dark-surface);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+html[data-theme="dark"] .theme-switch-icon.sun {
+  color: var(--dark-text-faint);
+}
+
+html[data-theme="dark"] .theme-switch-icon.moon {
+  color: #ffffff;
+}
+
+/* Dark phone screen, with a near-black chassis to match its black frame */
+html[data-theme="dark"] .phone-device .phone-screen-dark {
+  opacity: 1;
+}
+
+html[data-theme="dark"] .phone-body {
+  --phone-body-front: #1a1a1a;
+  --phone-body-back: #050505;
+}
+
+html[data-theme="dark"] .phone-volume {
+  background: linear-gradient(90deg, #262626, #3a3a3a 50%, #262626);
+}
+
+html[data-theme="dark"] .phone-volume::before,
+html[data-theme="dark"] .phone-volume::after {
+  background: #141414;
+}
+
+/* ----------------- Section 2: Who can use ShopKite merchant? */
+
+html[data-theme="dark"] .section-2 {
+  /* Starts at the hero's bottom grey, with a soft glow in place of the light background image */
+  background: radial-gradient(ellipse 60% 55% at 50% 50%, rgba(80, 110, 118, 0.22), rgba(80, 110, 118, 0) 70%),
+    linear-gradient(to bottom, #272727, var(--dark-bg));
+}
+
+html[data-theme="dark"] .section-2 p {
+  color: var(--dark-text);
+}
+
+/* No outline around the frosted ShopKite pill; the blur stays */
+html[data-theme="dark"] .section-2 .word.highlight {
+  border-color: transparent;
+}
+
+/* ----------------- Sections 3 to 5: stores */
+
+html[data-theme="dark"] .section-3 {
+  background: linear-gradient(to bottom, var(--dark-bg), var(--dark-bg-warm));
+}
+
+html[data-theme="dark"] .section-4 {
+  background: var(--dark-bg-cool);
+}
+
+html[data-theme="dark"] .section-5 {
+  background: var(--dark-bg);
+}
+
+html[data-theme="dark"] .section-3 .title h2,
+html[data-theme="dark"] .section-4 .title h2,
+html[data-theme="dark"] .section-5 .title h2 {
+  color: var(--dark-text);
+}
+
+html[data-theme="dark"] .section-3 .text-cont,
+html[data-theme="dark"] .section-4 .text-cont,
+html[data-theme="dark"] .section-5 .text-cont {
+  color: var(--dark-text-muted);
+}
+
+/* ----------------- Sections 6 to 8 */
+
+html[data-theme="dark"] .section-6 {
+  background: linear-gradient(to bottom, var(--dark-bg-warm), var(--dark-bg));
+}
+
+html[data-theme="dark"] .section-6 p {
+  color: var(--dark-text);
+}
+
+html[data-theme="dark"] .section-8 {
+  background: var(--dark-bg);
+}
+
+/* The giant "Built with" lettering stays a quiet backdrop */
+html[data-theme="dark"] .section-8-marquee p {
+  color: #2c2c2c;
+}
+
+html[data-theme="dark"] .section-8-marquee .marquee-text {
+  color: #262626;
+}
+
+/* ----------------- Testimonials */
+
+html[data-theme="dark"] .testimonials-title {
+  background: linear-gradient(to bottom, var(--dark-bg-warm), var(--dark-bg));
+}
+
+html[data-theme="dark"] .testimonials-title p {
+  color: var(--dark-text);
+}
+
+html[data-theme="dark"] .merchant-testimony-section {
+  background: var(--dark-bg);
+}
+
+html[data-theme="dark"] .testimonial {
+  background: var(--dark-surface);
+  border-color: var(--dark-border);
+}
+
+html[data-theme="dark"] .testimonial-btn {
+  background: var(--dark-surface);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+html[data-theme="dark"] .testimonial-btn span {
+  color: var(--dark-text);
+}
+
+html[data-theme="dark"] .testimonial-btn svg path {
+  stroke: var(--dark-text);
+}
+
+/* ----------------- Brands */
+
+html[data-theme="dark"] .brands {
+  background: var(--dark-bg);
+  border-top-color: var(--dark-border);
+  border-bottom-color: var(--dark-border);
+}
+
+html[data-theme="dark"] .brand-container {
+  /* The logos blend with this, so it has to be a solid colour */
+  background: var(--dark-bg);
+}
+
+html[data-theme="dark"] .brand-container:hover {
+  background: var(--dark-surface);
+}
+
+/* Several logos have navy or black lettering, so show them all as light monochrome. Screen
+   blending drops the white (now black) backing some logos have. */
+html[data-theme="dark"] .brand-container img {
+  filter: grayscale(1) invert(1);
+  mix-blend-mode: screen;
+}
+
+/* ----------------- Bento: Why choose ShopKite Merchant? */
+
+html[data-theme="dark"] .bento-divider {
+  background-color: var(--dark-border);
+}
+
+html[data-theme="dark"] .bento-title h3 {
+  color: var(--dark-text);
+}
+
+html[data-theme="dark"] .bento-title .sub-text p {
+  color: var(--dark-text-muted);
+}
+
+html[data-theme="dark"] .bento-container {
+  background: #232323;
+}
+
+html[data-theme="dark"] .bento-container .sku-store,
+html[data-theme="dark"] .bento-container .locations {
+  background: var(--dark-surface);
+}
+
+html[data-theme="dark"] .bento-container .sku-store p,
+html[data-theme="dark"] .bento-container .locations p {
+  color: var(--dark-text-muted);
+}
+
+/* The peach cards become a warm dark tone with peach headings; Set Staff Roles stays orange */
+html[data-theme="dark"] .bento-container .receipts,
+html[data-theme="dark"] .bento-container .reports,
+html[data-theme="dark"] .bento-container .notified,
+html[data-theme="dark"] .bento-container .offline {
+  background: #3a2c21;
+}
+
+html[data-theme="dark"] .bento-container .receipts h3,
+html[data-theme="dark"] .bento-container .reports h3,
+html[data-theme="dark"] .bento-container .notified h3,
+html[data-theme="dark"] .bento-container .offline h3 {
+  color: #ffd2a6;
+}
+
+html[data-theme="dark"] .bento-container .receipts p,
+html[data-theme="dark"] .bento-container .reports p,
+html[data-theme="dark"] .bento-container .notified p,
+html[data-theme="dark"] .bento-container .offline p {
+  color: #cdb59d;
+}
+
+html[data-theme="dark"] .bento-container .sku-store h3,
+html[data-theme="dark"] .bento-container .locations h3 {
+  color: var(--dark-text);
+}
+
+html[data-theme="dark"] .bento-container .ibr {
+  background: linear-gradient(to bottom, #3a3a3a 40%, var(--dark-surface) 100%);
+  color: var(--dark-text);
+}
+
+html[data-theme="dark"] .bento-container .ibr p {
+  color: var(--dark-text-muted);
+}
+
+/* ----------------- Free trial */
+
+html[data-theme="dark"] .trial-title {
+  background: var(--dark-bg);
+}
+
+html[data-theme="dark"] .trial-title p {
+  color: var(--dark-text);
+}
+
+html[data-theme="dark"] .trial-title .sub-text p {
+  color: var(--dark-text-muted);
+}
+
+/* Black buttons would vanish on the dark page, so they turn light */
+html[data-theme="dark"] .pricing-app-btn {
+  background: #f2f2f2;
+  color: #111111;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+html[data-theme="dark"] .pricing-app-btn img {
+  filter: brightness(0);
+}
+
+html[data-theme="dark"] .pricing-app-btn:hover {
+  background: #ff6600;
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .pricing-app-btn:hover img {
+  filter: brightness(0) invert(1);
+}
+
+/* ----------------- Footer */
+
+html[data-theme="dark"] .main-footer {
+  background: #000000;
+  border-top-color: var(--dark-border);
+}
+
+html[data-theme="dark"] .media-title h2,
+html[data-theme="dark"] .footer-col h4 {
+  color: var(--dark-text);
+}
+
+html[data-theme="dark"] .media-brands,
+html[data-theme="dark"] .footer-bottom,
+html[data-theme="dark"] .footer-copyright {
+  border-color: var(--dark-border);
+}
+
+html[data-theme="dark"] .media-brand-item img,
+html[data-theme="dark"] .media-brand-item:hover img {
+  filter: grayscale(1) invert(1) brightness(0.9);
+}
+
+html[data-theme="dark"] .footer-col a {
+  color: var(--dark-text-faint);
+}
+
+html[data-theme="dark"] .footer-col a:hover {
+  color: #ff6600;
+}
+
+html[data-theme="dark"] .partners-label {
+  color: var(--dark-text-muted);
+}
+
+html[data-theme="dark"] .footer-copyright {
+  color: #777777;
+}
+
+/* ----------------- Support popup */
+
+html[data-theme="dark"] .popup {
+  background: var(--dark-surface);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+html[data-theme="dark"] .popup-body h1 {
+  color: var(--dark-text);
+}
+
+html[data-theme="dark"] .popup-body p {
+  color: var(--dark-text-muted);
+}
+
+/* ----------------- Theme switch fade
+   The switch is only usable at the top of the page, so the hero and top nav are all that is on
+   screen when the theme changes: they fade, and everything below changes while off screen.
+   Plain transitions rather than a view transition, which Safari draws with the 3D phone flattened. */
+
+:root {
+  --theme-fade: 0.45s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --theme-fade: 0s;
+  }
+}
+
+.hero-section::before,
+.phone-device .phone-screen-dark,
+.top-nav .logo img,
+.top-nav .logo a::after,
+.footer-logo,
+.footer-col.logo-col a::after,
+.clouds .set1,
+.clouds .set2,
+.clouds .set3,
+.clouds .cloud-bg-img {
+  transition: opacity var(--theme-fade);
+}
+
+.welcome-text .text,
+.welcome-text .copy {
+  transition: font-size 0.3s ease, color var(--theme-fade);
+}
+
+.welcome-text .sub-text,
+.welcome-text .copy .changing-text span,
+.top-nav-info .sub-text .marquee-text,
+.top-nav-info .sub-text .marquee-divider,
+.phone-body-layer {
+  transition: color var(--theme-fade), background-color var(--theme-fade);
+}
+
+.hero-btn {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color var(--theme-fade), color var(--theme-fade);
+}
+
+.theme-switch {
+  transition: background-color var(--theme-fade), box-shadow 0.2s ease;
+}
+
+.theme-switch-icon {
+  transition: color var(--theme-fade);
+}
+
+.top-nav-info {
+  transition: opacity 0.25s ease, transform 0.25s ease, background-color var(--theme-fade), box-shadow var(--theme-fade);
+}

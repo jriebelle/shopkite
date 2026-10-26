@@ -136,6 +136,67 @@ a {
   /* 10px space between buttons */
 }
 
+/* The light/dark theme switch, on the right of the store buttons (dark.css has the dark theme) */
+.hero-buttons-container:has(.theme-switch) {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.theme-switch {
+  position: relative;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 84px;
+  height: 44px;
+  padding: 0 13px;
+  border: none;
+  border-radius: 22px;
+  background: #ffffff;
+  color: #b5b5b5;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.2s ease;
+}
+
+.theme-switch:hover {
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+}
+
+.theme-switch:focus-visible {
+  outline: 2px solid #ff6600;
+  outline-offset: 3px;
+}
+
+.theme-switch-icon {
+  position: relative;
+  z-index: 1;
+  transition: color 0.3s ease;
+}
+
+/* The icon under the knob is the current theme */
+.theme-switch-icon.sun {
+  color: #ffffff;
+}
+
+.theme-switch-knob {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ff6600;
+  box-shadow: 0 2px 8px rgba(255, 102, 0, 0.35);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.theme-switch[aria-checked="true"] .theme-switch-knob {
+  transform: translateX(40px);
+}
+
 .hero-btn {
   display: inline-flex;
   align-items: center;
@@ -640,7 +701,19 @@ a {
   transform: translateZ(0.5px);
 }
 
+.phone-device .phone-screen-dark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  /* Fades in over the light screen in the dark theme (dark.css) */
+  opacity: 0;
+}
+
 .phone-body {
+  /* Chassis shading, from the slice behind the screen to the back */
+  --phone-body-front: #4a4a4a;
+  --phone-body-back: #232323;
   position: absolute;
   inset: 0;
   transform-style: preserve-3d;
@@ -653,6 +726,7 @@ a {
   inset: 0;
   border-radius: 11.7% / 6%;
   background: #414141;
+  background: color-mix(in srgb, var(--phone-body-back) calc(var(--layer-depth, 0.5) * 100%), var(--phone-body-front));
 }
 
 /* The chassis' bottom edge, hinged back from the screen's bottom so it faces down
@@ -760,7 +834,7 @@ a {
 }
 
 /* Desktop scroll animation (script.js): the phone leaves the hero flow and is
-   positioned with a matrix3d, then docks into .section-3 as the store's roof */
+   positioned with a matrix3d, then docks into .section3-4-wrap as the stores' roof */
 .phone.is-flying {
   position: relative;
   z-index: 2;
@@ -781,8 +855,8 @@ a {
 
 .phone-device.is-docked {
   position: absolute;
-  /* Above .img-cont, so the roof covers the store parts like the artwork did */
-  z-index: 2;
+  /* Above all three stores (z-index 1 to 3), covering the roofs drawn into their artwork */
+  z-index: 4;
 }
 
 /* ----------------- SECTION 2 */
@@ -2316,8 +2390,10 @@ a {
     margin: -92px auto 0 auto;
   }
 
-  .hero-buttons-container {
+  .hero-buttons-container,
+  .hero-buttons-container:has(.theme-switch) {
     bottom: 40px;
+    flex-direction: column;
     align-items: center;
     /* center the label and button row on mobile */
     gap: 8px;

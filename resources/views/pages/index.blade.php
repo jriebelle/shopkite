@@ -3,6 +3,14 @@
 @section('title', 'ShopKite — Selling made easy')
 @section('meta_description', 'ShopKite merchant is a simple, easy to use point of sale app for neighbourhood stores and mini-marts to manage sales and inventory.')
 
+@push('styles')
+{{-- Dark theme (landing page only). The script applies a saved choice before the page paints, so there is no light flash. --}}
+<script>
+    try { if (localStorage.getItem('shopkite-theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (e) {}
+</script>
+<link rel="stylesheet" href="{{ asset('css/dark.css') }}?v={{ filemtime(public_path('css/dark.css')) }}">
+@endpush
+
 @section('content')
 <div class="hero-section">
     <div class="hero-clip">
@@ -28,6 +36,7 @@
     <div class="phone">
         <div class="phone-device">
             <img class="phone-screen" src="{{ asset('img/phone.png') }}" alt="">
+            <img class="phone-screen phone-screen-dark" src="{{ asset('img/dark/phone-dark.png') }}" alt="">
         </div>
         {{-- Holds the phone's place in the hero while script.js flies it down to the store roof --}}
         <div class="phone-slot"></div>
@@ -43,6 +52,16 @@
                 Google Play store
             </a>
         </div>
+        <button type="button" class="theme-switch" role="switch" aria-checked="false" aria-label="Dark theme" title="Dark theme">
+            <svg class="theme-switch-icon sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="4.5"/>
+                <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/>
+            </svg>
+            <svg class="theme-switch-icon moon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/>
+            </svg>
+            <span class="theme-switch-knob"></span>
+        </button>
     </div>
 </div>
 
