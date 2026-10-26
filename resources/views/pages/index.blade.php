@@ -14,6 +14,8 @@
 @section('content')
 <div class="hero-section">
     <div class="hero-clip">
+        {{-- The sky; zooms in as the hero scrolls away (main.css). dark.css adds the night sky on top. --}}
+        <div class="hero-bg"></div>
         <div class="clouds">
             <div class="set1"></div>
             <div class="set2"></div>

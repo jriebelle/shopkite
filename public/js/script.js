@@ -580,6 +580,24 @@ document.addEventListener("DOMContentLoaded", function () {
             };
         });
 
+        // The hero sky zooms in 50% as the hero scrolls away. main.css does this with a
+        // scroll-driven animation where the browser supports one.
+        const heroBg = document.querySelector(".hero-bg");
+        if (heroBg && !CSS.supports("animation-timeline: scroll()")) {
+            gsap.to(heroBg, {
+                scale: 1.5,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: ".hero-section",
+                    start: "top top",
+                    endTrigger: ".section-2",
+                    end: "top top",
+                    scrub: 0.5,
+                    invalidateOnRefresh: true
+                }
+            });
+        }
+
         // Mobile: the phone stays in the hero and shrinks as it scrolls away (to scale: 0.3).
         // main.css does this with a scroll-driven animation where the browser supports one.
         mm.add("(max-width: 820px)", () => {

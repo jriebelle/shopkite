@@ -82,10 +82,6 @@ a {
 
 
 .hero-section {
-  background: url('../img/main-bg.jpg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
   height: 100vh;
   padding-top: 1px;
   position: relative;
@@ -100,6 +96,30 @@ a {
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
+}
+
+/* The hero sky, in its own layer so it can zoom without the hero content */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: url('../img/main-bg.jpg') no-repeat center / cover;
+}
+
+/* Zooms in 50% while the hero scrolls away, finishing when section 2 fills the viewport
+   (the hero is 100vh at the top of the page). Browsers with scroll-driven animations run this
+   on their scrolling thread; script.js animates it with GSAP elsewhere. */
+@supports (animation-timeline: scroll()) {
+  .hero-bg {
+    animation: hero-bg-zoom linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 100vh;
+  }
+}
+
+@keyframes hero-bg-zoom {
+  to {
+    scale: 1.5;
+  }
 }
 
 .hero-buttons-container {

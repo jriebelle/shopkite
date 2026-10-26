@@ -98,8 +98,8 @@ html[data-theme="dark"] #menu-cursor {
 
 /* ----------------- Hero */
 
-/* The night sky is a layer over the day sky, so it can fade in */
-.hero-section::before {
+/* The night sky is a layer over the day sky, so it can fade in (and zooms with it) */
+.hero-bg::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -108,7 +108,7 @@ html[data-theme="dark"] #menu-cursor {
   pointer-events: none;
 }
 
-html[data-theme="dark"] .hero-section::before {
+html[data-theme="dark"] .hero-bg::after {
   opacity: 1;
 }
 
@@ -276,8 +276,8 @@ html[data-theme="dark"] .testimonial-btn svg path {
 
 html[data-theme="dark"] .brands {
   background: var(--dark-bg);
-  border-top-color: var(--dark-border);
-  border-bottom-color: var(--dark-border);
+  border-top: none;
+  border-bottom: none;
 }
 
 html[data-theme="dark"] .brand-container {
@@ -398,7 +398,8 @@ html[data-theme="dark"] .pricing-app-btn:hover img {
 
 html[data-theme="dark"] .main-footer {
   background: #000000;
-  border-top-color: var(--dark-border);
+  /* No lines above and below "ShopKite in the news" */
+  border-top: none;
 }
 
 html[data-theme="dark"] .media-title h2,
@@ -406,7 +407,10 @@ html[data-theme="dark"] .footer-col h4 {
   color: var(--dark-text);
 }
 
-html[data-theme="dark"] .media-brands,
+html[data-theme="dark"] .media-brands {
+  border-bottom: none;
+}
+
 html[data-theme="dark"] .footer-bottom,
 html[data-theme="dark"] .footer-copyright {
   border-color: var(--dark-border);
@@ -463,7 +467,7 @@ html[data-theme="dark"] .popup-body p {
   }
 }
 
-.hero-section::before,
+.hero-bg::after,
 .phone-device .phone-screen-dark,
 .top-nav .logo img,
 .top-nav .logo a::after,
