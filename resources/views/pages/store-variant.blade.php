@@ -52,161 +52,19 @@
 
     <div class="product-grid" id="productGrid">
 
-        <!-- Ken Desktop Device -->
-        <div class="product-card" data-id="ken" data-name="Ken Desktop Device + Barcode Scanner" data-price="630000" data-stock="10" data-img="{{ asset('img/our-store/ken-desktop-device.jpg') }}">
-            <div class="product-card-img-wrap">
-                <div class="product-stock-badge"><span class="stock-count">10</span> left</div>
-                <div class="product-qty-control">
-                    <button class="qty-btn qty-minus" aria-label="Decrease quantity" disabled>&#8722;</button>
-                    <span class="qty-count">0</span>
-                    <button class="qty-btn qty-plus" aria-label="Increase quantity">&#43;</button>
-                </div>
-                <img class="product-thumb"
-                     src="{{ asset('img/our-store/ken-desktop-device.jpg') }}"
-                     alt="Ken Desktop Device + Barcode Scanner"
-                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                <div class="product-thumb-placeholder">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                </div>
-            </div>
-            <div class="product-card-body">
-                <div class="product-card-name">Ken Desktop Device + Barcode Scanner</div>
-                <div class="product-card-variant">Sunmi D3 Mini (58mm)</div>
-                <div class="product-card-price">&#8358;630,000</div>
-                <button type="button" class="btn-buy btn-add-cart">Add to cart</button>
-            </div>
-        </div>
-
-        <!-- Stella Android Device (Sold Out) -->
-        <div class="product-card" data-id="stella" data-name="Stella Android Device" data-price="390000" data-stock="0" data-img="{{ asset('img/our-store/stella-android-device.jpg') }}">
-            <div class="product-card-img-wrap">
-                <div class="product-stock-badge empty"><span class="stock-count">0</span> left</div>
-                <div class="product-qty-control">
-                    <button class="qty-btn qty-minus" aria-label="Decrease quantity" disabled>&#8722;</button>
-                    <span class="qty-count">0</span>
-                    <button class="qty-btn qty-plus" aria-label="Increase quantity" disabled>&#43;</button>
-                </div>
-                <img class="product-thumb"
-                     src="{{ asset('img/our-store/stella-android-device.jpg') }}"
-                     alt="Stella Android Device"
-                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                <div class="product-thumb-placeholder">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                </div>
-            </div>
-            <div class="product-card-body">
-                <div class="product-card-name">Stella Android Device</div>
-                <div class="product-card-variant">Sunmi V3</div>
-                <div class="product-card-price">&#8358;390,000</div>
-                <span class="product-out-of-stock">Sold out</span>
-                <button type="button" class="btn-buy btn-buy-disabled" disabled aria-disabled="true">Currently unavailable</button>
-            </div>
-        </div>
-
-        <!-- On-ground Technical Support -->
-        <div class="product-card" data-id="support" data-name="On-ground Technical Support" data-price="10500" data-stock="2" data-img="{{ asset('img/our-store/on-ground-technical-support.jpg') }}">
-            <div class="product-card-img-wrap">
-                <div class="product-stock-badge"><span class="stock-count">2</span> left</div>
-                <div class="product-qty-control">
-                    <button class="qty-btn qty-minus" aria-label="Decrease quantity" disabled>&#8722;</button>
-                    <span class="qty-count">0</span>
-                    <button class="qty-btn qty-plus" aria-label="Increase quantity">&#43;</button>
-                </div>
-                <img class="product-thumb"
-                     src="{{ asset('img/our-store/on-ground-technical-support.jpg') }}"
-                     alt="On-ground Technical Support"
-                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                <div class="product-thumb-placeholder">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                </div>
-            </div>
-            <div class="product-card-body">
-                <div class="product-card-name">On-ground Technical Support</div>
-                <div class="product-card-variant">1 day</div>
-                <div class="product-card-price">&#8358;10,500</div>
-                <button type="button" class="btn-buy btn-add-cart">Add to cart</button>
-            </div>
-        </div>
-
-        <!-- Virtual Staff Training Fee -->
-        <div class="product-card" data-id="virtual" data-name="Virtual Staff Training Fee" data-price="10000" data-stock="20" data-img="{{ asset('img/our-store/virtual-staff-training-fee.jpg') }}">
-            <div class="product-card-img-wrap">
-                <div class="product-stock-badge"><span class="stock-count">20</span> left</div>
-                <div class="product-qty-control">
-                    <button class="qty-btn qty-minus" aria-label="Decrease quantity" disabled>&#8722;</button>
-                    <span class="qty-count">0</span>
-                    <button class="qty-btn qty-plus" aria-label="Increase quantity">&#43;</button>
-                </div>
-                <img class="product-thumb"
-                     src="{{ asset('img/our-store/virtual-staff-training-fee.jpg') }}"
-                     alt="Virtual Staff Training Fee"
-                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                <div class="product-thumb-placeholder">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                </div>
-            </div>
-            <div class="product-card-body">
-                <div class="product-card-name">Virtual Staff Training Fee</div>
-                <div class="product-card-variant">One session</div>
-                <div class="product-card-price">&#8358;10,000</div>
-                <button type="button" class="btn-buy btn-add-cart">Add to cart</button>
-            </div>
-        </div>
-
-        <!-- Stock-taking Fee -->
-        <div class="product-card" data-id="stocktaking" data-name="Stock-taking Fee (1 - 100 SKUs)" data-price="19500" data-stock="15" data-img="{{ asset('img/our-store/stock-taking-fee.jpg') }}">
-            <div class="product-card-img-wrap">
-                <div class="product-stock-badge"><span class="stock-count">15</span> left</div>
-                <div class="product-qty-control">
-                    <button class="qty-btn qty-minus" aria-label="Decrease quantity" disabled>&#8722;</button>
-                    <span class="qty-count">0</span>
-                    <button class="qty-btn qty-plus" aria-label="Increase quantity">&#43;</button>
-                </div>
-                <img class="product-thumb"
-                     src="{{ asset('img/our-store/stock-taking-fee.jpg') }}"
-                     alt="Stock-taking Fee (1 - 100 SKUs)"
-                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                <div class="product-thumb-placeholder">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                </div>
-            </div>
-            <div class="product-card-body">
-                <div class="product-card-name">Stock-taking Fee (1 &ndash; 100 SKUs)</div>
-                <div class="product-card-variant">per Store</div>
-                <div class="product-card-price">&#8358;19,500</div>
-                <button type="button" class="btn-buy btn-add-cart">Add to cart</button>
-            </div>
-        </div>
-
-        <!-- Staff Training Fee -->
-        <div class="product-card" data-id="staff" data-name="Staff Training Fee" data-price="15000" data-stock="25" data-img="{{ asset('img/our-store/staff-training-fee.png') }}">
-            <div class="product-card-img-wrap">
-                <div class="product-stock-badge"><span class="stock-count">25</span> left</div>
-                <div class="product-qty-control">
-                    <button class="qty-btn qty-minus" aria-label="Decrease quantity" disabled>&#8722;</button>
-                    <span class="qty-count">0</span>
-                    <button class="qty-btn qty-plus" aria-label="Increase quantity">&#43;</button>
-                </div>
-                <img class="product-thumb"
-                     src="{{ asset('img/our-store/staff-training-fee.png') }}"
-                     alt="Staff Training Fee"
-                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                <div class="product-thumb-placeholder">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                </div>
-            </div>
-            <div class="product-card-body">
-                <div class="product-card-name">Staff Training Fee</div>
-                <div class="product-card-variant">5 staff per Store per Day</div>
-                <div class="product-card-price">&#8358;15,000</div>
-                <button type="button" class="btn-buy btn-add-cart">Add to cart</button>
-            </div>
-        </div>
+        @include('partials.store-product-cards', ['products' => $products])
 
         <div class="no-products-found" id="noProductsFound">
             No products found matching your search.
         </div>
 
+    </div>
+
+    <!-- Lazy loading: the next batch of products is fetched when this nears the viewport -->
+    <div class="product-load-more" id="productLoadMore" aria-live="polite" @if ($nextPage === null) hidden @endif>
+        <span class="product-load-spinner" aria-hidden="true"></span>
+        <span class="product-load-text">Loading more products&hellip;</span>
+        <button type="button" class="product-load-retry" hidden>Couldn&rsquo;t load more. Tap to retry</button>
     </div>
 
     <!-- Bottom Shopping Cart Button (Spans 70% width of columns) -->
@@ -396,63 +254,140 @@
         }
     }
 
-    document.querySelectorAll('.product-card[data-id]').forEach(card => {
-        const id    = card.dataset.id;
-        const name  = card.dataset.name;
-        const price = parseInt(card.dataset.price, 10) || 0;
-        const stock = parseInt(card.dataset.stock, 10) || 0;
-        const img   = card.dataset.img || '';
+    // Wires up a product card: registers its product the first time, and re-attaches an
+    // existing product (keeping its cart quantity and remaining stock) if the card is rebuilt,
+    // as after a search.
+    function bindCard(card) {
+        if (card.dataset.bound) return;
+        card.dataset.bound = '1';
 
-        const prod = {
-            id,
-            name,
-            price,
-            stock,
-            qty: 0,
-            img,
-            cardEl: card
-        };
-
-        productsState[id] = prod;
+        const id = card.dataset.id;
+        let prod = productsState[id];
+        if (prod) {
+            prod.cardEl = card;
+        } else {
+            prod = {
+                id,
+                name: card.dataset.name,
+                price: parseInt(card.dataset.price, 10) || 0,
+                stock: parseInt(card.dataset.stock, 10) || 0,
+                qty: 0,
+                img: card.dataset.img || '',
+                cardEl: card
+            };
+            productsState[id] = prod;
+        }
 
         const minusBtn = card.querySelector('.qty-minus');
         const plusBtn  = card.querySelector('.qty-plus');
         const addBtn   = card.querySelector('.btn-add-cart');
 
-        if (plusBtn) {
-            plusBtn.addEventListener('click', () => changeQuantity(id, 1));
-        }
-        if (minusBtn) {
-            minusBtn.addEventListener('click', () => changeQuantity(id, -1));
-        }
-        if (addBtn) {
-            addBtn.addEventListener('click', () => changeQuantity(id, 1));
-        }
+        if (plusBtn)  plusBtn.addEventListener('click', () => changeQuantity(id, 1));
+        if (minusBtn) minusBtn.addEventListener('click', () => changeQuantity(id, -1));
+        if (addBtn)   addBtn.addEventListener('click', () => changeQuantity(id, 1));
 
         refreshProductCardUI(prod);
-    });
+    }
+
+    document.querySelectorAll('#productGrid .product-card[data-id]').forEach(bindCard);
+
+    // Lazy loading. The page renders the first batch; the next ones are fetched from the server
+    // when the "loading" row nears the viewport. Searching asks the server too, since products
+    // that haven't loaded yet can't be found in the page.
+    const productGrid     = document.getElementById('productGrid');
+    const loadMoreEl      = document.getElementById('productLoadMore');
+    const loadMoreText    = loadMoreEl ? loadMoreEl.querySelector('.product-load-text') : null;
+    const loadMoreSpinner = loadMoreEl ? loadMoreEl.querySelector('.product-load-spinner') : null;
+    const loadMoreRetry   = loadMoreEl ? loadMoreEl.querySelector('.product-load-retry') : null;
+    const productsUrl     = "{{ route('store.variant.products') }}";
+    let nextPage      = {{ $nextPage ?? 'null' }};
+    let searchQuery   = '';
+    let isLoading     = false;
+    let loadRequest   = 0;
+    let loadAbort     = null;
+    let loadObserver  = null;
+
+    function setLoadState(state) {
+        // state: 'idle' (nothing more to load), 'loading' or 'error'
+        if (!loadMoreEl) return;
+        loadMoreEl.hidden = state === 'idle';
+        if (loadMoreSpinner) loadMoreSpinner.hidden = state !== 'loading';
+        if (loadMoreText)    loadMoreText.hidden    = state !== 'loading';
+        if (loadMoreRetry)   loadMoreRetry.hidden   = state !== 'error';
+    }
+
+    async function loadMoreProducts() {
+        if (isLoading || nextPage === null) return;
+        isLoading = true;
+        setLoadState('loading');
+
+        const request = ++loadRequest;
+        loadAbort = new AbortController();
+        try {
+            const response = await fetch(productsUrl + '?page=' + nextPage + '&q=' + encodeURIComponent(searchQuery), {
+                headers: { 'Accept': 'application/json' },
+                signal: loadAbort.signal
+            });
+            if (!response.ok) throw new Error('HTTP ' + response.status);
+            const data = await response.json();
+            if (request !== loadRequest) return; // a newer search replaced this one
+
+            noProductsFound.insertAdjacentHTML('beforebegin', data.html);
+            productGrid.querySelectorAll('.product-card[data-id]').forEach(bindCard);
+            nextPage = data.next;
+            noProductsFound.style.display = productGrid.querySelector('.product-card') ? 'none' : 'block';
+            setLoadState(nextPage === null ? 'idle' : 'loading');
+        } catch (error) {
+            if (error.name === 'AbortError') return;
+            setLoadState('error');
+        } finally {
+            if (request === loadRequest) {
+                isLoading = false;
+                // Still near the viewport (a tall window, or a short batch): look again
+                if (loadObserver && nextPage !== null && loadMoreEl && !loadMoreEl.hidden && !(loadMoreRetry && !loadMoreRetry.hidden)) {
+                    loadObserver.unobserve(loadMoreEl);
+                    loadObserver.observe(loadMoreEl);
+                }
+            }
+        }
+    }
+
+    if (loadMoreEl) {
+        if ('IntersectionObserver' in window) {
+            loadObserver = new IntersectionObserver((entries) => {
+                if (entries.some(entry => entry.isIntersecting)) loadMoreProducts();
+            }, { rootMargin: '600px 0px' });
+            loadObserver.observe(loadMoreEl);
+        } else if (nextPage !== null) {
+            // No IntersectionObserver: just load everything, a batch at a time
+            (async () => { while (nextPage !== null) { await loadMoreProducts(); if (loadMoreRetry && !loadMoreRetry.hidden) break; } })();
+        }
+        if (loadMoreRetry) {
+            loadMoreRetry.addEventListener('click', () => {
+                setLoadState('loading');
+                loadMoreProducts();
+            });
+        }
+    }
 
     if (storeSearchInput) {
+        let searchTimer = null;
         storeSearchInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase().trim();
-            let visibleCount = 0;
+            const query = e.target.value.trim();
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => {
+                if (query === searchQuery) return;
+                searchQuery = query;
 
-            Object.values(productsState).forEach(prod => {
-                const cardName = prod.name.toLowerCase();
-                const cardVariant = (prod.cardEl.querySelector('.product-card-variant')?.textContent || '').toLowerCase();
-                const matches = cardName.includes(query) || cardVariant.includes(query);
-
-                if (matches) {
-                    prod.cardEl.style.display = '';
-                    visibleCount++;
-                } else {
-                    prod.cardEl.style.display = 'none';
-                }
-            });
-
-            if (noProductsFound) {
-                noProductsFound.style.display = visibleCount === 0 ? 'block' : 'none';
-            }
+                // Start over with the first batch of matches
+                loadRequest++;
+                if (loadAbort) loadAbort.abort();
+                isLoading = false;
+                productGrid.querySelectorAll('.product-card').forEach(card => card.remove());
+                noProductsFound.style.display = 'none';
+                nextPage = 1;
+                loadMoreProducts();
+            }, 250);
         });
     }
 
@@ -496,11 +431,10 @@
         document.body.style.overflow = '';
     }
 
-    document.querySelectorAll('.product-thumb').forEach(img => {
-        img.style.cursor = 'zoom-in';
-        img.addEventListener('click', () => {
-            openImgLightbox(img.src, img.alt);
-        });
+    // One listener for every thumbnail, including the ones loaded later
+    productGrid.addEventListener('click', (e) => {
+        const img = e.target.closest('.product-thumb');
+        if (img) openImgLightbox(img.src, img.alt);
     });
 
     function saveCartAndCheckout() {

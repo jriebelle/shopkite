@@ -4,9 +4,21 @@
 @section('meta_description', 'ShopKite merchant is a simple, easy to use point of sale app for neighbourhood stores and mini-marts to manage sales and inventory.')
 
 @push('styles')
-{{-- Dark theme (landing page only). The script applies a saved choice before the page paints, so there is no light flash. --}}
+{{-- Dark theme (landing page only). This applies the theme before the page paints, so there is no flash.
+     A choice made with the hero switch is saved and wins. Otherwise the page is dark when the visitor's
+     system is in dark mode or it is night (7pm to 6am) where they are, and light the rest of the time. --}}
 <script>
-    try { if (localStorage.getItem('shopkite-theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (e) {}
+    window.shopkiteAutoTheme = function () {
+        var hour = new Date().getHours();
+        var systemDark = !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        return systemDark || hour >= 19 || hour < 6 ? 'dark' : 'light';
+    };
+    (function () {
+        var theme = null;
+        try { theme = localStorage.getItem('shopkite-theme'); } catch (e) {}
+        if (theme !== 'dark' && theme !== 'light') theme = window.shopkiteAutoTheme();
+        if (theme === 'dark') document.documentElement.dataset.theme = 'dark';
+    })();
 </script>
 <link rel="stylesheet" href="{{ asset('css/dark.css') }}?v={{ filemtime(public_path('css/dark.css')) }}">
 @endpush
@@ -215,7 +227,7 @@
 </div>
 <div class="merchant-testimony-section">
     <div class="testimony-track">
-        <a href="#" target="_blank" rel="noopener noreferrer" class="testimonial">
+        <a href="https://www.instagram.com/reel/Cweqq_ls-Kc/" target="_blank" rel="noopener noreferrer" class="testimonial">
             <div class="testimonial-btn">
                 <span>Watch on IG</span>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -226,7 +238,7 @@
             <h2>"Everyday, I get my reports"</h2>
             <p>Pharm - Amaju Ezenduka / Delta State</p>
         </a>
-        <a href="#" target="_blank" rel="noopener noreferrer" class="testimonial">
+        <a href="https://www.instagram.com/reel/CwUbMSmsWcC/" target="_blank" rel="noopener noreferrer" class="testimonial">
             <div class="testimonial-btn">
                 <span>Watch on IG</span>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -237,7 +249,7 @@
             <h2>"I just love it!"</h2>
             <p>Pharm - Esther Nwachukwu / Delta State</p>
         </a>
-        <a href="#" target="_blank" rel="noopener noreferrer" class="testimonial">
+        <a href="https://www.instagram.com/reel/Cwp59kHOz_b/" target="_blank" rel="noopener noreferrer" class="testimonial">
             <div class="testimonial-btn">
                 <span>Watch on IG</span>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -248,7 +260,7 @@
             <h2>"ShopKite is very easy to use..."</h2>
             <p>Pharm - Faithful Oyakhilome / Edo State</p>
         </a>
-        <a href="#" target="_blank" rel="noopener noreferrer" class="testimonial">
+        <a href="https://www.instagram.com/reel/CwWyFxdIvUy/" target="_blank" rel="noopener noreferrer" class="testimonial">
             <div class="testimonial-btn">
                 <span>Watch on IG</span>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -259,7 +271,7 @@
             <h2>"Makes documentation and sales easy..."</h2>
             <p>Pharm - Godwin Atah / FCT Abuja</p>
         </a>
-        <a href="#" target="_blank" rel="noopener noreferrer" class="testimonial">
+        <a href="https://www.instagram.com/reel/Cwukh4ws0Wd/" target="_blank" rel="noopener noreferrer" class="testimonial">
             <div class="testimonial-btn">
                 <span>Watch on IG</span>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -270,7 +282,7 @@
             <h2>"It has been an excellent experience..."</h2>
             <p>Pharm - Christian Jaja / Rivers State</p>
         </a>
-        <a href="#" target="_blank" rel="noopener noreferrer" class="testimonial">
+        <a href="https://www.instagram.com/reel/CwkBOFhMAcG/" target="_blank" rel="noopener noreferrer" class="testimonial">
             <div class="testimonial-btn">
                 <span>Watch on IG</span>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -281,7 +293,7 @@
             <h2>"expired products has reduced..."</h2>
             <p>Pharm - Ngozi Luke Egbogu / Rivers State</p>
         </a>
-        <a href="#" target="_blank" rel="noopener noreferrer" class="testimonial">
+        <a href="https://www.instagram.com/reel/Cwb35aoI9Je/" target="_blank" rel="noopener noreferrer" class="testimonial">
             <div class="testimonial-btn">
                 <span>Watch on IG</span>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -292,7 +304,7 @@
             <h2>"makes inventory control simple and easy..."</h2>
             <p>Pharm - Temitope Olowolayemo / Ondo State</p>
         </a>
-        <a href="#" target="_blank" rel="noopener noreferrer" class="testimonial">
+        <a href="https://www.instagram.com/reel/Cw2fnkFObdQ/" target="_blank" rel="noopener noreferrer" class="testimonial">
             <div class="testimonial-btn">
                 <span>Watch on IG</span>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -303,9 +315,9 @@
             <h2>"it's a really nice thing for pharmacy inventory..."</h2>
             <p>Pharm - Udeme Nyong / Akwa Ibom State</p>
         </a>
-        <a href="#" target="_blank" rel="noopener noreferrer" class="testimonial">
+        <a href="https://youtu.be/-KAobAbB8As" target="_blank" rel="noopener noreferrer" class="testimonial">
             <div class="testimonial-btn">
-                <span>Watch on IG</span>
+                <span>Watch on YouTube</span>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="#4f4f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>

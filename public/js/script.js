@@ -294,27 +294,50 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Light/dark theme switch in the hero (landing page only; the dark styles are in dark.css).
-    // The page starts light unless the visitor chose dark before.
+    // Until the visitor picks a theme with the switch, the page follows the system's dark mode
+    // setting and the time of day (see shopkiteAutoTheme in the page's head); a pick is saved and wins.
     const themeSwitch = document.querySelector(".theme-switch");
     if (themeSwitch) {
         const root = document.documentElement;
-        const syncThemeSwitch = () => {
-            themeSwitch.setAttribute("aria-checked", String(root.dataset.theme === "dark"));
+        const savedTheme = () => {
+            try {
+                const theme = localStorage.getItem("shopkite-theme");
+                return theme === "dark" || theme === "light" ? theme : null;
+            } catch (e) {
+                return null;
+            }
         };
-        syncThemeSwitch();
-        themeSwitch.addEventListener("click", () => {
-            // The hero fades between themes (see the end of dark.css)
-            const theme = root.dataset.theme === "dark" ? "light" : "dark";
+        const applyTheme = (theme) => {
             if (theme === "dark") {
                 root.dataset.theme = "dark";
             } else {
                 delete root.dataset.theme;
             }
+            themeSwitch.setAttribute("aria-checked", String(theme === "dark"));
+        };
+        // The hero fades between themes (see the end of dark.css)
+        applyTheme(root.dataset.theme === "dark" ? "dark" : "light");
+
+        themeSwitch.addEventListener("click", () => {
+            const theme = root.dataset.theme === "dark" ? "light" : "dark";
+            applyTheme(theme);
             try {
                 localStorage.setItem("shopkite-theme", theme);
             } catch (e) {}
-            syncThemeSwitch();
         });
+
+        // Keep following the system setting and the clock until the visitor has chosen
+        if (window.shopkiteAutoTheme) {
+            const followAuto = () => {
+                if (!savedTheme()) applyTheme(window.shopkiteAutoTheme());
+            };
+            if (window.matchMedia) {
+                const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+                if (systemDark.addEventListener) systemDark.addEventListener("change", followAuto);
+            }
+            setInterval(followAuto, 60000);
+            document.addEventListener("visibilitychange", followAuto);
+        }
     }
 
     gsap.registerPlugin(ScrollTrigger);
@@ -1442,15 +1465,12 @@ document.addEventListener("DOMContentLoaded", function () {
         let mediaCurrentSpeed = mediaBaseSpeed;
         let mediaIsHovered = false;
         let isDragging = false;
-        let lastX = 0;
 
         mediaSection.addEventListener("mouseenter", () => {
             mediaIsHovered = true;
         });
         mediaSection.addEventListener("mouseleave", () => {
             mediaIsHovered = false;
-            isDragging = false;
-            mediaSection.style.cursor = "grab";
         });
 
         // 1. Mouse wheel / trackpad horizontal & vertical scroll
@@ -1467,67 +1487,22 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }, { passive: true });
 
-        // 2. Mouse Drag & Touch Swipe Gesture Handlers
+        // 2. Mouse drag & touch swipe gestures
         let mediaRafId = null;
         let isMediaVisible = false;
 
-        const onMediaPointerMove = (e) => {
-            if (isDragging) {
-                onDragMove(e.clientX);
+        enableCarouselDrag(mediaSection, {
+            onStart: () => {
+                isDragging = true;
+            },
+            onMove: (step) => {
+                mediaPos += step;
+            },
+            onEnd: (flingSpeed) => {
+                isDragging = false;
+                // Carry on at the finger's speed; updateMediaCarousel() eases back to auto-scroll from there
+                if (flingSpeed !== null) mediaCurrentSpeed = mediaTargetSpeed = flingSpeed;
             }
-        };
-
-        const onMediaTouchMove = (e) => {
-            if (isDragging && e.touches.length === 1) {
-                onDragMove(e.touches[0].clientX);
-            }
-        };
-
-        const onDragStart = (clientX) => {
-            isDragging = true;
-            lastX = clientX;
-            mediaSection.style.cursor = "grabbing";
-            window.addEventListener("pointermove", onMediaPointerMove);
-            window.addEventListener("pointerup", onDragEnd);
-            window.addEventListener("pointercancel", onDragEnd);
-            window.addEventListener("touchmove", onMediaTouchMove, { passive: true });
-            window.addEventListener("touchend", onDragEnd);
-        };
-
-        const onDragMove = (clientX) => {
-            if (!isDragging) return;
-            const deltaX = clientX - lastX;
-            lastX = clientX;
-            mediaPos += -deltaX;
-            mediaTargetSpeed = -deltaX * 0.5;
-        };
-
-        const onDragEnd = () => {
-            if (!isDragging) return;
-            isDragging = false;
-            mediaSection.style.cursor = "grab";
-            window.removeEventListener("pointermove", onMediaPointerMove);
-            window.removeEventListener("pointerup", onDragEnd);
-            window.removeEventListener("pointercancel", onDragEnd);
-            window.removeEventListener("touchmove", onMediaTouchMove);
-            window.removeEventListener("touchend", onDragEnd);
-        };
-
-        // Pointer Events
-        mediaSection.addEventListener("pointerdown", (e) => {
-            onDragStart(e.clientX);
-        });
-
-        // Touch Events Fallback
-        mediaSection.addEventListener("touchstart", (e) => {
-            if (e.touches.length === 1) {
-                onDragStart(e.touches[0].clientX);
-            }
-        }, { passive: true });
-
-        // Prevent native image dragging
-        mediaTrack.querySelectorAll("img").forEach(img => {
-            img.addEventListener("dragstart", (e) => e.preventDefault());
         });
 
         function updateMediaCarousel() {

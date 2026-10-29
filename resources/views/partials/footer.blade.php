@@ -5,11 +5,11 @@
     </div>
     <div class="media-brands">
         <div class="media-brands-track">
-            <a href="#" target="_blank" rel="noopener noreferrer" class="media-brand-item"><img src="{{ asset('img/media-logos/channels.png') }}" alt="Channels TV"></a>
-            <a href="#" target="_blank" rel="noopener noreferrer" class="media-brand-item"><img src="{{ asset('img/media-logos/lagos-talks.png') }}" alt="Lagos Talks"></a>
-            <a href="#" target="_blank" rel="noopener noreferrer" class="media-brand-item"><img src="{{ asset('img/media-logos/mainland-fm.png') }}" alt="Mainland FM"></a>
-            <a href="#" target="_blank" rel="noopener noreferrer" class="media-brand-item"><img src="{{ asset('img/media-logos/techcity.png') }}" alt="Tech City"></a>
-            <a href="#" target="_blank" rel="noopener noreferrer" class="media-brand-item"><img src="{{ asset('img/media-logos/tvc.png') }}" alt="TVC News"></a>
+            <a href="https://www.instagram.com/p/CbJ7g1JDo3y/" target="_blank" rel="noopener noreferrer" class="media-brand-item"><img src="{{ asset('img/media-logos/channels.png') }}" alt="Channels TV"></a>
+            <a href="https://www.youtube.com/watch?v=j4VcUK9gOgA" target="_blank" rel="noopener noreferrer" class="media-brand-item"><img src="{{ asset('img/media-logos/lagos-talks.png') }}" alt="Lagos Talks"></a>
+            <a href="https://www.youtube.com/watch?v=GfC0fkiokh8" target="_blank" rel="noopener noreferrer" class="media-brand-item"><img src="{{ asset('img/media-logos/mainland-fm.png') }}" alt="Mainland FM"></a>
+            <a href="https://www.techcityng.com/meet-shopkite-the-go-to-inventory-management-mobile-app-for-neighbourhood-stores/" target="_blank" rel="noopener noreferrer" class="media-brand-item"><img src="{{ asset('img/media-logos/techcity.png') }}" alt="Tech City"></a>
+            <a href="https://www.instagram.com/p/CbpgGNHjdun/" target="_blank" rel="noopener noreferrer" class="media-brand-item"><img src="{{ asset('img/media-logos/tvc.png') }}" alt="TVC News"></a>
         </div>
     </div>
     <div class="footer-container">
