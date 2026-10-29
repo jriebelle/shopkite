@@ -31,13 +31,16 @@
                 <a href="{{ route('store') }}" class="nav-item {{ request()->routeIs('store', 'store.*') ? 'nav-active' : '' }}" data-text="Visit our store"><span>Visit our store</span></a>
                 <a href="{{ route('pricing') }}" class="nav-item {{ request()->routeIs('pricing') ? 'nav-active' : '' }}" data-text="Pricing"><span>Pricing</span></a>
                 <a href="{{ route('faq') }}" class="nav-item {{ request()->routeIs('faq') ? 'nav-active' : '' }}" data-text="FAQs"><span>FAQs</span></a>
-                <a href="#" class="nav-item" data-text="Contact Us" onclick="openPopupSupport(); return false;"><span>Get help from a human</span></a>
                 <a href="{{ route('ibr') }}" class="nav-item {{ request()->routeIs('ibr') ? 'nav-active' : '' }}" data-text="IBR"><span>Intelligent Business Report</span><span class="nav-item-pill">new</span></a>
                 <a href="{{ route('invoice') }}" class="nav-item {{ request()->routeIs('invoice') ? 'nav-active' : '' }}" data-text="Invoice Generator"><span>Free Invoice Generator</span><span class="nav-item-pill">new</span></a>
                 <a href="{{ route('devices') }}" class="nav-item {{ request()->routeIs('devices') ? 'nav-active' : '' }}" data-text="Devices"><span>Recommended Devices</span></a>
                 <a href="{{ route('agent') }}" class="nav-item {{ request()->routeIs('agent', 'handbook') ? 'nav-active' : '' }}" data-text="Agent Signup"><span>Become an Agent</span></a>
                 <a href="{{ route('blog.index') }}" class="nav-item {{ request()->routeIs('blog.*') ? 'nav-active' : '' }}" data-text="Blog"><span>Blog</span></a>
                 <a href="{{ route('privacy') }}" class="nav-item {{ request()->routeIs('privacy') ? 'nav-active' : '' }}" data-text="Privacy Policy"><span>Privacy Policy</span></a>
+                <a href="#" class="nav-item nav-item-support" data-text="Contact Us" onclick="openPopupSupport(); return false;">
+                    <svg class="nav-item-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h3z"/><path d="M3 15a2 2 0 0 0 2 2h1a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1H3z"/><path d="M21 17v1a3 3 0 0 1-3 3h-4"/></svg>
+                    <span>Get help from a human</span>
+                </a>
             </nav>
         </div>
     </div>

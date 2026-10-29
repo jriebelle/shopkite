@@ -47,7 +47,7 @@
             <a href="https://facebook.com/shopkite" target="_blank" class="social-link"><img src="{{ asset('img/facebook-icon.png') }}" alt="Facebook"></a>
             <a href="https://twitter.com/shopkite" target="_blank" class="social-link"><img src="{{ asset('img/x-icon.png') }}" alt="X"></a>
             <a href="https://www.youtube.com/@shopkiteapp" target="_blank" class="social-link"><img src="{{ asset('img/youtube-icon.png') }}" alt="YouTube"></a>
-            <a href="#" class="social-link"><img src="{{ asset('img/tiktok-icon.png') }}" alt="TikTok"></a>
+            <a href="https://www.tiktok.com/@shopkite" target="_blank" rel="noopener noreferrer" class="social-link"><img src="{{ asset('img/tiktok-icon.png') }}" alt="TikTok"></a>
         </div>
     </div>
     <div class="footer-copyright">

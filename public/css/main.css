@@ -460,6 +460,13 @@ a {
   background: #f5f4f2;
 }
 
+/* The support link's icon, in the brand orange */
+.nav-item-icon {
+  flex-shrink: 0;
+  margin-right: 10px;
+  color: #ff6600;
+}
+
 .nav-item span {
   display: inline-block;
 }
